@@ -350,31 +350,18 @@
     </footer>
 
     <script>
-        // Переменные для хранения состояния
         let itemsData = {};
         let selectedItem = null;
         let priceChart = null;
         let overallChart = null;
         let filteredItems = [];
 
-        // URL для загрузки данных - замените на ваш репозиторий
-        // Варианты URL (раскомментируйте нужный):
-        
-        // 1. Для GitHub Pages (если сайт опубликован)
         const DATA_URL = './prices.json';
         
-        // 2. Для raw файла GitHub (если нужно брать из другого репозитория)
-        // const DATA_URL = 'https://raw.githubusercontent.com/ВАШ_USERNAME/ВАШ_REPO/main/prices.json';
-        
-        // 3. Для тестирования локально
-        // const DATA_URL = 'prices.json';
-
-        // Функция для загрузки данных из JSON файла
         async function loadData() {
             try {
                 showLoadingState();
                 
-                // Добавляем timestamp для избежания кэширования
                 const url = `${DATA_URL}?t=${Date.now()}`;
                 const response = await fetch(url);
                 
@@ -396,19 +383,16 @@
             }
         }
 
-        // Функция для показа состояния загрузки
         function showLoadingState() {
             document.getElementById('items-container').innerHTML = 
                 '<div class="loading">Загрузка данных...</div>';
         }
 
-        // Функция для показа ошибки
         function showErrorState(message) {
             document.getElementById('items-container').innerHTML = 
                 `<div class="error">${message}</div>`;
         }
 
-        // Функция для показа уведомления
         function showNotification(message) {
             const notification = document.getElementById('update-notification');
             notification.textContent = message;
@@ -418,7 +402,6 @@
             }, 3000);
         }
 
-        // Функция для обновления времени последнего обновления
         function updateLastUpdateTime() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('ru-RU');
@@ -426,12 +409,9 @@
                 `Последнее обновление: ${timeString}`;
         }
 
-        // Функция для обработки данных из JSON
         function processData() {
             filteredItems = [];
             
-            // Преобразуем данные из формата { "item name": { price: X, history: [...] } }
-            // в массив объектов для удобства работы
             for (const [name, data] of Object.entries(itemsData)) {
                 filteredItems.push({
                     name: name,
@@ -441,7 +421,6 @@
             }
         }
 
-        // Функция для форматирования цены
         function formatPrice(price) {
             return new Intl.NumberFormat('ru-RU', { 
                 minimumFractionDigits: 2, 
@@ -449,13 +428,11 @@
             }).format(price);
         }
 
-        // Функция для форматирования даты
         function formatDate(dateString) {
             const date = new Date(dateString);
             return date.toLocaleDateString('ru-RU');
         }
 
-        // Функция для расчета изменения цены
         function calculatePriceChange(item) {
             if (!item.priceHistory || item.priceHistory.length < 2) return 0;
             
@@ -465,7 +442,6 @@
             return ((lastPrice - firstPrice) / firstPrice) * 100;
         }
 
-        // Функция для отображения списка предметов
         function renderItemsList() {
             const container = document.getElementById('items-container');
             container.innerHTML = '';
@@ -499,14 +475,12 @@
             });
         }
 
-        // Функция для выбора предмета
         function selectItem(item) {
             selectedItem = item;
             renderItemsList();
             updateItemDetails();
         }
 
-        // Функция для обновления деталей выбранного предмета
         function updateItemDetails() {
             const itemNameElement = document.getElementById('selected-item-name');
             const priceInfoElement = document.getElementById('price-info');
@@ -525,7 +499,6 @@
             itemNameElement.textContent = selectedItem.name;
             priceInfoElement.style.display = 'flex';
             
-            // Обновление информации о ценах
             currentPriceElement.textContent = formatPrice(selectedItem.currentPrice);
             
             let startPrice = selectedItem.currentPrice;
@@ -545,11 +518,9 @@
             
             lastUpdateElement.textContent = lastUpdate !== 'Нет данных' ? formatDate(lastUpdate) : lastUpdate;
             
-            // Обновление графика
             renderPriceChart();
         }
 
-        // Функция для отрисовки графика цен
         function renderPriceChart() {
             const ctx = document.getElementById('price-chart').getContext('2d');
             
@@ -557,7 +528,6 @@
                 priceChart.destroy();
             }
             
-            // Если нет истории цен, показываем сообщение
             if (!selectedItem.priceHistory || selectedItem.priceHistory.length === 0) {
                 ctx.font = "16px Arial";
                 ctx.fillStyle = "#7f8c8d";
@@ -612,7 +582,6 @@
             });
         }
 
-        // Функция для обновления общей статистики
         function updateOverallStats() {
             document.getElementById('total-items').textContent = filteredItems.length;
             
@@ -628,7 +597,6 @@
             renderOverallChart();
         }
 
-        // Функция для отрисовки общего графика
         function renderOverallChart() {
             const ctx = document.getElementById('overall-chart').getContext('2d');
             
@@ -636,12 +604,10 @@
                 overallChart.destroy();
             }
             
-            // Собираем все уникальные даты из истории цен всех предметов
             const allDates = [...new Set(filteredItems.flatMap(item => 
                 (item.priceHistory || []).map(entry => entry.date)
             ))].sort();
             
-            // Если нет данных для графика
             if (allDates.length === 0) {
                 ctx.font = "16px Arial";
                 ctx.fillStyle = "#7f8c8d";
@@ -651,7 +617,6 @@
                 return;
             }
             
-            // Создаем массив средних цен по датам
             const avgPricesByDate = allDates.map(date => {
                 const pricesOnDate = filteredItems.map(item => {
                     if (!item.priceHistory) return null;
@@ -708,7 +673,6 @@
             });
         }
 
-        // Функция для поиска предметов
         function searchItems(query) {
             if (!query.trim()) {
                 processData();
@@ -725,19 +689,15 @@
             renderItemsList();
             updateOverallStats();
             
-            // Сбрасываем выбор предмета при поиске
             if (selectedItem && !filteredItems.some(item => item.name === selectedItem.name)) {
                 selectedItem = null;
                 updateItemDetails();
             }
         }
 
-        // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
-            // Загружаем данные при старте
             loadData();
             
-            // Обработчик поиска
             document.getElementById('search-btn').addEventListener('click', function() {
                 const query = document.getElementById('search-input').value;
                 searchItems(query);
@@ -750,12 +710,10 @@
                 }
             });
 
-            // Кнопка для обновления данных
             document.getElementById('load-data-btn').addEventListener('click', function() {
                 loadData();
             });
             
-            // Автообновление данных каждые 5 минут
             setInterval(loadData, 5 * 60 * 1000);
         });
     </script>
