@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Трекер цен на предметы</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        #search-input {
+            width: 60%;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            font-size: 1rem;
+        }
+        
+        #search-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        #search-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .main-content {
+            display: flex;
+            margin-top: 2rem;
+            gap: 2rem;
+        }
+        
+        .items-list {
+            flex: 1;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .items-list h2 {
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .item.active {
+            background-color: #e3f2fd;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .item-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .item-price {
+            color: var(--success-color);
+            font-weight: 600;
+        }
+        
+        .item-price.change-negative {
+            color: var(--accent-color);
+        }
+        
+        .item-details {
+            flex: 2;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+        
+        .item-details h2 {
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+        
+        .price-info {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .price-box {
+            background-color: var(--light-color);
+            padding: 1rem;
+            border-radius: 6px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .price-box h3 {
+            font-size: 0.9rem;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .price-box p {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .chart-container {
+            margin-top: 2rem;
+            position: relative;
+            height: 400px;
+        }
+        
+        .overall-stats {
+            margin-top: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+        
+        .overall-stats h2 {
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .stat-box {
+            background-color: var(--light-color);
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .stat-box h3 {
+            font-size: 0.9rem;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-box p {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .overall-chart {
+            margin-top: 2rem;
+            position: relative;
+            height: 300px;
+        }
+        
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            padding: 1rem 0;
+            color: var(--dark-color);
+            border-top: 1px solid #eee;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+        }
+
+        .error {
+            text-align: center;
+            padding: 2rem;
+            color: #e74c3c;
+            background: #ffeaea;
+            border-radius: 8px;
+            margin: 1rem;
+        }
+
+        .update-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .items-list {
+                max-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="update-notification" id="update-notification">Данные обновлены!</div>
+    
+    <header>
+        <div class="container">
+            <h1>Трекер цен на предметы</h1>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Поиск предметов...">
+                <button id="search-btn">Найти</button>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="main-content">
+            <div class="items-list">
+                <h2>Предметы</h2>
+                <div id="items-container">
+                    <div class="loading">Загрузка данных...</div>
+                </div>
+            </div>
+            
+            <div class="item-details">
+                <h2 id="selected-item-name">Выберите предмет для просмотра деталей</h2>
+                <div class="price-info" id="price-info" style="display: none;">
+                    <div class="price-box">
+                        <h3>Текущая цена</h3>
+                        <p id="current-price">-</p>
+                    </div>
+                    <div class="price-box">
+                        <h3>Стартовая цена</h3>
+                        <p id="start-price">-</p>
+                    </div>
+                    <div class="price-box">
+                        <h3>Изменение цены</h3>
+                        <p id="price-change">-</p>
+                    </div>
+                    <div class="price-box">
+                        <h3>Последнее обновление</h3>
+                        <p id="last-update">-</p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="price-chart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="overall-stats">
+            <h2>Общая статистика цен</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <h3>Всего предметов</h3>
+                    <p id="total-items">0</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Средняя цена</h3>
+                    <p id="avg-price">0</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Максимальная цена</h3>
+                    <p id="max-price">0</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Минимальная цена</h3>
+                    <p id="min-price">0</p>
+                </div>
+            </div>
+            <div class="overall-chart">
+                <canvas id="overall-chart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>Трекер цен &copy; 2023 | 
+                <button id="load-data-btn" style="background: #3498db; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
+                    Обновить данные
+                </button>
+                <span id="last-update-time" style="margin-left: 1rem; color: #7f8c8d;"></span>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Переменные для хранения состояния
+        let itemsData = {};
+        let selectedItem = null;
+        let priceChart = null;
+        let overallChart = null;
+        let filteredItems = [];
+
+        // URL для загрузки данных - замените на ваш репозиторий
+        // Варианты URL (раскомментируйте нужный):
+        
+        // 1. Для GitHub Pages (если сайт опубликован)
+        const DATA_URL = './prices.json';
+        
+        // 2. Для raw файла GitHub (если нужно брать из другого репозитория)
+        // const DATA_URL = 'https://raw.githubusercontent.com/ВАШ_USERNAME/ВАШ_REPO/main/prices.json';
+        
+        // 3. Для тестирования локально
+        // const DATA_URL = 'prices.json';
+
+        // Функция для загрузки данных из JSON файла
+        async function loadData() {
+            try {
+                showLoadingState();
+                
+                // Добавляем timestamp для избежания кэширования
+                const url = `${DATA_URL}?t=${Date.now()}`;
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`Ошибка загрузки: ${response.status} ${response.statusText}`);
+                }
+                
+                itemsData = await response.json();
+                processData();
+                renderItemsList();
+                updateOverallStats();
+                updateLastUpdateTime();
+                
+                showNotification('Данные успешно загружены!');
+                
+            } catch (error) {
+                console.error('Ошибка загрузки данных:', error);
+                showErrorState(`Ошибка загрузки данных: ${error.message}`);
+            }
+        }
+
+        // Функция для показа состояния загрузки
+        function showLoadingState() {
+            document.getElementById('items-container').innerHTML = 
+                '<div class="loading">Загрузка данных...</div>';
+        }
+
+        // Функция для показа ошибки
+        function showErrorState(message) {
+            document.getElementById('items-container').innerHTML = 
+                `<div class="error">${message}</div>`;
+        }
+
+        // Функция для показа уведомления
+        function showNotification(message) {
+            const notification = document.getElementById('update-notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Функция для обновления времени последнего обновления
+        function updateLastUpdateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ru-RU');
+            document.getElementById('last-update-time').textContent = 
+                `Последнее обновление: ${timeString}`;
+        }
+
+        // Функция для обработки данных из JSON
+        function processData() {
+            filteredItems = [];
+            
+            // Преобразуем данные из формата { "item name": { price: X, history: [...] } }
+            // в массив объектов для удобства работы
+            for (const [name, data] of Object.entries(itemsData)) {
+                filteredItems.push({
+                    name: name,
+                    currentPrice: data.price,
+                    priceHistory: data.history || []
+                });
+            }
+        }
+
+        // Функция для форматирования цены
+        function formatPrice(price) {
+            return new Intl.NumberFormat('ru-RU', { 
+                minimumFractionDigits: 2, 
+                maximumFractionDigits: 2 
+            }).format(price);
+        }
+
+        // Функция для форматирования даты
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU');
+        }
+
+        // Функция для расчета изменения цены
+        function calculatePriceChange(item) {
+            if (!item.priceHistory || item.priceHistory.length < 2) return 0;
+            
+            const firstPrice = item.priceHistory[0].price;
+            const lastPrice = item.priceHistory[item.priceHistory.length - 1].price;
+            
+            return ((lastPrice - firstPrice) / firstPrice) * 100;
+        }
+
+        // Функция для отображения списка предметов
+        function renderItemsList() {
+            const container = document.getElementById('items-container');
+            container.innerHTML = '';
+            
+            if (filteredItems.length === 0) {
+                container.innerHTML = '<div class="item">Предметы не найдены</div>';
+                return;
+            }
+            
+            filteredItems.forEach(item => {
+                const priceChange = calculatePriceChange(item);
+                const priceChangeClass = priceChange >= 0 ? '' : 'change-negative';
+                const priceChangeSymbol = priceChange >= 0 ? '+' : '';
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = `item ${selectedItem && selectedItem.name === item.name ? 'active' : ''}`;
+                itemElement.dataset.name = item.name;
+                
+                itemElement.innerHTML = `
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-price ${priceChangeClass}">
+                        ${formatPrice(item.currentPrice)} 
+                        ${item.priceHistory && item.priceHistory.length > 1 ? 
+                            `<span>(${priceChangeSymbol}${priceChange.toFixed(2)}%)</span>` : 
+                            '<span>(нет истории)</span>'}
+                    </div>
+                `;
+                
+                itemElement.addEventListener('click', () => selectItem(item));
+                container.appendChild(itemElement);
+            });
+        }
+
+        // Функция для выбора предмета
+        function selectItem(item) {
+            selectedItem = item;
+            renderItemsList();
+            updateItemDetails();
+        }
+
+        // Функция для обновления деталей выбранного предмета
+        function updateItemDetails() {
+            const itemNameElement = document.getElementById('selected-item-name');
+            const priceInfoElement = document.getElementById('price-info');
+            const currentPriceElement = document.getElementById('current-price');
+            const startPriceElement = document.getElementById('start-price');
+            const priceChangeElement = document.getElementById('price-change');
+            const lastUpdateElement = document.getElementById('last-update');
+            
+            if (!selectedItem) {
+                itemNameElement.textContent = 'Выберите предмет для просмотра деталей';
+                priceInfoElement.style.display = 'none';
+                if (priceChart) priceChart.destroy();
+                return;
+            }
+            
+            itemNameElement.textContent = selectedItem.name;
+            priceInfoElement.style.display = 'flex';
+            
+            // Обновление информации о ценах
+            currentPriceElement.textContent = formatPrice(selectedItem.currentPrice);
+            
+            let startPrice = selectedItem.currentPrice;
+            let lastUpdate = 'Нет данных';
+            
+            if (selectedItem.priceHistory && selectedItem.priceHistory.length > 0) {
+                startPrice = selectedItem.priceHistory[0].price;
+                lastUpdate = selectedItem.priceHistory[selectedItem.priceHistory.length - 1].date;
+            }
+            
+            startPriceElement.textContent = formatPrice(startPrice);
+            
+            const priceChange = calculatePriceChange(selectedItem);
+            const priceChangeSymbol = priceChange >= 0 ? '+' : '';
+            priceChangeElement.textContent = `${priceChangeSymbol}${priceChange.toFixed(2)}%`;
+            priceChangeElement.className = priceChange >= 0 ? '' : 'change-negative';
+            
+            lastUpdateElement.textContent = lastUpdate !== 'Нет данных' ? formatDate(lastUpdate) : lastUpdate;
+            
+            // Обновление графика
+            renderPriceChart();
+        }
+
+        // Функция для отрисовки графика цен
+        function renderPriceChart() {
+            const ctx = document.getElementById('price-chart').getContext('2d');
+            
+            if (priceChart) {
+                priceChart.destroy();
+            }
+            
+            // Если нет истории цен, показываем сообщение
+            if (!selectedItem.priceHistory || selectedItem.priceHistory.length === 0) {
+                ctx.font = "16px Arial";
+                ctx.fillStyle = "#7f8c8d";
+                ctx.textAlign = "center";
+                ctx.fillText("Нет данных об истории цен для этого предмета", 
+                            ctx.canvas.width / 2, ctx.canvas.height / 2);
+                return;
+            }
+            
+            const labels = selectedItem.priceHistory.map(entry => formatDate(entry.date));
+            const data = selectedItem.priceHistory.map(entry => entry.price);
+            
+            priceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `Цена ${selectedItem.name}`,
+                        data: data,
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `Цена: ${formatPrice(context.raw)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatPrice(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Функция для обновления общей статистики
+        function updateOverallStats() {
+            document.getElementById('total-items').textContent = filteredItems.length;
+            
+            const avgPrice = filteredItems.reduce((sum, item) => sum + item.currentPrice, 0) / filteredItems.length;
+            document.getElementById('avg-price').textContent = formatPrice(avgPrice || 0);
+            
+            const maxPrice = filteredItems.length > 0 ? Math.max(...filteredItems.map(item => item.currentPrice)) : 0;
+            document.getElementById('max-price').textContent = formatPrice(maxPrice);
+            
+            const minPrice = filteredItems.length > 0 ? Math.min(...filteredItems.map(item => item.currentPrice)) : 0;
+            document.getElementById('min-price').textContent = formatPrice(minPrice);
+            
+            renderOverallChart();
+        }
+
+        // Функция для отрисовки общего графика
+        function renderOverallChart() {
+            const ctx = document.getElementById('overall-chart').getContext('2d');
+            
+            if (overallChart) {
+                overallChart.destroy();
+            }
+            
+            // Собираем все уникальные даты из истории цен всех предметов
+            const allDates = [...new Set(filteredItems.flatMap(item => 
+                (item.priceHistory || []).map(entry => entry.date)
+            ))].sort();
+            
+            // Если нет данных для графика
+            if (allDates.length === 0) {
+                ctx.font = "16px Arial";
+                ctx.fillStyle = "#7f8c8d";
+                ctx.textAlign = "center";
+                ctx.fillText("Нет данных для построения общего графика", 
+                            ctx.canvas.width / 2, ctx.canvas.height / 2);
+                return;
+            }
+            
+            // Создаем массив средних цен по датам
+            const avgPricesByDate = allDates.map(date => {
+                const pricesOnDate = filteredItems.map(item => {
+                    if (!item.priceHistory) return null;
+                    const priceEntry = item.priceHistory.find(entry => entry.date === date);
+                    return priceEntry ? priceEntry.price : null;
+                }).filter(price => price !== null);
+                
+                return pricesOnDate.length > 0 
+                    ? pricesOnDate.reduce((sum, price) => sum + price, 0) / pricesOnDate.length
+                    : 0;
+            });
+            
+            const labels = allDates.map(date => formatDate(date));
+            
+            overallChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Средняя цена всех предметов',
+                        data: avgPricesByDate,
+                        borderColor: '#e74c3c',
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `Средняя цена: ${formatPrice(context.raw)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatPrice(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Функция для поиска предметов
+        function searchItems(query) {
+            if (!query.trim()) {
+                processData();
+            } else {
+                const lowerQuery = query.toLowerCase();
+                filteredItems = Object.entries(itemsData)
+                    .filter(([name, data]) => name.toLowerCase().includes(lowerQuery))
+                    .map(([name, data]) => ({
+                        name: name,
+                        currentPrice: data.price,
+                        priceHistory: data.history || []
+                    }));
+            }
+            renderItemsList();
+            updateOverallStats();
+            
+            // Сбрасываем выбор предмета при поиске
+            if (selectedItem && !filteredItems.some(item => item.name === selectedItem.name)) {
+                selectedItem = null;
+                updateItemDetails();
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загружаем данные при старте
+            loadData();
+            
+            // Обработчик поиска
+            document.getElementById('search-btn').addEventListener('click', function() {
+                const query = document.getElementById('search-input').value;
+                searchItems(query);
+            });
+            
+            document.getElementById('search-input').addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    const query = document.getElementById('search-input').value;
+                    searchItems(query);
+                }
+            });
+
+            // Кнопка для обновления данных
+            document.getElementById('load-data-btn').addEventListener('click', function() {
+                loadData();
+            });
+            
+            // Автообновление данных каждые 5 минут
+            setInterval(loadData, 5 * 60 * 1000);
+        });
+    </script>
+</body>
+</html>
