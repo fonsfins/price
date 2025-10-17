@@ -74,7 +74,7 @@
       {"date": "2023-01-01", "price": 21.32}
     ]
   },
-  "charm \"metal rat\"": {
+  "charm "metal rat": {
     "price": 400.00,
     "history": [
       {"date": "2023-01-01", "price": 450.00},
