@@ -422,9 +422,6 @@
             border-radius: 12px;
             border: 1px solid var(--border-color);
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.6s ease 0.2s forwards;
         }
 
         .panel-header {
@@ -440,6 +437,13 @@
         .items-list {
             max-height: 70vh;
             overflow-y: auto;
+            /* Скрываем скроллбар */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+
+        .items-list::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
         }
 
         @media (max-width: 1024px) {
@@ -453,20 +457,10 @@
             border-bottom: 1px solid var(--border-color);
             cursor: pointer;
             transition: all 0.3s ease;
-            transform: translateX(-10px);
-            opacity: 0;
-            animation: slideInLeft 0.4s ease forwards;
         }
-
-        .item:nth-child(1) { animation-delay: 0.3s; }
-        .item:nth-child(2) { animation-delay: 0.4s; }
-        .item:nth-child(3) { animation-delay: 0.5s; }
-        .item:nth-child(4) { animation-delay: 0.6s; }
-        .item:nth-child(5) { animation-delay: 0.7s; }
 
         .item:hover {
             background-color: var(--hover-color);
-            transform: translateX(0) scale(1.02);
         }
 
         .item.active {
@@ -502,9 +496,7 @@
             border-radius: 12px;
             border: 1px solid var(--border-color);
             padding: 2rem;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.6s ease 0.4s forwards;
+            min-height: 600px;
         }
 
         .details-header {
@@ -529,15 +521,20 @@
             padding: 1.5rem;
             border-radius: 8px;
             border: 1px solid var(--border-color);
-            transform: scale(0.9);
+            transform: translateY(20px);
             opacity: 0;
-            animation: scaleIn 0.5s ease forwards;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .price-card:nth-child(1) { animation-delay: 0.6s; }
-        .price-card:nth-child(2) { animation-delay: 0.7s; }
-        .price-card:nth-child(3) { animation-delay: 0.8s; }
-        .price-card:nth-child(4) { animation-delay: 0.9s; }
+        .price-card.animate-in {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .price-card:nth-child(1) { transition-delay: 0.1s; }
+        .price-card:nth-child(2) { transition-delay: 0.2s; }
+        .price-card:nth-child(3) { transition-delay: 0.3s; }
+        .price-card:nth-child(4) { transition-delay: 0.4s; }
 
         .price-card h3 {
             font-size: 0.9rem;
@@ -565,9 +562,14 @@
             margin-top: 2rem;
             position: relative;
             height: 400px;
+            transform: translateY(30px);
             opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.6s ease 1s forwards;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .chart-container.animate-in {
+            transform: translateY(0);
+            opacity: 1;
         }
 
         .hourly-chart {
@@ -577,9 +579,9 @@
             padding: 2rem;
             margin-top: 2rem;
             position: relative;
-            height: 300px;
+            height: 450px;
             opacity: 0;
-            transform: translateY(20px);
+            transform: scale(0.95);
             max-height: 0;
             overflow: hidden;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -587,9 +589,8 @@
 
         .hourly-chart.active {
             opacity: 1;
-            transform: translateY(0);
-            max-height: 500px;
-            animation: slideDown 0.6s ease forwards;
+            transform: scale(1);
+            max-height: 600px;
         }
 
         .hourly-placeholder {
@@ -619,9 +620,14 @@
             text-align: center;
             color: var(--accent-color);
             font-size: 0.9rem;
+            transform: translateY(-10px);
             opacity: 0;
-            transform: scale(0.9);
-            animation: scaleIn 0.5s ease 1.2s forwards;
+            transition: all 0.4s ease 0.3s;
+        }
+
+        .hourly-chart.active .demo-notice {
+            transform: translateY(0);
+            opacity: 1;
         }
 
         /* Overall Stats */
@@ -631,9 +637,6 @@
             border-radius: 12px;
             border: 1px solid var(--border-color);
             padding: 2rem;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.6s ease 1.4s forwards;
         }
 
         .overall-stats h2 {
@@ -655,15 +658,7 @@
             border-radius: 8px;
             border: 1px solid var(--border-color);
             text-align: center;
-            transform: scale(0.9);
-            opacity: 0;
-            animation: scaleIn 0.5s ease forwards;
         }
-
-        .stat-card:nth-child(1) { animation-delay: 1.5s; }
-        .stat-card:nth-child(2) { animation-delay: 1.6s; }
-        .stat-card:nth-child(3) { animation-delay: 1.7s; }
-        .stat-card:nth-child(4) { animation-delay: 1.8s; }
 
         .stat-card h3 {
             font-size: 0.9rem;
@@ -681,9 +676,6 @@
         .overall-chart {
             height: 300px;
             position: relative;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.6s ease 2s forwards;
         }
 
         footer {
@@ -692,8 +684,6 @@
             padding: 2rem 0;
             color: var(--text-secondary);
             border-top: 1px solid var(--border-color);
-            opacity: 0;
-            animation: fadeIn 0.6s ease 2.2s forwards;
         }
 
         .update-notification {
@@ -735,59 +725,39 @@
             border: 1px solid rgba(255, 68, 68, 0.3);
         }
 
-        /* Animations */
-        @keyframes fadeInUp {
+        /* Selection animation */
+        @keyframes cardSlideIn {
             from {
+                transform: translateY(20px);
                 opacity: 0;
-                transform: translateY(30px);
             }
             to {
-                opacity: 1;
                 transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
                 opacity: 1;
             }
         }
 
-        @keyframes slideInLeft {
+        @keyframes chartSlideIn {
             from {
+                transform: translateY(30px);
                 opacity: 0;
-                transform: translateX(-10px);
             }
             to {
+                transform: translateY(0);
                 opacity: 1;
-                transform: translateX(0);
             }
         }
 
-        @keyframes scaleIn {
+        @keyframes hourlyExpand {
             from {
+                transform: scale(0.95);
                 opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
                 max-height: 0;
             }
             to {
+                transform: scale(1);
                 opacity: 1;
-                transform: translateY(0);
-                max-height: 500px;
+                max-height: 600px;
             }
         }
     </style>
@@ -891,7 +861,7 @@
                     </div>
                 </div>
 
-                <div class="chart-container">
+                <div class="chart-container" id="main-chart-container">
                     <canvas id="price-chart"></canvas>
                 </div>
 
@@ -1119,7 +1089,6 @@
                 const itemElement = document.createElement('div');
                 itemElement.className = `item ${selectedItem && selectedItem.name === item.name ? 'active' : ''}`;
                 itemElement.dataset.name = item.name;
-                itemElement.style.animationDelay = `${0.3 + index * 0.1}s`;
                 
                 itemElement.innerHTML = `
                     <div class="item-name">${item.name}</div>
@@ -1150,11 +1119,13 @@
             const priceChangeElement = document.getElementById('price-change');
             const lastUpdateElement = document.getElementById('last-update');
             const hourlyChartElement = document.getElementById('hourly-chart');
+            const chartContainer = document.getElementById('main-chart-container');
             
             if (!selectedItem) {
                 itemNameElement.textContent = 'Выберите предмет для просмотра деталей';
                 priceInfoElement.style.display = 'none';
                 hourlyChartElement.classList.remove('active');
+                chartContainer.classList.remove('animate-in');
                 if (priceChart) priceChart.destroy();
                 return;
             }
@@ -1162,6 +1133,21 @@
             itemNameElement.textContent = selectedItem.name;
             priceInfoElement.style.display = 'grid';
             hourlyChartElement.classList.remove('active');
+            chartContainer.classList.remove('animate-in');
+            
+            // Reset animations
+            document.querySelectorAll('.price-card').forEach(card => {
+                card.classList.remove('animate-in');
+            });
+            
+            // Animate price cards
+            setTimeout(() => {
+                document.querySelectorAll('.price-card').forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animate-in');
+                    }, index * 100);
+                });
+            }, 50);
             
             currentPriceElement.textContent = formatPrice(selectedItem.currentPrice);
             
@@ -1182,7 +1168,11 @@
             
             lastUpdateElement.textContent = lastUpdate !== 'Нет данных' ? formatDate(lastUpdate) : lastUpdate;
             
-            renderPriceChart();
+            // Animate chart container
+            setTimeout(() => {
+                chartContainer.classList.add('animate-in');
+                renderPriceChart();
+            }, 500);
         }
 
         function renderPriceChart() {
