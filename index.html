@@ -595,7 +595,6 @@
             opacity: 1;
             transform: scale(1);
             max-height: 600px;
-            height: 350px;
         }
 
         .hourly-placeholder {
@@ -605,6 +604,34 @@
             transform: translate(-50%, -50%);
             text-align: center;
             color: var(--text-secondary);
+        }
+
+        .hourly-placeholder h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hourly-placeholder p {
+            font-size: 0.9rem;
+        }
+
+        .demo-notice {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: all 0.4s ease 0.3s;
+        }
+
+        .hourly-chart.active .demo-notice {
+            transform: translateY(0);
+            opacity: 1;
         }
 
         /* Overall Stats */
@@ -809,6 +836,13 @@
                 </div>
 
                 <div class="hourly-chart" id="hourly-chart">
+                    <div class="demo-notice">
+                        ⚠️ Это демонстрационные данные. Реальная почасовая статистика будет доступна после подключения к API
+                    </div>
+                    <div class="hourly-placeholder">
+                        <h3>Статистика по часам</h3>
+                        <p>Нажмите на точку в основном графике для просмотра детальной статистики</p>
+                    </div>
                     <canvas id="hourly-chart-canvas"></canvas>
                 </div>
             </div>
@@ -1167,6 +1201,9 @@
                             callbacks: {
                                 label: function(context) {
                                     return `Цена: ${formatPrice(context.raw)}`;
+                                },
+                                afterLabel: function(context) {
+                                    return 'Нажмите для детальной статистики по часам';
                                 }
                             }
                         },
@@ -1197,11 +1234,6 @@
                                 color: textColor
                             }
                         }
-                    },
-                    interaction: {
-                        mode: 'nearest',
-                        axis: 'x',
-                        intersect: false
                     }
                 }
             });
@@ -1209,6 +1241,9 @@
 
         function showHourlyStats(date) {
             const hourlyChartElement = document.getElementById('hourly-chart');
+            const placeholder = hourlyChartElement.querySelector('.hourly-placeholder');
+            
+            placeholder.style.display = 'none';
             hourlyChartElement.classList.add('active');
             
             setTimeout(() => {
@@ -1217,35 +1252,46 @@
         }
 
         function renderHourlyChart(date) {
-            const ctx = document.getElementById('hourly-chart-canvas').getContext('2d');
+            const canvas = document.getElementById('hourly-chart-canvas');
             
             if (hourlyChart) {
                 hourlyChart.destroy();
             }
             
-            // Generate mock hourly data for demonstration
-            const hourlyData = generateMockHourlyData();
+            // Детальные данные по часам (демонстрационные)
+            const hours = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', 
+                          '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+            
+            // Генерация реалистичных демонстрационных данных
+            const basePrice = selectedItem.currentPrice;
+            const prices = hours.map((_, index) => {
+                const hour = index;
+                // Симуляция суточных колебаний цены
+                const fluctuation = Math.sin(hour * Math.PI / 12) * 0.1;
+                const random = (Math.random() - 0.5) * 0.05;
+                return basePrice * (1 + fluctuation + random);
+            });
             
             const gridColor = currentTheme === 'light' ? '#E8E8E8' : '#333333';
             const textColor = currentTheme === 'light' ? '#404040' : '#E0E0E0';
             
-            hourlyChart = new Chart(ctx, {
+            hourlyChart = new Chart(canvas, {
                 type: 'line',
                 data: {
-                    labels: Array.from({length: 24}, (_, i) => `${i}:00`),
+                    labels: hours,
                     datasets: [{
-                        label: `Почасовые цены за ${formatDate(date)}`,
-                        data: hourlyData,
-                        borderColor: '#8B0000',
-                        backgroundColor: 'rgba(139, 0, 0, 0.1)',
+                        label: `Цена за ${formatDate(date)}`,
+                        data: prices,
+                        borderColor: '#FF4444',
+                        backgroundColor: 'rgba(255, 68, 68, 0.1)',
                         borderWidth: 2,
                         fill: true,
-                        tension: 0.3,
-                        pointBackgroundColor: '#8B0000',
+                        tension: 0.4,
+                        pointBackgroundColor: '#FF4444',
                         pointBorderColor: currentTheme === 'light' ? '#FFFFFF' : '#121212',
-                        pointBorderWidth: 2,
-                        pointRadius: 4,
-                        pointHoverRadius: 6
+                        pointBorderWidth: 1,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
                     }]
                 },
                 options: {
@@ -1281,62 +1327,37 @@
                                 callback: function(value) {
                                     return formatPrice(value);
                                 }
-                            },
-                            // Убираем ограничения по минимальному значению
-                            suggestedMin: undefined,
-                            suggestedMax: undefined
+                            }
                         },
                         x: {
                             grid: {
                                 color: gridColor
                             },
                             ticks: {
-                                color: textColor
+                                color: textColor,
+                                maxTicksLimit: 12,
+                                callback: function(value, index) {
+                                    // Показываем каждые 2 часа для лучшей читаемости
+                                    return index % 2 === 0 ? this.getLabelForValue(value) : '';
+                                }
                             }
                         }
-                    },
-                    interaction: {
-                        mode: 'nearest',
-                        axis: 'x',
-                        intersect: false
                     }
                 }
             });
         }
 
-        function generateMockHourlyData() {
-            const basePrice = selectedItem.currentPrice;
-            const volatility = basePrice * 0.05; // 5% volatility
-            
-            return Array.from({length: 24}, () => {
-                const randomChange = (Math.random() - 0.5) * 2 * volatility;
-                return Math.max(basePrice * 0.5, basePrice + randomChange); // Ensure price doesn't drop below 50%
-            });
-        }
-
         function updateOverallStats() {
-            const totalItemsElement = document.getElementById('total-items');
-            const avgPriceElement = document.getElementById('avg-price');
-            const maxPriceElement = document.getElementById('max-price');
-            const minPriceElement = document.getElementById('min-price');
+            document.getElementById('total-items').textContent = filteredItems.length;
             
-            const prices = filteredItems.map(item => item.currentPrice);
+            const avgPrice = filteredItems.reduce((sum, item) => sum + item.currentPrice, 0) / filteredItems.length;
+            document.getElementById('avg-price').textContent = formatPrice(avgPrice || 0);
             
-            totalItemsElement.textContent = filteredItems.length;
+            const maxPrice = filteredItems.length > 0 ? Math.max(...filteredItems.map(item => item.currentPrice)) : 0;
+            document.getElementById('max-price').textContent = formatPrice(maxPrice);
             
-            if (prices.length > 0) {
-                const avgPrice = prices.reduce((sum, price) => sum + price, 0) / prices.length;
-                const maxPrice = Math.max(...prices);
-                const minPrice = Math.min(...prices);
-                
-                avgPriceElement.textContent = formatPrice(avgPrice);
-                maxPriceElement.textContent = formatPrice(maxPrice);
-                minPriceElement.textContent = formatPrice(minPrice);
-            } else {
-                avgPriceElement.textContent = '0';
-                maxPriceElement.textContent = '0';
-                minPriceElement.textContent = '0';
-            }
+            const minPrice = filteredItems.length > 0 ? Math.min(...filteredItems.map(item => item.currentPrice)) : 0;
+            document.getElementById('min-price').textContent = formatPrice(minPrice);
             
             renderOverallChart();
         }
@@ -1348,47 +1369,70 @@
                 overallChart.destroy();
             }
             
-            if (filteredItems.length === 0) return;
+            const allDates = [...new Set(filteredItems.flatMap(item => 
+                (item.priceHistory || []).map(entry => entry.date)
+            ))].sort();
             
-            // Get top 10 most expensive items for the chart
-            const topItems = [...filteredItems]
-                .sort((a, b) => b.currentPrice - a.currentPrice)
-                .slice(0, 10);
+            if (allDates.length === 0) {
+                return;
+            }
+            
+            const avgPricesByDate = allDates.map(date => {
+                const pricesOnDate = filteredItems.map(item => {
+                    if (!item.priceHistory) return null;
+                    const priceEntry = item.priceHistory.find(entry => entry.date === date);
+                    return priceEntry ? priceEntry.price : null;
+                }).filter(price => price !== null);
+                
+                return pricesOnDate.length > 0 
+                    ? pricesOnDate.reduce((sum, price) => sum + price, 0) / pricesOnDate.length
+                    : 0;
+            });
+            
+            const labels = allDates.map(date => formatDate(date));
             
             const gridColor = currentTheme === 'light' ? '#E8E8E8' : '#333333';
             const textColor = currentTheme === 'light' ? '#404040' : '#E0E0E0';
             
             overallChart = new Chart(ctx, {
-                type: 'bar',
+                type: 'line',
                 data: {
-                    labels: topItems.map(item => item.name),
+                    labels: labels,
                     datasets: [{
-                        label: 'Цена',
-                        data: topItems.map(item => item.currentPrice),
-                        backgroundColor: '#FF4444',
-                        borderColor: '#8B0000',
-                        borderWidth: 1,
-                        borderRadius: 4
+                        label: 'Средняя цена всех предметов',
+                        data: avgPricesByDate,
+                        borderColor: '#FF4444',
+                        backgroundColor: 'rgba(255, 68, 68, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            display: false
-                        },
                         tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#FFFFFF',
+                            bodyColor: '#FFFFFF',
                             callbacks: {
                                 label: function(context) {
-                                    return `Цена: ${formatPrice(context.raw)}`;
+                                    return `Средняя цена: ${formatPrice(context.raw)}`;
                                 }
+                            }
+                        },
+                        legend: {
+                            labels: {
+                                color: textColor
                             }
                         }
                     },
                     scales: {
                         y: {
-                            beginAtZero: true,
+                            beginAtZero: false,
                             grid: {
                                 color: gridColor
                             },
@@ -1401,12 +1445,10 @@
                         },
                         x: {
                             grid: {
-                                display: false
+                                color: gridColor
                             },
                             ticks: {
-                                color: textColor,
-                                maxRotation: 45,
-                                minRotation: 45
+                                color: textColor
                             }
                         }
                     }
@@ -1414,49 +1456,46 @@
             });
         }
 
-        // Search functionality
-        function initSearch() {
-            const searchInput = document.getElementById('search-input');
-            const searchBtn = document.getElementById('search-btn');
-            
-            function performSearch() {
-                const searchTerm = searchInput.value.toLowerCase().trim();
-                
-                if (searchTerm === '') {
-                    processData();
-                } else {
-                    filteredItems = filteredItems.filter(item => 
-                        item.name.toLowerCase().includes(searchTerm)
-                    );
-                }
-                
-                renderItemsList();
-                updateOverallStats();
+        function searchItems(query) {
+            if (!query.trim()) {
+                processData();
+            } else {
+                const lowerQuery = query.toLowerCase();
+                filteredItems = Object.entries(itemsData)
+                    .filter(([name, data]) => name.toLowerCase().includes(lowerQuery))
+                    .map(([name, data]) => ({
+                        name: name,
+                        currentPrice: data.price,
+                        priceHistory: data.history || []
+                    }));
             }
+            renderItemsList();
+            updateOverallStats();
             
-            searchInput.addEventListener('input', performSearch);
-            searchBtn.addEventListener('click', performSearch);
+            if (selectedItem && !filteredItems.some(item => item.name === selectedItem.name)) {
+                selectedItem = null;
+                updateItemDetails();
+            }
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            initTopMenu();
+            loadData();
             
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    performSearch();
+            document.getElementById('search-btn').addEventListener('click', function() {
+                const query = document.getElementById('search-input').value;
+                searchItems(query);
+            });
+            
+            document.getElementById('search-input').addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    const query = document.getElementById('search-input').value;
+                    searchItems(query);
                 }
             });
-        }
-
-        // Auto-refresh data every 5 minutes
-        function startAutoRefresh() {
-            setInterval(() => {
-                loadData();
-            }, 5 * 60 * 1000);
-        }
-
-        // Initialize everything when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            initTopMenu();
-            initSearch();
-            loadData();
-            startAutoRefresh();
+            
+            setInterval(loadData, 5 * 60 * 1000);
         });
     </script>
 </body>
