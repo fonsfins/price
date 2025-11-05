@@ -266,6 +266,12 @@
             font-weight: 500;
         }
 
+        .theme-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
         .theme-option {
             display: flex;
             align-items: center;
@@ -274,7 +280,6 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-bottom: 0.5rem;
             transform: translateX(-20px);
             opacity: 0;
         }
@@ -285,11 +290,11 @@
         }
 
         .top-menu.active .theme-option:nth-child(1) {
-            transition-delay: 0.1s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
         }
 
         .top-menu.active .theme-option:nth-child(2) {
-            transition-delay: 0.2s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
         }
 
         .theme-option:hover {
@@ -320,7 +325,7 @@
             margin-bottom: 1rem;
             transform: translateY(20px);
             opacity: 0;
-            transition: all 0.3s ease 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
         }
 
         .top-menu.active .language-selector {
@@ -437,13 +442,12 @@
         .items-list {
             max-height: 70vh;
             overflow-y: auto;
-            /* Скрываем скроллбар */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
         .items-list::-webkit-scrollbar {
-            display: none; /* Chrome, Safari and Opera */
+            display: none;
         }
 
         @media (max-width: 1024px) {
@@ -724,42 +728,6 @@
             margin: 1rem;
             border: 1px solid rgba(255, 68, 68, 0.3);
         }
-
-        /* Selection animation */
-        @keyframes cardSlideIn {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes chartSlideIn {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes hourlyExpand {
-            from {
-                transform: scale(0.95);
-                opacity: 0;
-                max-height: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-                max-height: 600px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -803,13 +771,15 @@
         
         <div class="theme-switcher">
             <div class="theme-section-title">Тема</div>
-            <div class="theme-option active" data-theme="dark">
-                <div class="theme-preview dark-preview"></div>
-                <span>Темная тема</span>
-            </div>
-            <div class="theme-option" data-theme="light">
-                <div class="theme-preview light-preview"></div>
-                <span>Светлая тема</span>
+            <div class="theme-options">
+                <div class="theme-option active" data-theme="dark">
+                    <div class="theme-preview dark-preview"></div>
+                    <span>Темная тема</span>
+                </div>
+                <div class="theme-option" data-theme="light">
+                    <div class="theme-preview light-preview"></div>
+                    <span>Светлая тема</span>
+                </div>
             </div>
         </div>
         
@@ -1297,8 +1267,8 @@
             const prices = hours.map((_, index) => {
                 const hour = index;
                 // Симуляция суточных колебаний цены
-                const fluctuation = Math.sin(hour * Math.PI / 12) * 0.1; // Волна в течение дня
-                const random = (Math.random() - 0.5) * 0.05; // Случайные колебания
+                const fluctuation = Math.sin(hour * Math.PI / 12) * 0.1;
+                const random = (Math.random() - 0.5) * 0.05;
                 return basePrice * (1 + fluctuation + random);
             });
             
@@ -1365,7 +1335,11 @@
                             },
                             ticks: {
                                 color: textColor,
-                                maxTicksLimit: 12
+                                maxTicksLimit: 12,
+                                callback: function(value, index) {
+                                    // Показываем каждые 2 часа для лучшей читаемости
+                                    return index % 2 === 0 ? this.getLabelForValue(value) : '';
+                                }
                             }
                         }
                     }
