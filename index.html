@@ -41,6 +41,7 @@
             line-height: 1.6;
             transition: all 0.3s ease;
             position: relative;
+            overflow-x: hidden;
         }
 
         .gradient-overlay {
@@ -96,8 +97,14 @@
         .menu-section {
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
             gap: 1.5rem;
-            flex: 1;
         }
 
         .hamburger-menu {
@@ -106,6 +113,7 @@
             border-radius: 4px;
             transition: background-color 0.3s;
             flex-shrink: 0;
+            order: 2;
         }
 
         .hamburger-menu:hover {
@@ -186,15 +194,16 @@
         /* Top Menu */
         .top-menu {
             position: fixed;
-            top: -300px;
+            top: -100%;
             left: 0;
             width: 100%;
             background-color: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
-            transition: top 0.3s ease;
+            transition: top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1000;
             padding: 2rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transform: translateZ(0);
         }
 
         .top-menu.active {
@@ -210,10 +219,13 @@
             background-color: rgba(0, 0, 0, 0.5);
             display: none;
             z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .top-menu-overlay.active {
             display: block;
+            opacity: 1;
         }
 
         .top-menu-header {
@@ -235,10 +247,23 @@
             font-size: 1.5rem;
             cursor: pointer;
             padding: 5px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .close-top-menu:hover {
+            background-color: var(--hover-color);
         }
 
         .theme-switcher {
             margin-bottom: 2rem;
+        }
+
+        .theme-section-title {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 500;
         }
 
         .theme-option {
@@ -248,8 +273,23 @@
             padding: 1rem;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
             margin-bottom: 0.5rem;
+            transform: translateX(-20px);
+            opacity: 0;
+        }
+
+        .top-menu.active .theme-option {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .top-menu.active .theme-option:nth-child(1) {
+            transition-delay: 0.1s;
+        }
+
+        .top-menu.active .theme-option:nth-child(2) {
+            transition-delay: 0.2s;
         }
 
         .theme-option:hover {
@@ -274,6 +314,35 @@
 
         .light-preview {
             background: linear-gradient(135deg, #FFFFFF 50%, #F5F5F5 50%);
+        }
+
+        .language-selector {
+            margin-bottom: 1rem;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease 0.3s;
+        }
+
+        .top-menu.active .language-selector {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .language-section-title {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .language-select {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
         }
 
         /* Mobile styles */
@@ -304,6 +373,10 @@
             .logo {
                 height: 30px;
             }
+
+            .top-menu {
+                padding: 1.5rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -323,6 +396,10 @@
             #search-btn {
                 padding: 10px 20px;
                 font-size: 0.85rem;
+            }
+
+            .top-menu {
+                padding: 1rem;
             }
         }
 
@@ -345,6 +422,9 @@
             border-radius: 12px;
             border: 1px solid var(--border-color);
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease 0.2s forwards;
         }
 
         .panel-header {
@@ -372,11 +452,21 @@
             padding: 1.2rem 1.5rem;
             border-bottom: 1px solid var(--border-color);
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.3s ease;
+            transform: translateX(-10px);
+            opacity: 0;
+            animation: slideInLeft 0.4s ease forwards;
         }
+
+        .item:nth-child(1) { animation-delay: 0.3s; }
+        .item:nth-child(2) { animation-delay: 0.4s; }
+        .item:nth-child(3) { animation-delay: 0.5s; }
+        .item:nth-child(4) { animation-delay: 0.6s; }
+        .item:nth-child(5) { animation-delay: 0.7s; }
 
         .item:hover {
             background-color: var(--hover-color);
+            transform: translateX(0) scale(1.02);
         }
 
         .item.active {
@@ -412,6 +502,9 @@
             border-radius: 12px;
             border: 1px solid var(--border-color);
             padding: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease 0.4s forwards;
         }
 
         .details-header {
@@ -436,7 +529,15 @@
             padding: 1.5rem;
             border-radius: 8px;
             border: 1px solid var(--border-color);
+            transform: scale(0.9);
+            opacity: 0;
+            animation: scaleIn 0.5s ease forwards;
         }
+
+        .price-card:nth-child(1) { animation-delay: 0.6s; }
+        .price-card:nth-child(2) { animation-delay: 0.7s; }
+        .price-card:nth-child(3) { animation-delay: 0.8s; }
+        .price-card:nth-child(4) { animation-delay: 0.9s; }
 
         .price-card h3 {
             font-size: 0.9rem;
@@ -464,6 +565,9 @@
             margin-top: 2rem;
             position: relative;
             height: 400px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease 1s forwards;
         }
 
         .hourly-chart {
@@ -474,11 +578,18 @@
             margin-top: 2rem;
             position: relative;
             height: 300px;
-            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .hourly-chart.active {
-            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            max-height: 500px;
+            animation: slideDown 0.6s ease forwards;
         }
 
         .hourly-placeholder {
@@ -499,6 +610,20 @@
             font-size: 0.9rem;
         }
 
+        .demo-notice {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: scale(0.9);
+            animation: scaleIn 0.5s ease 1.2s forwards;
+        }
+
         /* Overall Stats */
         .overall-stats {
             margin-top: 3rem;
@@ -506,6 +631,9 @@
             border-radius: 12px;
             border: 1px solid var(--border-color);
             padding: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease 1.4s forwards;
         }
 
         .overall-stats h2 {
@@ -527,7 +655,15 @@
             border-radius: 8px;
             border: 1px solid var(--border-color);
             text-align: center;
+            transform: scale(0.9);
+            opacity: 0;
+            animation: scaleIn 0.5s ease forwards;
         }
+
+        .stat-card:nth-child(1) { animation-delay: 1.5s; }
+        .stat-card:nth-child(2) { animation-delay: 1.6s; }
+        .stat-card:nth-child(3) { animation-delay: 1.7s; }
+        .stat-card:nth-child(4) { animation-delay: 1.8s; }
 
         .stat-card h3 {
             font-size: 0.9rem;
@@ -545,6 +681,9 @@
         .overall-chart {
             height: 300px;
             position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease 2s forwards;
         }
 
         footer {
@@ -553,6 +692,8 @@
             padding: 2rem 0;
             color: var(--text-secondary);
             border-top: 1px solid var(--border-color);
+            opacity: 0;
+            animation: fadeIn 0.6s ease 2.2s forwards;
         }
 
         .update-notification {
@@ -567,6 +708,15 @@
             display: none;
             z-index: 1000;
             font-weight: 600;
+            transform: translateX(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .update-notification.show {
+            display: block;
+            transform: translateX(0);
+            opacity: 1;
         }
 
         .loading {
@@ -584,6 +734,62 @@
             margin: 1rem;
             border: 1px solid rgba(255, 68, 68, 0.3);
         }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                max-height: 500px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -599,10 +805,12 @@
             <div class="header-content">
                 <div class="header-top-row">
                     <div class="menu-section">
+                        <div class="logo-section">
+                            <img src="https://downloads.intercomcdn.com/i/o/427509/b0cce76cc72dc84563f5e8c7/c507c374faf2bc0216c805612a002e47.png" alt="Standoff2" class="logo">
+                        </div>
                         <div class="hamburger-menu" id="hamburger-menu">
                             <div class="hamburger-icon"></div>
                         </div>
-                        <img src="https://downloads.intercomcdn.com/i/o/427509/b0cce76cc72dc84563f5e8c7/c507c374faf2bc0216c805612a002e47.png" alt="Standoff2" class="logo">
                     </div>
                 </div>
                 <div class="header-bottom-row">
@@ -624,6 +832,7 @@
         </div>
         
         <div class="theme-switcher">
+            <div class="theme-section-title">Тема</div>
             <div class="theme-option active" data-theme="dark">
                 <div class="theme-preview dark-preview"></div>
                 <span>Темная тема</span>
@@ -635,8 +844,8 @@
         </div>
         
         <div class="language-selector">
-            <h3 style="margin-bottom: 1rem; font-size: 1rem;">Язык</h3>
-            <select style="width: 100%; padding: 12px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary);">
+            <div class="language-section-title">Язык</div>
+            <select class="language-select">
                 <option>Русский</option>
                 <option>English</option>
                 <option>Español</option>
@@ -687,6 +896,9 @@
                 </div>
 
                 <div class="hourly-chart" id="hourly-chart">
+                    <div class="demo-notice">
+                        ⚠️ Это демонстрационные данные. Реальная почасовая статистика будет доступна после подключения к API
+                    </div>
                     <div class="hourly-placeholder">
                         <h3>Статистика по часам</h3>
                         <p>Нажмите на точку в основном графике для просмотра детальной статистики</p>
@@ -747,6 +959,10 @@
             const overlay = document.getElementById('top-menu-overlay');
             const closeBtn = document.getElementById('close-top-menu');
 
+            // Initially closed
+            topMenu.classList.remove('active');
+            overlay.classList.remove('active');
+
             hamburger.addEventListener('click', () => {
                 topMenu.classList.add('active');
                 overlay.classList.add('active');
@@ -779,6 +995,9 @@
             if (overallChart) {
                 renderOverallChart();
             }
+            if (hourlyChart) {
+                renderHourlyChart();
+            }
         }
 
         // Initialize theme from localStorage
@@ -789,8 +1008,15 @@
         document.querySelectorAll('.theme-option').forEach(option => {
             option.addEventListener('click', () => {
                 setTheme(option.dataset.theme);
+                // Close menu after theme change
+                closeTopMenu();
             });
         });
+
+        function closeTopMenu() {
+            document.getElementById('top-menu').classList.remove('active');
+            document.getElementById('top-menu-overlay').classList.remove('active');
+        }
 
         // Data loading functions
         async function loadData() {
@@ -831,9 +1057,10 @@
         function showNotification(message) {
             const notification = document.getElementById('update-notification');
             notification.textContent = message;
-            notification.style.display = 'block';
+            notification.classList.add('show');
+            
             setTimeout(() => {
-                notification.style.display = 'none';
+                notification.classList.remove('show');
             }, 3000);
         }
 
@@ -884,7 +1111,7 @@
                 return;
             }
             
-            filteredItems.forEach(item => {
+            filteredItems.forEach((item, index) => {
                 const priceChange = calculatePriceChange(item);
                 const priceChangeClass = priceChange >= 0 ? '' : 'change-negative';
                 const priceChangeSymbol = priceChange >= 0 ? '+' : '';
@@ -892,6 +1119,7 @@
                 const itemElement = document.createElement('div');
                 itemElement.className = `item ${selectedItem && selectedItem.name === item.name ? 'active' : ''}`;
                 itemElement.dataset.name = item.name;
+                itemElement.style.animationDelay = `${0.3 + index * 0.1}s`;
                 
                 itemElement.innerHTML = `
                     <div class="item-name">${item.name}</div>
@@ -1054,20 +1282,35 @@
         function showHourlyStats(date) {
             const hourlyChartElement = document.getElementById('hourly-chart');
             const placeholder = hourlyChartElement.querySelector('.hourly-placeholder');
-            const canvas = document.getElementById('hourly-chart-canvas');
             
             placeholder.style.display = 'none';
             hourlyChartElement.classList.add('active');
             
-            // Заглушка для почасовой статистики
-            const hours = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'];
-            const prices = Array.from({length: 6}, () => 
-                selectedItem.currentPrice * (0.95 + Math.random() * 0.1)
-            );
+            setTimeout(() => {
+                renderHourlyChart(date);
+            }, 300);
+        }
+
+        function renderHourlyChart(date) {
+            const canvas = document.getElementById('hourly-chart-canvas');
             
             if (hourlyChart) {
                 hourlyChart.destroy();
             }
+            
+            // Детальные данные по часам (демонстрационные)
+            const hours = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', 
+                          '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+            
+            // Генерация реалистичных демонстрационных данных
+            const basePrice = selectedItem.currentPrice;
+            const prices = hours.map((_, index) => {
+                const hour = index;
+                // Симуляция суточных колебаний цены
+                const fluctuation = Math.sin(hour * Math.PI / 12) * 0.1; // Волна в течение дня
+                const random = (Math.random() - 0.5) * 0.05; // Случайные колебания
+                return basePrice * (1 + fluctuation + random);
+            });
             
             const gridColor = currentTheme === 'light' ? '#E8E8E8' : '#333333';
             const textColor = currentTheme === 'light' ? '#404040' : '#E0E0E0';
@@ -1083,7 +1326,12 @@
                         backgroundColor: 'rgba(255, 68, 68, 0.1)',
                         borderWidth: 2,
                         fill: true,
-                        tension: 0.4
+                        tension: 0.4,
+                        pointBackgroundColor: '#FF4444',
+                        pointBorderColor: currentTheme === 'light' ? '#FFFFFF' : '#121212',
+                        pointBorderWidth: 1,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
                     }]
                 },
                 options: {
@@ -1126,7 +1374,8 @@
                                 color: gridColor
                             },
                             ticks: {
-                                color: textColor
+                                color: textColor,
+                                maxTicksLimit: 12
                             }
                         }
                     }
