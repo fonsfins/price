@@ -69,6 +69,7 @@
             margin: 0 auto;
             padding: 0 20px;
             width: 100%;
+            overflow-x: hidden; /* Предотвращаем выход за границы */
         }
 
         /* Header Styles */
@@ -85,6 +86,8 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            width: 100%;
+            max-width: 100%;
         }
 
         .header-top-row {
@@ -158,6 +161,7 @@
             height: 35px;
             width: auto;
             flex-shrink: 0;
+            max-width: 100%;
         }
 
         .search-container {
@@ -176,6 +180,7 @@
             color: var(--text-primary);
             font-size: 0.9rem;
             outline: none;
+            max-width: 100%;
         }
 
         #search-input::placeholder {
@@ -361,6 +366,7 @@
             border-radius: 6px;
             color: var(--text-primary);
             font-size: 0.9rem;
+            max-width: 100%;
         }
 
         /* Main Content */
@@ -369,6 +375,9 @@
             grid-template-columns: 350px 1fr;
             gap: 2rem;
             margin-top: 2rem;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
         .items-panel {
@@ -377,11 +386,14 @@
             border: 1px solid var(--border-color);
             overflow: hidden;
             order: 1;
+            width: 100%;
+            max-width: 100%;
         }
 
         .panel-header {
             padding: 1.5rem;
             border-bottom: 1px solid var(--border-color);
+            width: 100%;
         }
 
         .panel-header h2 {
@@ -394,6 +406,7 @@
             overflow-y: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            width: 100%;
         }
 
         .items-list::-webkit-scrollbar {
@@ -409,6 +422,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            width: 100%;
         }
 
         .item:hover {
@@ -424,6 +438,8 @@
             font-weight: 600;
             margin-bottom: 0.5rem;
             font-size: 1rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .item-price {
@@ -450,16 +466,22 @@
             padding: 2rem;
             min-height: 600px;
             order: 2;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
         .details-header {
             margin-bottom: 2rem;
+            width: 100%;
         }
 
         .details-header h2 {
             font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .price-info-grid {
@@ -467,6 +489,7 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
+            width: 100%;
         }
 
         .price-card {
@@ -477,6 +500,8 @@
             transform: translateY(20px);
             opacity: 0;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            max-width: 100%;
         }
 
         .price-card.animate-in {
@@ -518,6 +543,9 @@
             transform: translateY(30px);
             opacity: 0;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
         }
 
         .chart-container.animate-in {
@@ -537,6 +565,8 @@
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            max-width: 100%;
         }
 
         .hourly-chart.active {
@@ -552,34 +582,47 @@
             width: 100%;
         }
 
-        /* Демо-заметка поверх графика */
+        /* Новый дизайн демо-заметки - как ошибка, но полупрозрачная */
         .demo-notice-overlay {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 68, 68, 0.3);
-            border-radius: 12px;
-            padding: 2rem;
+            background: rgba(255, 68, 68, 0.15); /* Полупрозрачный красный фон */
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 68, 68, 0.5);
+            border-radius: 8px;
+            padding: 1.5rem;
             text-align: center;
             color: #FF4444;
             z-index: 10;
-            max-width: 90%;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 80%;
+            box-shadow: 0 4px 20px rgba(255, 68, 68, 0.2);
+            font-weight: 500;
         }
 
         .demo-notice-overlay h3 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 0.5rem;
             color: #FF4444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         .demo-notice-overlay p {
             font-size: 0.9rem;
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.9);
             line-height: 1.4;
+        }
+
+        .light-theme .demo-notice-overlay p {
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        .warning-icon {
+            font-size: 1.3rem;
         }
 
         .hourly-placeholder {
@@ -614,6 +657,9 @@
             border-radius: 12px;
             border: 1px solid var(--border-color);
             padding: 2rem;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
         .overall-stats h2 {
@@ -627,6 +673,7 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
+            width: 100%;
         }
 
         .stat-card {
@@ -635,6 +682,8 @@
             border-radius: 8px;
             border: 1px solid var(--border-color);
             text-align: center;
+            width: 100%;
+            max-width: 100%;
         }
 
         .stat-card h3 {
@@ -653,6 +702,7 @@
         .overall-chart {
             height: 300px;
             position: relative;
+            width: 100%;
         }
 
         footer {
@@ -661,6 +711,7 @@
             padding: 2rem 0;
             color: var(--text-secondary);
             border-top: 1px solid var(--border-color);
+            width: 100%;
         }
 
         .update-notification {
@@ -700,6 +751,8 @@
             border-radius: 8px;
             margin: 1rem;
             border: 1px solid rgba(255, 68, 68, 0.3);
+            width: calc(100% - 2rem);
+            max-width: 100%;
         }
 
         /* Мобильная адаптация */
@@ -787,8 +840,8 @@
             }
 
             .demo-notice-overlay {
-                padding: 1.5rem;
-                max-width: 95%;
+                padding: 1.2rem;
+                max-width: 90%;
             }
 
             .demo-notice-overlay h3 {
@@ -852,7 +905,7 @@
 
         @media (max-width: 480px) {
             .container {
-                padding: 0 15px; /* Увеличил отступы для лучшего отображения */
+                padding: 0 15px;
             }
 
             .header-content {
@@ -914,6 +967,7 @@
 
             .demo-notice-overlay {
                 padding: 1rem;
+                max-width: 95%;
             }
 
             .demo-notice-overlay h3 {
@@ -941,6 +995,24 @@
             .hourly-chart-container {
                 height: 200px;
             }
+        }
+
+        /* Дополнительные исправления для предотвращения выхода за границы */
+        .main-content > * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .details-panel > * {
+            max-width: 100%;
+        }
+
+        .items-panel > * {
+            max-width: 100%;
+        }
+
+        canvas {
+            max-width: 100% !important;
         }
     </style>
 </head>
@@ -1056,10 +1128,10 @@
                             <h3>Статистика по часам</h3>
                             <p>Нажмите на точку в основном графике для просмотра детальной статистики</p>
                         </div>
-                        <!-- Демо-заметка поверх графика -->
+                        <!-- Новый дизайн демо-заметки -->
                         <div class="demo-notice-overlay" id="demo-notice-overlay">
-                            <h3>Демонстрационные данные</h3>
-                            <p>⚠️ Реальная почасовая статистика будет доступна после подключения к API</p>
+                            <h3><span class="warning-icon">⚠️</span> Демонстрационные данные</h3>
+                            <p>Реальная почасовая статистика будет доступна после подключения к API</p>
                         </div>
                         <canvas id="hourly-chart-canvas" class="hourly-chart-canvas"></canvas>
                     </div>
@@ -1101,6 +1173,7 @@
     </footer>
 
     <script>
+        // ... (остальной JavaScript код остается без изменений)
         let itemsData = {};
         let selectedItem = null;
         let priceChart = null;
