@@ -388,7 +388,6 @@
             order: 1;
             width: 100%;
             max-width: 100%;
-            /* Уменьшили высоту панели предметов */
             max-height: 65vh;
         }
 
@@ -404,7 +403,6 @@
         }
 
         .items-list {
-            /* Уменьшили максимальную высоту списка предметов */
             max-height: calc(65vh - 80px);
             overflow-y: auto;
             scrollbar-width: none;
@@ -534,7 +532,7 @@
             color: #FF4444;
         }
 
-        /* Chart Container - вернули оригинальные анимации */
+        /* Chart Container */
         .chart-container {
             background-color: var(--bg-tertiary);
             border-radius: 12px;
@@ -556,18 +554,16 @@
             opacity: 1;
         }
 
-        /* Hourly Chart - вернули оригинальные анимации */
+        /* Hourly Chart - исправленная версия */
         .hourly-chart {
             background-color: var(--bg-tertiary);
             border-radius: 12px;
             border: 1px solid var(--border-color);
-            padding: 2rem;
             margin-top: 2rem;
             position: relative;
-            height: 350px;
+            height: 0;
             opacity: 0;
             transform: scale(0.95);
-            max-height: 0;
             overflow: hidden;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             width: 100%;
@@ -577,7 +573,8 @@
         .hourly-chart.active {
             opacity: 1;
             transform: scale(1);
-            max-height: 600px;
+            height: 400px;
+            padding: 2rem;
         }
 
         .hourly-chart-container {
@@ -586,17 +583,23 @@
             width: 100%;
         }
 
-        /* Новый дизайн демо-заметки - как у ошибки, но полупрозрачный */
+        /* Демо-заметка поверх графика - абсолютное позиционирование */
         .demo-notice {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
             padding: 1.5rem;
             color: #FF4444;
             background: rgba(255, 68, 68, 0.1);
             border-radius: 8px;
-            margin-bottom: 1.5rem;
             border: 1px solid rgba(255, 68, 68, 0.3);
-            width: 100%;
-            box-sizing: border-box;
+            width: 80%;
+            max-width: 400px;
+            z-index: 10;
+            backdrop-filter: none;
+            box-shadow: none;
         }
 
         .hourly-placeholder {
@@ -801,10 +804,14 @@
                 margin-top: 1rem;
             }
 
-            .hourly-chart {
+            .hourly-chart.active {
                 padding: 1rem;
-                height: 280px;
-                margin-top: 1rem;
+                height: 300px;
+            }
+
+            .demo-notice {
+                padding: 1rem;
+                width: 90%;
             }
 
             .hourly-placeholder h3 {
@@ -911,8 +918,8 @@
                 padding: 0.8rem;
             }
 
-            .hourly-chart {
-                height: 230px;
+            .hourly-chart.active {
+                height: 250px;
                 padding: 0.8rem;
             }
 
@@ -931,8 +938,8 @@
                 height: 250px;
             }
 
-            .hourly-chart {
-                height: 230px;
+            .hourly-chart.active {
+                height: 200px;
             }
         }
 
@@ -1060,16 +1067,19 @@
                     <canvas id="price-chart"></canvas>
                 </div>
 
-                <!-- Почасовая таблица с оригинальным дизайном и анимациями -->
+                <!-- Почасовая таблица с исправлениями -->
                 <div class="hourly-chart" id="hourly-chart">
-                    <div class="demo-notice">
-                        ⚠️ Это демонстрационные данные. Реальная почасовая статистика будет доступна после подключения к API
+                    <div class="hourly-chart-container">
+                        <div class="hourly-placeholder">
+                            <h3>Статистика по часам</h3>
+                            <p>Нажмите на точку в основном графике для просмотра детальной статистики</p>
+                        </div>
+                        <!-- Демо-заметка поверх графика -->
+                        <div class="demo-notice">
+                            ⚠️ Это демонстрационные данные. Реальная почасовая статистика будет доступна после подключения к API
+                        </div>
+                        <canvas id="hourly-chart-canvas"></canvas>
                     </div>
-                    <div class="hourly-placeholder">
-                        <h3>Статистика по часам</h3>
-                        <p>Нажмите на точку в основном графике для просмотра детальной статистики</p>
-                    </div>
-                    <canvas id="hourly-chart-canvas"></canvas>
                 </div>
             </div>
         </div>
@@ -1331,27 +1341,39 @@
             const hourlyChartElement = document.getElementById('hourly-chart');
             const chartContainer = document.getElementById('main-chart-container');
             const hourlyPlaceholder = hourlyChartElement.querySelector('.hourly-placeholder');
+            const demoNotice = hourlyChartElement.querySelector('.demo-notice');
             
             if (!selectedItem) {
                 itemNameElement.textContent = 'Выберите предмет для просмотра деталей';
                 priceInfoElement.style.display = 'none';
                 hourlyChartElement.classList.remove('active');
+                hourlyPlaceholder.style.display = 'flex';
+                demoNotice.style.display = 'none';
                 chartContainer.classList.remove('animate-in');
                 if (priceChart) priceChart.destroy();
+                if (hourlyChart) {
+                    hourlyChart.destroy();
+                    hourlyChart = null;
+                }
                 return;
             }
             
             itemNameElement.textContent = selectedItem.name;
             priceInfoElement.style.display = 'grid';
-            hourlyChartElement.classList.remove('active');
-            chartContainer.classList.remove('animate-in');
             
-            // Reset animations
+            // Сбрасываем почасовой график при смене предмета
+            hourlyChartElement.classList.remove('active');
+            hourlyPlaceholder.style.display = 'flex';
+            demoNotice.style.display = 'none';
+            if (hourlyChart) {
+                hourlyChart.destroy();
+                hourlyChart = null;
+            }
+            
             document.querySelectorAll('.price-card').forEach(card => {
                 card.classList.remove('animate-in');
             });
             
-            // Animate price cards
             setTimeout(() => {
                 document.querySelectorAll('.price-card').forEach((card, index) => {
                     setTimeout(() => {
@@ -1379,7 +1401,6 @@
             
             lastUpdateElement.textContent = lastUpdate !== 'Нет данных' ? formatDate(lastUpdate) : lastUpdate;
             
-            // Animate chart container
             setTimeout(() => {
                 chartContainer.classList.add('animate-in');
                 renderPriceChart();
@@ -1483,11 +1504,15 @@
         function showHourlyStats(date) {
             const hourlyChartElement = document.getElementById('hourly-chart');
             const placeholder = hourlyChartElement.querySelector('.hourly-placeholder');
+            const demoNotice = hourlyChartElement.querySelector('.demo-notice');
             
-            placeholder.style.display = 'none';
+            // Показываем контейнер
             hourlyChartElement.classList.add('active');
             
+            // Скрываем плейсхолдер и показываем демо-заметку поверх графика
             setTimeout(() => {
+                placeholder.style.display = 'none';
+                demoNotice.style.display = 'block';
                 renderHourlyChart(date);
             }, 300);
         }
