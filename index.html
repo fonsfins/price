@@ -525,46 +525,26 @@
             opacity: 1;
         }
 
-        /* Hourly Chart - исправленная версия */
+        /* Hourly Chart - вернул оригинальный дизайн */
         .hourly-chart {
             background-color: var(--bg-tertiary);
             border-radius: 12px;
             border: 1px solid var(--border-color);
-            padding: 0;
+            padding: 2rem;
             margin-top: 2rem;
             position: relative;
+            height: 350px;
             opacity: 0;
             transform: scale(0.95);
             max-height: 0;
             overflow: hidden;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
         }
 
         .hourly-chart.active {
             opacity: 1;
             transform: scale(1);
             max-height: 600px;
-            padding: 0;
-        }
-
-        .demo-notice {
-            background: rgba(255, 68, 68, 0.1);
-            border-bottom: 1px solid var(--accent-color);
-            padding: 1rem;
-            text-align: center;
-            color: var(--accent-color);
-            font-size: 0.9rem;
-            flex-shrink: 0;
-        }
-
-        .hourly-chart-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            min-height: 300px;
         }
 
         .hourly-placeholder {
@@ -574,8 +554,6 @@
             transform: translate(-50%, -50%);
             text-align: center;
             color: var(--text-secondary);
-            width: 100%;
-            padding: 0 2rem;
         }
 
         .hourly-placeholder h3 {
@@ -587,11 +565,23 @@
             font-size: 0.9rem;
         }
 
-        #hourly-chart-canvas {
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            min-height: 300px;
+        /* Demo Notice - стиль как у ошибки */
+        .demo-notice {
+            text-align: center;
+            padding: 2rem;
+            color: #FF4444;
+            background: rgba(255, 68, 68, 0.1);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: all 0.4s ease 0.3s;
+        }
+
+        .hourly-chart.active .demo-notice {
+            transform: translateY(0);
+            opacity: 1;
         }
 
         /* Overall Stats */
@@ -768,16 +758,10 @@
                 margin-top: 1rem;
             }
 
-            .hourly-chart.active {
-                max-height: 500px;
-            }
-
-            .hourly-chart-content {
-                min-height: 250px;
-            }
-
-            #hourly-chart-canvas {
-                min-height: 250px;
+            .hourly-chart {
+                padding: 1rem;
+                height: 280px;
+                margin-top: 1rem;
             }
 
             .hourly-placeholder h3 {
@@ -888,16 +872,9 @@
                 padding: 0.8rem;
             }
 
-            .hourly-chart.active {
-                max-height: 450px;
-            }
-
-            .hourly-chart-content {
-                min-height: 200px;
-            }
-
-            #hourly-chart-canvas {
-                min-height: 200px;
+            .hourly-chart {
+                height: 230px;
+                padding: 0.8rem;
             }
 
             .demo-notice {
@@ -907,7 +884,7 @@
 
             /* Улучшение отображения текста в графиках */
             .chart-container canvas,
-            #hourly-chart-canvas,
+            .hourly-chart canvas,
             .overall-chart canvas {
                 max-width: 100% !important;
             }
@@ -923,12 +900,8 @@
                 height: 250px;
             }
 
-            .hourly-chart.active {
-                max-height: 400px;
-            }
-
-            .hourly-chart-content {
-                min-height: 200px;
+            .hourly-chart {
+                height: 230px;
             }
         }
     </style>
@@ -1038,18 +1011,16 @@
                     <canvas id="price-chart"></canvas>
                 </div>
 
-                <!-- Исправленная структура почасового графика -->
+                <!-- Вернул оригинальную структуру почасового графика -->
                 <div class="hourly-chart" id="hourly-chart">
                     <div class="demo-notice">
                         ⚠️ Это демонстрационные данные. Реальная почасовая статистика будет доступна после подключения к API
                     </div>
-                    <div class="hourly-chart-content">
-                        <div class="hourly-placeholder">
-                            <h3>Статистика по часам</h3>
-                            <p>Нажмите на точку в основном графике для просмотра детальной статистики</p>
-                        </div>
-                        <canvas id="hourly-chart-canvas"></canvas>
+                    <div class="hourly-placeholder">
+                        <h3>Статистика по часам</h3>
+                        <p>Нажмите на точку в основном графике для просмотра детальной статистики</p>
                     </div>
+                    <canvas id="hourly-chart-canvas"></canvas>
                 </div>
             </div>
         </div>
