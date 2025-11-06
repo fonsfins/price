@@ -69,13 +69,13 @@
             animation: fadeInGradient 1s ease-out 0.3s forwards;
         }
 
+        .light-theme .gradient-overlay {
+            background: linear-gradient(180deg, #FF4444 0%, rgba(255, 68, 68, 0.7) 20%, rgba(255, 68, 68, 0.3) 40%, rgba(255, 68, 68, 0.1) 60%, transparent 100%);
+        }
+
         @keyframes fadeInGradient {
             from { opacity: 0; }
             to { opacity: 1; }
-        }
-
-        .light-theme .gradient-overlay {
-            background: linear-gradient(180deg, #8B0000 0%, rgba(139, 0, 0, 0.6) 20%, rgba(139, 0, 0, 0.3) 40%, rgba(139, 0, 0, 0.1) 60%, transparent 100%);
         }
 
         .container {
@@ -479,22 +479,43 @@
             flex-direction: column;
             justify-content: center;
             width: 100%;
-            transform: translateY(10px);
-            opacity: 0;
         }
 
-        .item.show {
-            transform: translateY(0);
-            opacity: 1;
+        .item.animate-in {
+            animation: itemSlideIn 0.4s ease forwards;
         }
 
-        .item:hover {
-            background-color: var(--hover-color);
+        @keyframes itemSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .item.active {
             background-color: var(--hover-color);
             border-left: 4px solid var(--accent-color);
+            animation: itemActive 0.3s ease;
+        }
+
+        @keyframes itemActive {
+            0% {
+                background-color: var(--bg-secondary);
+            }
+            50% {
+                background-color: var(--hover-color);
+            }
+            100% {
+                background-color: var(--hover-color);
+            }
+        }
+
+        .item:hover {
+            background-color: var(--hover-color);
         }
 
         .item-name {
@@ -669,6 +690,31 @@
         .chart-container.fade-out {
             opacity: 0;
             transform: translateY(-20px);
+        }
+
+        /* Period Notice */
+        .period-notice {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            padding: 1.5rem;
+            color: #FF4444;
+            background: rgba(255, 68, 68, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            width: 80%;
+            max-width: 400px;
+            z-index: 10;
+            backdrop-filter: none;
+            box-shadow: none;
+            transition: all 0.4s ease;
+        }
+
+        .period-notice.fade-out {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
         }
 
         /* Hourly Chart */
@@ -995,7 +1041,7 @@
                 height: 300px;
             }
 
-            .demo-notice {
+            .demo-notice, .period-notice {
                 padding: 1rem;
                 width: 90%;
             }
@@ -1118,7 +1164,7 @@
                 padding: 0.8rem;
             }
 
-            .demo-notice {
+            .demo-notice, .period-notice {
                 font-size: 0.8rem;
                 padding: 0.8rem;
             }
@@ -1271,6 +1317,10 @@
                 </div>
 
                 <div class="chart-container" id="main-chart-container">
+                    <!-- Period Notice -->
+                    <div class="period-notice" id="period-notice" style="display: none;">
+                        ⚠️ Период "Неделя", "Месяц" и "Год" пока не поддерживаются. Доступен только период "Все время"
+                    </div>
                     <canvas id="price-chart"></canvas>
                 </div>
 
@@ -1333,6 +1383,7 @@
         let filteredItems = [];
         let currentTheme = 'dark';
         let currentPeriod = 'all';
+        let isInitialLoad = true;
 
         const DATA_URL = 'prices.json';
 
@@ -1435,8 +1486,6 @@
                 updateOverallStats();
                 updateLastUpdateTime();
                 
-                showNotification('Данные успешно загружены!');
-                
             } catch (error) {
                 console.error('Ошибка загрузки данных:', error);
                 showErrorState(`Ошибка загрузки данных: ${error.message}`);
@@ -1500,7 +1549,7 @@
             return ((lastPrice - firstPrice) / firstPrice) * 100;
         }
 
-        function renderItemsList() {
+        function renderItemsList(animateItems = false) {
             const container = document.getElementById('items-container');
             container.innerHTML = '';
             
@@ -1531,18 +1580,29 @@
                 itemElement.addEventListener('click', () => selectItem(item));
                 container.appendChild(itemElement);
                 
-                // Анимация появления элемента
-                setTimeout(() => {
-                    itemElement.classList.add('show');
-                }, index * 50);
+                // Анимация появления элемента только при поиске или начальной загрузке
+                if (animateItems) {
+                    setTimeout(() => {
+                        itemElement.classList.add('animate-in');
+                    }, index * 50);
+                }
             });
         }
 
         function selectItem(item) {
+            // Обновляем активный класс без полной перерисовки списка
+            document.querySelectorAll('.item').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            const selectedElement = document.querySelector(`.item[data-name="${item.name}"]`);
+            if (selectedElement) {
+                selectedElement.classList.add('active');
+            }
+            
             // Анимация смены предмета
             animateItemChange(() => {
                 selectedItem = item;
-                renderItemsList();
                 updateItemDetails();
             });
         }
@@ -1557,6 +1617,7 @@
             const hourlyPlaceholder = document.querySelector('.hourly-placeholder');
             const hourlyCanvas = document.getElementById('hourly-chart-canvas');
             const periodSelector = document.getElementById('period-selector');
+            const periodNotice = document.getElementById('period-notice');
 
             // Если уже есть выбранный предмет - анимируем исчезновение
             if (selectedItem) {
@@ -1574,6 +1635,9 @@
 
                 // Анимация основного графика
                 chartContainer.classList.add('fade-out');
+
+                // Скрываем уведомление о периодах
+                periodNotice.style.display = 'none';
 
                 // Анимация почасового графика если он активен
                 if (hourlyChartElement.classList.contains('active')) {
@@ -1605,6 +1669,7 @@
             const demoNotice = hourlyChartElement.querySelector('.demo-notice');
             const hourlyCanvas = document.getElementById('hourly-chart-canvas');
             const periodSelector = document.getElementById('period-selector');
+            const periodNotice = document.getElementById('period-notice');
             
             if (!selectedItem) {
                 itemNameElement.textContent = 'Выберите предмет для просмотра деталей';
@@ -1707,29 +1772,17 @@
         function filterPriceHistoryByPeriod(history, period) {
             if (!history || history.length === 0) return [];
             
-            const now = new Date();
-            let cutoffDate = new Date(0); // Все время
-            
-            switch (period) {
-                case 'year':
-                    cutoffDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
-                    break;
-                case 'month':
-                    cutoffDate = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
-                    break;
-                case 'week':
-                    cutoffDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-                    break;
+            // Для периодов кроме "all" показываем уведомление
+            if (period !== 'all') {
+                return [];
             }
             
-            return history.filter(entry => {
-                const entryDate = new Date(entry.date);
-                return entryDate >= cutoffDate;
-            });
+            return history;
         }
 
         function renderPriceChart() {
             const ctx = document.getElementById('price-chart').getContext('2d');
+            const periodNotice = document.getElementById('period-notice');
             
             if (priceChart) {
                 priceChart.destroy();
@@ -1741,6 +1794,14 @@
             
             // Фильтруем историю по выбранному периоду
             const filteredHistory = filterPriceHistoryByPeriod(selectedItem.priceHistory, currentPeriod);
+            
+            // Показываем уведомление для периодов кроме "all"
+            if (currentPeriod !== 'all') {
+                periodNotice.style.display = 'block';
+                return;
+            } else {
+                periodNotice.style.display = 'none';
+            }
             
             const labels = filteredHistory.map(entry => formatDate(entry.date));
             const data = filteredHistory.map(entry => entry.price);
@@ -2080,7 +2141,6 @@
             // Анимация исчезновения текущих элементов
             items.forEach((item, index) => {
                 setTimeout(() => {
-                    item.classList.remove('show');
                     item.style.opacity = '0';
                     item.style.transform = 'translateY(10px)';
                 }, index * 30);
@@ -2100,7 +2160,7 @@
                             priceHistory: data.history || []
                         }));
                 }
-                renderItemsList();
+                renderItemsList(true); // Включаем анимацию для результатов поиска
                 updateOverallStats();
                 
                 if (selectedItem && !filteredItems.some(item => item.name === selectedItem.name)) {
@@ -2168,6 +2228,11 @@
             
             // Обновление данных каждые 5 минут
             setInterval(loadData, 5 * 60 * 1000);
+            
+            // После первой загрузки отключаем флаг начальной загрузки
+            setTimeout(() => {
+                isInitialLoad = false;
+            }, 2000);
         });
     </script>
 </body>
