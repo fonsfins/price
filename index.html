@@ -483,6 +483,7 @@
             margin-bottom: 0.5rem;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .price-info-grid {
@@ -510,6 +511,11 @@
             opacity: 1;
         }
 
+        .price-card.fade-out {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
         .price-card:nth-child(1) { transition-delay: 0.1s; }
         .price-card:nth-child(2) { transition-delay: 0.2s; }
         .price-card:nth-child(3) { transition-delay: 0.3s; }
@@ -526,6 +532,7 @@
             font-size: 1.3rem;
             font-weight: 600;
             color: var(--accent-color);
+            transition: all 0.3s ease;
         }
 
         .price-card .change-negative {
@@ -554,7 +561,12 @@
             opacity: 1;
         }
 
-        /* Hourly Chart - исправленная версия */
+        .chart-container.fade-out {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        /* Hourly Chart */
         .hourly-chart {
             background-color: var(--bg-tertiary);
             border-radius: 12px;
@@ -577,13 +589,20 @@
             padding: 2rem;
         }
 
+        .hourly-chart.fade-out {
+            opacity: 0;
+            transform: scale(0.9);
+            height: 0;
+            padding: 0;
+        }
+
         .hourly-chart-container {
             height: 100%;
             position: relative;
             width: 100%;
         }
 
-        /* Демо-заметка поверх графика - абсолютное позиционирование */
+        /* Демо-заметка поверх графика */
         .demo-notice {
             position: absolute;
             top: 50%;
@@ -600,6 +619,12 @@
             z-index: 10;
             backdrop-filter: none;
             box-shadow: none;
+            transition: all 0.4s ease;
+        }
+
+        .demo-notice.fade-out {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
         }
 
         .hourly-placeholder {
@@ -611,12 +636,23 @@
             color: var(--text-secondary);
             width: 100%;
             z-index: 2;
+            transition: all 0.4s ease;
+        }
+
+        .hourly-placeholder.fade-out {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
         }
 
         .hourly-chart-canvas {
             transition: all 0.5s ease;
             width: 100% !important;
             height: 100% !important;
+        }
+
+        .hourly-chart-canvas.fade-out {
+            opacity: 0;
+            transform: scale(0.95);
         }
 
         /* Overall Stats */
@@ -722,6 +758,37 @@
             border: 1px solid rgba(255, 68, 68, 0.3);
             width: calc(100% - 2rem);
             max-width: 100%;
+        }
+
+        /* Анимации для текста */
+        .text-fade-in {
+            animation: textFadeIn 0.5s ease forwards;
+        }
+
+        .text-fade-out {
+            animation: textFadeOut 0.3s ease forwards;
+        }
+
+        @keyframes textFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes textFadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
         }
 
         /* Мобильная адаптация */
@@ -1067,7 +1134,7 @@
                     <canvas id="price-chart"></canvas>
                 </div>
 
-                <!-- Почасовая таблица с исправлениями -->
+                <!-- Почасовая таблица -->
                 <div class="hourly-chart" id="hourly-chart">
                     <div class="hourly-chart-container">
                         <div class="hourly-placeholder">
@@ -1326,9 +1393,52 @@
         }
 
         function selectItem(item) {
-            selectedItem = item;
-            renderItemsList();
-            updateItemDetails();
+            // Анимация смены предмета
+            animateItemChange(() => {
+                selectedItem = item;
+                renderItemsList();
+                updateItemDetails();
+            });
+        }
+
+        function animateItemChange(callback) {
+            const itemNameElement = document.getElementById('selected-item-name');
+            const priceInfoElement = document.getElementById('price-info');
+            const chartContainer = document.getElementById('main-chart-container');
+            const hourlyChartElement = document.getElementById('hourly-chart');
+            const priceCards = document.querySelectorAll('.price-card');
+            const demoNotice = document.querySelector('.demo-notice');
+            const hourlyPlaceholder = document.querySelector('.hourly-placeholder');
+            const hourlyCanvas = document.getElementById('hourly-chart-canvas');
+
+            // Если уже есть выбранный предмет - анимируем исчезновение
+            if (selectedItem) {
+                // Анимация заголовка
+                itemNameElement.classList.add('text-fade-out');
+                
+                // Анимация карточек цен
+                priceCards.forEach(card => {
+                    card.classList.add('fade-out');
+                });
+
+                // Анимация основного графика
+                chartContainer.classList.add('fade-out');
+
+                // Анимация почасового графика если он активен
+                if (hourlyChartElement.classList.contains('active')) {
+                    hourlyChartElement.classList.add('fade-out');
+                    demoNotice.classList.add('fade-out');
+                    hourlyCanvas.classList.add('fade-out');
+                } else {
+                    hourlyPlaceholder.classList.add('fade-out');
+                }
+
+                // Запускаем callback после завершения анимации
+                setTimeout(callback, 300);
+            } else {
+                // Первый выбор предмета
+                callback();
+            }
         }
 
         function updateItemDetails() {
@@ -1342,6 +1452,7 @@
             const chartContainer = document.getElementById('main-chart-container');
             const hourlyPlaceholder = hourlyChartElement.querySelector('.hourly-placeholder');
             const demoNotice = hourlyChartElement.querySelector('.demo-notice');
+            const hourlyCanvas = document.getElementById('hourly-chart-canvas');
             
             if (!selectedItem) {
                 itemNameElement.textContent = 'Выберите предмет для просмотра деталей';
@@ -1358,53 +1469,76 @@
                 return;
             }
             
-            itemNameElement.textContent = selectedItem.name;
+            // Анимация появления нового контента
+            setTimeout(() => {
+                itemNameElement.textContent = selectedItem.name;
+                itemNameElement.classList.remove('text-fade-out');
+                itemNameElement.classList.add('text-fade-in');
+                
+                setTimeout(() => {
+                    itemNameElement.classList.remove('text-fade-in');
+                }, 500);
+            }, 300);
+
             priceInfoElement.style.display = 'grid';
             
             // Сбрасываем почасовой график при смене предмета
             hourlyChartElement.classList.remove('active');
+            hourlyChartElement.classList.remove('fade-out');
             hourlyPlaceholder.style.display = 'flex';
+            hourlyPlaceholder.classList.remove('fade-out');
             demoNotice.style.display = 'none';
+            demoNotice.classList.remove('fade-out');
+            hourlyCanvas.classList.remove('fade-out');
+            
             if (hourlyChart) {
                 hourlyChart.destroy();
                 hourlyChart = null;
             }
             
+            // Сбрасываем анимации карточек
             document.querySelectorAll('.price-card').forEach(card => {
                 card.classList.remove('animate-in');
+                card.classList.remove('fade-out');
             });
             
+            // Анимируем появление карточек с задержкой
             setTimeout(() => {
                 document.querySelectorAll('.price-card').forEach((card, index) => {
                     setTimeout(() => {
                         card.classList.add('animate-in');
                     }, index * 100);
                 });
-            }, 50);
+            }, 400);
             
-            currentPriceElement.textContent = formatPrice(selectedItem.currentPrice);
-            
-            let startPrice = selectedItem.currentPrice;
-            let lastUpdate = 'Нет данных';
-            
-            if (selectedItem.priceHistory && selectedItem.priceHistory.length > 0) {
-                startPrice = selectedItem.priceHistory[0].price;
-                lastUpdate = selectedItem.priceHistory[selectedItem.priceHistory.length - 1].date;
-            }
-            
-            startPriceElement.textContent = formatPrice(startPrice);
-            
-            const priceChange = calculatePriceChange(selectedItem);
-            const priceChangeSymbol = priceChange >= 0 ? '+' : '';
-            priceChangeElement.textContent = `${priceChangeSymbol}${priceChange.toFixed(2)}%`;
-            priceChangeElement.className = priceChange >= 0 ? '' : 'change-negative';
-            
-            lastUpdateElement.textContent = lastUpdate !== 'Нет данных' ? formatDate(lastUpdate) : lastUpdate;
-            
+            // Обновляем данные в карточках с анимацией
             setTimeout(() => {
+                currentPriceElement.textContent = formatPrice(selectedItem.currentPrice);
+                
+                let startPrice = selectedItem.currentPrice;
+                let lastUpdate = 'Нет данных';
+                
+                if (selectedItem.priceHistory && selectedItem.priceHistory.length > 0) {
+                    startPrice = selectedItem.priceHistory[0].price;
+                    lastUpdate = selectedItem.priceHistory[selectedItem.priceHistory.length - 1].date;
+                }
+                
+                startPriceElement.textContent = formatPrice(startPrice);
+                
+                const priceChange = calculatePriceChange(selectedItem);
+                const priceChangeSymbol = priceChange >= 0 ? '+' : '';
+                priceChangeElement.textContent = `${priceChangeSymbol}${priceChange.toFixed(2)}%`;
+                priceChangeElement.className = priceChange >= 0 ? '' : 'change-negative';
+                
+                lastUpdateElement.textContent = lastUpdate !== 'Нет данных' ? formatDate(lastUpdate) : lastUpdate;
+            }, 500);
+            
+            // Анимируем появление основного графика
+            setTimeout(() => {
+                chartContainer.classList.remove('fade-out');
                 chartContainer.classList.add('animate-in');
                 renderPriceChart();
-            }, 500);
+            }, 600);
         }
 
         function renderPriceChart() {
@@ -1505,15 +1639,20 @@
             const hourlyChartElement = document.getElementById('hourly-chart');
             const placeholder = hourlyChartElement.querySelector('.hourly-placeholder');
             const demoNotice = hourlyChartElement.querySelector('.demo-notice');
+            const hourlyCanvas = document.getElementById('hourly-chart-canvas');
             
-            // Показываем контейнер
-            hourlyChartElement.classList.add('active');
+            // Анимация скрытия плейсхолдера
+            placeholder.classList.add('fade-out');
             
-            // Скрываем плейсхолдер и показываем демо-заметку поверх графика
             setTimeout(() => {
                 placeholder.style.display = 'none';
                 demoNotice.style.display = 'block';
-                renderHourlyChart(date);
+                
+                // Анимация появления демо-заметки и графика
+                setTimeout(() => {
+                    hourlyChartElement.classList.add('active');
+                    renderHourlyChart(date);
+                }, 200);
             }, 300);
         }
 
@@ -1563,6 +1702,10 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 800,
+                        easing: 'easeOutQuart'
+                    },
                     plugins: {
                         tooltip: {
                             mode: 'index',
