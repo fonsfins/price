@@ -525,7 +525,7 @@
             opacity: 1;
         }
 
-        /* Hourly Chart - полностью переработанная версия */
+        /* Hourly Chart - полностью исправленная версия */
         .hourly-chart {
             background-color: var(--bg-tertiary);
             border-radius: 12px;
@@ -552,14 +552,34 @@
             width: 100%;
         }
 
-        .demo-notice {
-            text-align: center;
-            padding: 1rem;
-            color: #FF4444;
-            background: rgba(255, 68, 68, 0.1);
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
+        /* Демо-заметка поверх графика */
+        .demo-notice-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            color: #FF4444;
+            z-index: 10;
+            max-width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .demo-notice-overlay h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #FF4444;
+        }
+
+        .demo-notice-overlay p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
         }
 
         .hourly-placeholder {
@@ -766,6 +786,19 @@
                 height: 250px;
             }
 
+            .demo-notice-overlay {
+                padding: 1.5rem;
+                max-width: 95%;
+            }
+
+            .demo-notice-overlay h3 {
+                font-size: 1rem;
+            }
+
+            .demo-notice-overlay p {
+                font-size: 0.8rem;
+            }
+
             .hourly-placeholder h3 {
                 font-size: 1rem;
             }
@@ -819,7 +852,7 @@
 
         @media (max-width: 480px) {
             .container {
-                padding: 0 10px;
+                padding: 0 15px; /* Увеличил отступы для лучшего отображения */
             }
 
             .header-content {
@@ -879,9 +912,16 @@
                 height: 200px;
             }
 
-            .demo-notice {
-                font-size: 0.8rem;
-                padding: 0.8rem;
+            .demo-notice-overlay {
+                padding: 1rem;
+            }
+
+            .demo-notice-overlay h3 {
+                font-size: 0.9rem;
+            }
+
+            .demo-notice-overlay p {
+                font-size: 0.75rem;
             }
         }
 
@@ -1009,15 +1049,17 @@
                     <canvas id="price-chart"></canvas>
                 </div>
 
-                <!-- Полностью переработанная почасовая таблица -->
+                <!-- Полностью исправленная почасовая таблица -->
                 <div class="hourly-chart" id="hourly-chart">
-                    <div class="demo-notice">
-                        ⚠️ Это демонстрационные данные. Реальная почасовая статистика будет доступна после подключения к API
-                    </div>
                     <div class="hourly-chart-container">
                         <div class="hourly-placeholder">
                             <h3>Статистика по часам</h3>
                             <p>Нажмите на точку в основном графике для просмотра детальной статистики</p>
+                        </div>
+                        <!-- Демо-заметка поверх графика -->
+                        <div class="demo-notice-overlay" id="demo-notice-overlay">
+                            <h3>Демонстрационные данные</h3>
+                            <p>⚠️ Реальная почасовая статистика будет доступна после подключения к API</p>
                         </div>
                         <canvas id="hourly-chart-canvas" class="hourly-chart-canvas"></canvas>
                     </div>
@@ -1076,35 +1118,28 @@
             const overlay = document.getElementById('top-menu-overlay');
             const closeBtn = document.getElementById('close-top-menu');
 
-            // Улучшенное управление состоянием меню
             function openTopMenu() {
-                topMenu.classList.add('active');
-                overlay.classList.add('active');
-                document.body.style.overflow = 'hidden'; // Блокируем скролл
+                topMenu.style.display = 'block';
+                overlay.style.display = 'block';
+                setTimeout(() => {
+                    topMenu.classList.add('active');
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }, 10);
             }
 
             function closeTopMenu() {
                 topMenu.classList.remove('active');
                 overlay.classList.remove('active');
-                document.body.style.overflow = ''; // Разблокируем скролл
+                document.body.style.overflow = '';
                 
-                // Гарантированно скрываем меню через небольшой таймаут
                 setTimeout(() => {
                     topMenu.style.display = 'none';
                     overlay.style.display = 'none';
                 }, 400);
             }
 
-            function showTopMenu() {
-                topMenu.style.display = 'block';
-                overlay.style.display = 'block';
-                setTimeout(() => {
-                    topMenu.classList.add('active');
-                    overlay.classList.add('active');
-                }, 10);
-            }
-
-            hamburger.addEventListener('click', showTopMenu);
+            hamburger.addEventListener('click', openTopMenu);
             closeBtn.addEventListener('click', closeTopMenu);
             overlay.addEventListener('click', closeTopMenu);
 
@@ -1289,12 +1324,14 @@
             const hourlyChartElement = document.getElementById('hourly-chart');
             const chartContainer = document.getElementById('main-chart-container');
             const hourlyPlaceholder = hourlyChartElement.querySelector('.hourly-placeholder');
+            const demoNotice = document.getElementById('demo-notice-overlay');
             
             if (!selectedItem) {
                 itemNameElement.textContent = 'Выберите предмет для просмотра деталей';
                 priceInfoElement.style.display = 'none';
                 hourlyChartElement.classList.remove('active');
                 hourlyPlaceholder.style.display = 'flex';
+                demoNotice.style.display = 'none';
                 chartContainer.classList.remove('animate-in');
                 if (priceChart) priceChart.destroy();
                 if (hourlyChart) {
@@ -1310,6 +1347,7 @@
             // Сбрасываем почасовой график при смене предмета
             hourlyChartElement.classList.remove('active');
             hourlyPlaceholder.style.display = 'flex';
+            demoNotice.style.display = 'none';
             if (hourlyChart) {
                 hourlyChart.destroy();
                 hourlyChart = null;
@@ -1449,14 +1487,15 @@
         function showHourlyStats(date) {
             const hourlyChartElement = document.getElementById('hourly-chart');
             const placeholder = hourlyChartElement.querySelector('.hourly-placeholder');
-            const canvas = document.getElementById('hourly-chart-canvas');
+            const demoNotice = document.getElementById('demo-notice-overlay');
             
             // Показываем контейнер
             hourlyChartElement.classList.add('active');
             
-            // Скрываем плейсхолдер и рендерим график
+            // Скрываем плейсхолдер и показываем демо-заметку поверх графика
             setTimeout(() => {
                 placeholder.style.display = 'none';
+                demoNotice.style.display = 'block';
                 renderHourlyChart(date);
             }, 300);
         }
