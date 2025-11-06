@@ -1065,7 +1065,8 @@
         let filteredItems = [];
         let currentTheme = 'dark';
 
-        const DATA_URL = 'https://raw.githubusercontent.com/your-username/your-repo/main/prices.json';
+        // Используем относительный путь к JSON файлу в той же директории
+        const DATA_URL = 'prices.json';
 
         // Top Menu Management
         function initTopMenu() {
