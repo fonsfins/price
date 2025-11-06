@@ -4,93 +4,25 @@
     "history": [
       {
         "date": "2025-11-06",
-        "price": 499999.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 41000.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 41000.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 41000.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 41000.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 41000.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 499999.0
-      },
-      {
-        "date": "2025-11-06",
         "price": 41000.0
       }
     ]
   },
   "m9 bayonet \"scratch\"": {
-    "price": 22999.0,
+    "price": 22998.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 22999.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 22999.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 22999.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 22999.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 22999.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 22999.0
+        "price": 22998.0
       }
     ]
   },
   "m9 bayonet \"universe\"": {
-    "price": 22644.0,
+    "price": 21999.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 2264.4
-      },
-      {
-        "date": "2025-11-06",
-        "price": 2264.4
-      },
-      {
-        "date": "2025-11-06",
-        "price": 2264.4
-      },
-      {
-        "date": "2025-11-06",
-        "price": 2264.4
-      },
-      {
-        "date": "2025-11-06",
-        "price": 2264.4
-      },
-      {
-        "date": "2025-11-06",
-        "price": 22644.0
+        "price": 21999.0
       }
     ]
   },
@@ -100,84 +32,15 @@
       {
         "date": "2025-11-06",
         "price": 15869.99
-      },
-      {
-        "date": "2025-11-06",
-        "price": 15869.99
-      },
-      {
-        "date": "2025-11-06",
-        "price": 15869.99
-      },
-      {
-        "date": "2025-11-06",
-        "price": 15869.99
-      },
-      {
-        "date": "2025-11-06",
-        "price": 15869.99
-      },
-      {
-        "date": "2025-11-06",
-        "price": 15869.99
       }
     ]
   },
   "m9 bayonet \"ancient\"": {
-    "price": 0.28,
+    "price": 8200.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 8199.0
-      },
-      {
-        "date": "2025-11-06",
         "price": 8200.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 499999.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 8200.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 8200.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 0.28
-      }
-    ]
-  },
-  "akr \"treasure hunter\"": {
-    "price": 6819.9,
-    "history": [
-      {
-        "date": "2025-11-06",
-        "price": 6674.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 6819.9
-      },
-      {
-        "date": "2025-11-06",
-        "price": 6819.9
-      },
-      {
-        "date": "2025-11-06",
-        "price": 6819.9
-      },
-      {
-        "date": "2025-11-06",
-        "price": 6819.9
-      },
-      {
-        "date": "2025-11-06",
-        "price": 6819.9
       }
     ]
   },
@@ -187,40 +50,21 @@
       {
         "date": "2025-11-06",
         "price": 50000.0
-      },
+      }
+    ]
+  },
+  "akr \"treasure hunter\"": {
+    "price": 6400.0,
+    "history": [
       {
         "date": "2025-11-06",
-        "price": 50000.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 50000.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 50000.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 50000.0
+        "price": 6400.0
       }
     ]
   },
   "g22 \"nest\" ST": {
     "price": 5299.9,
     "history": [
-      {
-        "date": "2025-11-06",
-        "price": 5299.9
-      },
-      {
-        "date": "2025-11-06",
-        "price": 5299.9
-      },
-      {
-        "date": "2025-11-06",
-        "price": 5299.9
-      },
       {
         "date": "2025-11-06",
         "price": 5299.9
@@ -232,91 +76,43 @@
     "history": [
       {
         "date": "2025-11-06",
-        "price": 820.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 820.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 820.0
-      },
-      {
-        "date": "2025-11-06",
         "price": 860.0
       }
     ]
   },
   "akr12 \"railgun\" ST": {
-    "price": 6769.99,
+    "price": 6770.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 6769.99
-      },
-      {
-        "date": "2025-11-06",
-        "price": 6769.99
-      },
-      {
-        "date": "2025-11-06",
-        "price": 6769.99
-      },
-      {
-        "date": "2025-11-06",
-        "price": 6769.99
+        "price": 6770.0
       }
     ]
   },
   "akr12 \"railgun\"": {
-    "price": 799.0,
+    "price": 800.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 799.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 799.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 799.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 799.0
+        "price": 800.0
       }
     ]
   },
   "m4 \"necromancer\" ST": {
-    "price": 7400.0,
+    "price": 7700.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 7400.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 7400.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 7400.0
+        "price": 7700.0
       }
     ]
   },
   "m4 \"necromancer\"": {
-    "price": 830.0,
+    "price": 837.99,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 840.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 830.0
+        "price": 837.99
       }
     ]
   },
@@ -326,33 +122,21 @@
       {
         "date": "2025-11-06",
         "price": 6079.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 6079.0
       }
     ]
   },
   "m16 \"winged\"": {
-    "price": 755.0,
+    "price": 777.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 755.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 755.0
+        "price": 777.0
       }
     ]
   },
   "p350 \"neon\" ST": {
     "price": 1580.0,
     "history": [
-      {
-        "date": "2025-11-06",
-        "price": 1580.0
-      },
       {
         "date": "2025-11-06",
         "price": 1580.0
@@ -364,37 +148,25 @@
     "history": [
       {
         "date": "2025-11-06",
-        "price": 18.99
-      },
-      {
-        "date": "2025-11-06",
         "price": 189.95
       }
     ]
   },
   "ump45 \"cyberpunk\" ST": {
-    "price": 1626.65,
+    "price": 1625.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 1627.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 1626.65
+        "price": 1625.0
       }
     ]
   },
   "ump45 \"cyberpunk\"": {
-    "price": 188.0,
+    "price": 190.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 18.8
-      },
-      {
-        "date": "2025-11-06",
-        "price": 188.0
+        "price": 190.0
       }
     ]
   },
@@ -404,172 +176,132 @@
       {
         "date": "2025-11-06",
         "price": 1300.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 1300.0
       }
     ]
   },
   "p90 \"ghoul\"": {
-    "price": 184.89,
+    "price": 175.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 18.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 184.89
+        "price": 175.0
       }
     ]
   },
   "sm1014 \"pathfinder\" ST": {
-    "price": 347.0,
+    "price": 345.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 3.47
-      },
-      {
-        "date": "2025-11-06",
-        "price": 347.0
+        "price": 345.0
       }
     ]
   },
   "sm1014 \"pathfinder\"": {
-    "price": 55.0,
+    "price": 54.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 55.77
-      },
-      {
-        "date": "2025-11-06",
-        "price": 55.0
+        "price": 54.0
       }
     ]
   },
   "awm \"phoenix\" ST": {
-    "price": 369.99,
+    "price": 368.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 369.99
-      },
-      {
-        "date": "2025-11-06",
-        "price": 369.99
+        "price": 368.0
       }
     ]
   },
   "awm \"phoenix\"": {
-    "price": 53.0,
+    "price": 54.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 5.3
-      },
-      {
-        "date": "2025-11-06",
-        "price": 53.0
+        "price": 54.0
       }
     ]
   },
   "akr12 \"pixel camouflage\" ST": {
-    "price": 329.0,
+    "price": 328.99,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 329.0
-      },
-      {
-        "date": "2025-11-06",
-        "price": 329.0
+        "price": 328.99
       }
     ]
   },
   "akr12 \"pixel camouflage\"": {
-    "price": 53.95,
+    "price": 53.93,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 53.95
-      },
-      {
-        "date": "2025-11-06",
-        "price": 53.95
+        "price": 53.93
       }
     ]
   },
   "desert eagle \"blood\"": {
-    "price": 18.25,
+    "price": 16.52,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 1.82
-      },
-      {
-        "date": "2025-11-06",
-        "price": 18.25
+        "price": 16.52
       }
     ]
   },
   "p90 \"radiation\"": {
-    "price": 17.5,
+    "price": 17.3,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 16.8
-      },
-      {
-        "date": "2025-11-06",
-        "price": 17.5
+        "price": 17.3
       }
     ]
   },
   "m16 \"camouflage\"": {
-    "price": 14.99,
+    "price": 16.49,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 14.99
+        "price": 16.49
       }
     ]
   },
   "sm1014 \"facet\"": {
-    "price": 16.19,
+    "price": 16.09,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 16.19
+        "price": 16.09
       }
     ]
   },
   "p350 \"savannah\"": {
-    "price": 11.68,
+    "price": 11.93,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 11.68
+        "price": 11.93
       }
     ]
   },
   "g22 \"pixel camouflage\"": {
-    "price": 10.78,
+    "price": 10.7,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 10.78
+        "price": 10.7
       }
     ]
   },
   "m4 \"tiger\"": {
-    "price": 9.8,
+    "price": 9.95,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 9.8
+        "price": 9.95
       }
     ]
   },
@@ -592,65 +324,65 @@
     ]
   },
   "desert eagle \"predator\"": {
-    "price": 54.98,
+    "price": 53.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 54.98
+        "price": 53.0
       }
     ]
   },
   "m9 bayonet \"blue blood\"": {
-    "price": 12400.0,
+    "price": 12500.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 12400.0
+        "price": 12500.0
       }
     ]
   },
   "awm \"sport\"": {
-    "price": 0.82,
+    "price": 2800.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 0.82
+        "price": 2800.0
       }
     ]
   },
   "m4 \"predator\"": {
-    "price": 180.0,
+    "price": 208.99,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 180.0
+        "price": 208.99
       }
     ]
   },
   "desert eagle \"morgan\"": {
-    "price": 170.5,
+    "price": 169.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 170.5
+        "price": 169.0
       }
     ]
   },
   "charm \"gold skull\"": {
-    "price": 6665.0,
+    "price": 6650.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 6665.0
+        "price": 6650.0
       }
     ]
   },
   "charm \"lighter\"": {
-    "price": 1838.83,
+    "price": 1780.99,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 1838.83
+        "price": 1780.99
       }
     ]
   },
@@ -664,83 +396,83 @@
     ]
   },
   "charm \"metal rat\"": {
-    "price": 376.11,
+    "price": 375.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 376.11
+        "price": 375.0
       }
     ]
   },
   "charm \"plush adam\"": {
-    "price": 104.0,
+    "price": 107.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 104.0
+        "price": 107.0
       }
     ]
   },
   "charm \"bomb\"": {
-    "price": 72.9,
+    "price": 69.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 72.9
+        "price": 69.0
       }
     ]
   },
   "charm \"origin box\"": {
-    "price": 39.88,
+    "price": 41.0,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 39.88
+        "price": 41.0
       }
     ]
   },
   "charm \"pro\"": {
-    "price": 21.99,
+    "price": 22.18,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 21.99
+        "price": 22.18
       }
     ]
   },
   "charm \"lucky\"": {
-    "price": 18.69,
+    "price": 18.9,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 18.69
+        "price": 18.9
       }
     ]
   },
   "charm \"mini kit\"": {
-    "price": 18.88,
+    "price": 18.99,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 18.88
+        "price": 18.99
       }
     ]
   },
   "charm \"gold coin\"": {
-    "price": 12.09,
+    "price": 12.05,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 12.09
+        "price": 12.05
       }
     ]
   },
   "charm \"so2 tag\"": {
-    "price": 9.31,
+    "price": 9.3,
     "history": [
       {
         "date": "2025-11-06",
-        "price": 9.31
+        "price": 9.3
       }
     ]
   }
