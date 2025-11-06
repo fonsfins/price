@@ -350,78 +350,63 @@
             font-size: 0.9rem;
         }
 
-	/* Улучшенная адаптация под телефоны */
-	@media (max-width: 768px) {
-	    .main-content {
-	        grid-template-columns: 1fr;
-	        gap: 1.5rem;
-	    }
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
 
-	    .details-panel {
-	        padding: 1.2rem;
-	        min-height: auto;
-	    }
+            .header-top-row {
+                order: 1;
+            }
 
-	    .price-info-grid {
-	        grid-template-columns: 1fr 1fr;
-	        gap: 1rem;
-	    }
+            .header-bottom-row {
+                order: 2;
+            }
 
-	    .chart-container,
-	    .hourly-chart {
-	        padding: 1rem;
-	        height: auto;
-	        min-height: 300px;
-	    }
+            .search-container {
+                margin: 0;
+                max-width: none;
+            }
 
-	    .overall-stats {
-	        padding: 1.5rem 1rem;
-	        margin-top: 2rem;
-	    }
+            .menu-section {
+                justify-content: space-between;
+                width: 100%;
+            }
 
-	    .stats-grid {
-	        grid-template-columns: 1fr 1fr;
-	        gap: 1rem;
-	    }
-	}
+            .logo {
+                height: 30px;
+            }
 
-	@media (max-width: 480px) {
-	    .price-info-grid {
-	        grid-template-columns: 1fr;
-	    }
-	
-	    .stats-grid {
-	        grid-template-columns: 1fr;
-	    }
+            .top-menu {
+                padding: 1.5rem;
+            }
+        }
 
-	    .price-card p {
-	        font-size: 1.1rem;
-	    }
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
 
-	    .stat-card p {
-	        font-size: 1.2rem;
-	    }
+            .logo {
+                height: 28px;
+            }
 
-	    .details-header h2 {
-	        font-size: 1.2rem;
-	    }
+            #search-input {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
 
-	    .overall-stats h2 {
-	        font-size: 1.1rem;
-	    }
+            #search-btn {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
 
-	    .items-list {
-	        max-height: none;
-	    }
-
-	    .chart-container,
-	    .hourly-chart {
-	        padding: 0.8rem;
-	        height: auto;
-	        min-height: 250px;
-	    }
-	}
-
+            .top-menu {
+                padding: 1rem;
+            }
+        }
 
         /* Main Content */
         .main-content {
