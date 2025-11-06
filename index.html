@@ -47,6 +47,13 @@
             transition: all 0.3s ease;
             position: relative;
             overflow-x: hidden;
+            opacity: 0;
+            animation: fadeInBody 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInBody {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .gradient-overlay {
@@ -58,6 +65,13 @@
             background: linear-gradient(180deg, #8B0000 0%, rgba(139, 0, 0, 0.8) 20%, rgba(139, 0, 0, 0.4) 40%, rgba(139, 0, 0, 0.1) 60%, transparent 100%);
             z-index: -1;
             pointer-events: none;
+            opacity: 0;
+            animation: fadeInGradient 1s ease-out 0.3s forwards;
+        }
+
+        @keyframes fadeInGradient {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .light-theme .gradient-overlay {
@@ -80,6 +94,20 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: slideDownHeader 0.8s ease-out 0.5s forwards;
+        }
+
+        @keyframes slideDownHeader {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .header-content {
@@ -181,6 +209,12 @@
             font-size: 0.9rem;
             outline: none;
             max-width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        #search-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.2);
         }
 
         #search-input::placeholder {
@@ -378,6 +412,13 @@
             width: 100%;
             max-width: 100%;
             overflow-x: hidden;
+            opacity: 0;
+            animation: fadeInContent 0.8s ease-out 0.7s forwards;
+        }
+
+        @keyframes fadeInContent {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .items-panel {
@@ -389,6 +430,20 @@
             width: 100%;
             max-width: 100%;
             max-height: 65vh;
+            transform: translateX(-20px);
+            opacity: 0;
+            animation: slideInLeft 0.6s ease-out 0.9s forwards;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         .panel-header {
@@ -424,6 +479,13 @@
             flex-direction: column;
             justify-content: center;
             width: 100%;
+            transform: translateY(10px);
+            opacity: 0;
+        }
+
+        .item.show {
+            transform: translateY(0);
+            opacity: 1;
         }
 
         .item:hover {
@@ -470,6 +532,20 @@
             width: 100%;
             max-width: 100%;
             overflow-x: hidden;
+            transform: translateX(20px);
+            opacity: 0;
+            animation: slideInRight 0.6s ease-out 0.9s forwards;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         .details-header {
@@ -484,6 +560,35 @@
             word-wrap: break-word;
             overflow-wrap: break-word;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Period Selector */
+        .period-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .period-btn {
+            padding: 8px 16px;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .period-btn:hover {
+            background-color: var(--hover-color);
+        }
+
+        .period-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
         }
 
         .price-info-grid {
@@ -665,6 +770,20 @@
             width: 100%;
             max-width: 100%;
             overflow-x: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUpStats 0.8s ease-out 1.1s forwards;
+        }
+
+        @keyframes slideUpStats {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .overall-stats h2 {
@@ -930,6 +1049,15 @@
             .theme-option {
                 padding: 0.8rem;
             }
+
+            .period-selector {
+                gap: 0.3rem;
+            }
+
+            .period-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -993,6 +1121,10 @@
             .demo-notice {
                 font-size: 0.8rem;
                 padding: 0.8rem;
+            }
+
+            .period-selector {
+                justify-content: center;
             }
         }
 
@@ -1111,6 +1243,14 @@
                     <h2 id="selected-item-name">Выберите предмет для просмотра деталей</h2>
                 </div>
                 
+                <!-- Period Selector -->
+                <div class="period-selector" id="period-selector" style="display: none;">
+                    <button class="period-btn active" data-period="all">Все время</button>
+                    <button class="period-btn" data-period="year">Год</button>
+                    <button class="period-btn" data-period="month">Месяц</button>
+                    <button class="period-btn" data-period="week">Неделя</button>
+                </div>
+                
                 <div class="price-info-grid" id="price-info" style="display: none;">
                     <div class="price-card">
                         <h3>Текущая цена</h3>
@@ -1192,6 +1332,7 @@
         let hourlyChart = null;
         let filteredItems = [];
         let currentTheme = 'dark';
+        let currentPeriod = 'all';
 
         const DATA_URL = 'prices.json';
 
@@ -1294,7 +1435,7 @@
                 updateOverallStats();
                 updateLastUpdateTime();
                 
-                showNotification('');
+                showNotification('Данные успешно загружены!');
                 
             } catch (error) {
                 console.error('Ошибка загрузки данных:', error);
@@ -1389,6 +1530,11 @@
                 
                 itemElement.addEventListener('click', () => selectItem(item));
                 container.appendChild(itemElement);
+                
+                // Анимация появления элемента
+                setTimeout(() => {
+                    itemElement.classList.add('show');
+                }, index * 50);
             });
         }
 
@@ -1410,11 +1556,16 @@
             const demoNotice = document.querySelector('.demo-notice');
             const hourlyPlaceholder = document.querySelector('.hourly-placeholder');
             const hourlyCanvas = document.getElementById('hourly-chart-canvas');
+            const periodSelector = document.getElementById('period-selector');
 
             // Если уже есть выбранный предмет - анимируем исчезновение
             if (selectedItem) {
                 // Анимация заголовка
                 itemNameElement.classList.add('text-fade-out');
+                
+                // Анимация селектора периода
+                periodSelector.style.opacity = '0';
+                periodSelector.style.transform = 'translateY(-10px)';
                 
                 // Анимация карточек цен
                 priceCards.forEach(card => {
@@ -1453,10 +1604,12 @@
             const hourlyPlaceholder = hourlyChartElement.querySelector('.hourly-placeholder');
             const demoNotice = hourlyChartElement.querySelector('.demo-notice');
             const hourlyCanvas = document.getElementById('hourly-chart-canvas');
+            const periodSelector = document.getElementById('period-selector');
             
             if (!selectedItem) {
                 itemNameElement.textContent = 'Выберите предмет для просмотра деталей';
                 priceInfoElement.style.display = 'none';
+                periodSelector.style.display = 'none';
                 hourlyChartElement.classList.remove('active');
                 hourlyPlaceholder.style.display = 'flex';
                 demoNotice.style.display = 'none';
@@ -1469,11 +1622,21 @@
                 return;
             }
             
+            // Показываем селектор периода
+            periodSelector.style.display = 'flex';
+            
             // Анимация появления нового контента
             setTimeout(() => {
                 itemNameElement.textContent = selectedItem.name;
                 itemNameElement.classList.remove('text-fade-out');
                 itemNameElement.classList.add('text-fade-in');
+                
+                // Анимация появления селектора периода
+                setTimeout(() => {
+                    periodSelector.style.opacity = '1';
+                    periodSelector.style.transform = 'translateY(0)';
+                    periodSelector.style.transition = 'all 0.4s ease';
+                }, 200);
                 
                 setTimeout(() => {
                     itemNameElement.classList.remove('text-fade-in');
@@ -1541,6 +1704,30 @@
             }, 600);
         }
 
+        function filterPriceHistoryByPeriod(history, period) {
+            if (!history || history.length === 0) return [];
+            
+            const now = new Date();
+            let cutoffDate = new Date(0); // Все время
+            
+            switch (period) {
+                case 'year':
+                    cutoffDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+                    break;
+                case 'month':
+                    cutoffDate = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+                    break;
+                case 'week':
+                    cutoffDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                    break;
+            }
+            
+            return history.filter(entry => {
+                const entryDate = new Date(entry.date);
+                return entryDate >= cutoffDate;
+            });
+        }
+
         function renderPriceChart() {
             const ctx = document.getElementById('price-chart').getContext('2d');
             
@@ -1552,8 +1739,11 @@
                 return;
             }
             
-            const labels = selectedItem.priceHistory.map(entry => formatDate(entry.date));
-            const data = selectedItem.priceHistory.map(entry => entry.price);
+            // Фильтруем историю по выбранному периоду
+            const filteredHistory = filterPriceHistoryByPeriod(selectedItem.priceHistory, currentPeriod);
+            
+            const labels = filteredHistory.map(entry => formatDate(entry.date));
+            const data = filteredHistory.map(entry => entry.price);
             
             const gridColor = currentTheme === 'light' ? '#E8E8E8' : '#333333';
             const textColor = currentTheme === 'light' ? '#404040' : '#E0E0E0';
@@ -1583,7 +1773,7 @@
                     onClick: (e, elements) => {
                         if (elements.length > 0) {
                             const index = elements[0].index;
-                            const date = selectedItem.priceHistory[index].date;
+                            const date = filteredHistory[index].date;
                             showHourlyStats(date);
                         }
                     },
@@ -1641,19 +1831,37 @@
             const demoNotice = hourlyChartElement.querySelector('.demo-notice');
             const hourlyCanvas = document.getElementById('hourly-chart-canvas');
             
-            // Анимация скрытия плейсхолдера
-            placeholder.classList.add('fade-out');
-            
-            setTimeout(() => {
-                placeholder.style.display = 'none';
-                demoNotice.style.display = 'block';
+            // Если график уже активен, анимируем переход
+            if (hourlyChartElement.classList.contains('active')) {
+                // Анимация исчезновения текущего графика
+                hourlyCanvas.classList.add('fade-out');
+                demoNotice.classList.add('fade-out');
                 
-                // Анимация появления демо-заметки и графика
                 setTimeout(() => {
-                    hourlyChartElement.classList.add('active');
+                    // Обновляем данные
                     renderHourlyChart(date);
-                }, 200);
-            }, 300);
+                    
+                    // Анимация появления обновленного графика
+                    setTimeout(() => {
+                        hourlyCanvas.classList.remove('fade-out');
+                        demoNotice.classList.remove('fade-out');
+                    }, 100);
+                }, 300);
+            } else {
+                // Анимация скрытия плейсхолдера
+                placeholder.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    placeholder.style.display = 'none';
+                    demoNotice.style.display = 'block';
+                    
+                    // Анимация появления демо-заметки и графика
+                    setTimeout(() => {
+                        hourlyChartElement.classList.add('active');
+                        renderHourlyChart(date);
+                    }, 200);
+                }, 300);
+            }
         }
 
         function renderHourlyChart(date) {
@@ -1866,25 +2074,40 @@
         }
 
         function searchItems(query) {
-            if (!query.trim()) {
-                processData();
-            } else {
-                const lowerQuery = query.toLowerCase();
-                filteredItems = Object.entries(itemsData)
-                    .filter(([name, data]) => name.toLowerCase().includes(lowerQuery))
-                    .map(([name, data]) => ({
-                        name: name,
-                        currentPrice: data.price,
-                        priceHistory: data.history || []
-                    }));
-            }
-            renderItemsList();
-            updateOverallStats();
+            const container = document.getElementById('items-container');
+            const items = container.querySelectorAll('.item');
             
-            if (selectedItem && !filteredItems.some(item => item.name === selectedItem.name)) {
-                selectedItem = null;
-                updateItemDetails();
-            }
+            // Анимация исчезновения текущих элементов
+            items.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.remove('show');
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateY(10px)';
+                }, index * 30);
+            });
+            
+            // Фильтрация и отображение новых результатов
+            setTimeout(() => {
+                if (!query.trim()) {
+                    processData();
+                } else {
+                    const lowerQuery = query.toLowerCase();
+                    filteredItems = Object.entries(itemsData)
+                        .filter(([name, data]) => name.toLowerCase().includes(lowerQuery))
+                        .map(([name, data]) => ({
+                            name: name,
+                            currentPrice: data.price,
+                            priceHistory: data.history || []
+                        }));
+                }
+                renderItemsList();
+                updateOverallStats();
+                
+                if (selectedItem && !filteredItems.some(item => item.name === selectedItem.name)) {
+                    selectedItem = null;
+                    updateItemDetails();
+                }
+            }, items.length * 30 + 100);
         }
 
         function initMobileImprovements() {
@@ -1902,10 +2125,33 @@
             });
         }
 
+        function initPeriodSelector() {
+            const periodBtns = document.querySelectorAll('.period-btn');
+            
+            periodBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Убираем активный класс у всех кнопок
+                    periodBtns.forEach(b => b.classList.remove('active'));
+                    
+                    // Добавляем активный класс к текущей кнопке
+                    this.classList.add('active');
+                    
+                    // Обновляем текущий период
+                    currentPeriod = this.dataset.period;
+                    
+                    // Перерисовываем график с новым периодом
+                    if (selectedItem) {
+                        renderPriceChart();
+                    }
+                });
+            });
+        }
+
         // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
             initTopMenu();
             initMobileImprovements();
+            initPeriodSelector();
             loadData();
             
             document.getElementById('search-btn').addEventListener('click', function() {
