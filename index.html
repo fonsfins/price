@@ -450,6 +450,7 @@
             padding: 2rem;
             min-height: 600px;
             order: 2;
+            transition: padding-bottom 0.3s ease;
         }
 
         .details-header {
@@ -525,18 +526,17 @@
             opacity: 1;
         }
 
-        /* Hourly Chart - вернул оригинальный дизайн */
+        /* Hourly Chart - исправленная версия */
         .hourly-chart {
             background-color: var(--bg-tertiary);
             border-radius: 12px;
             border: 1px solid var(--border-color);
-            padding: 2rem;
+            padding: 0;
             margin-top: 2rem;
             position: relative;
-            height: 350px;
+            height: 0;
             opacity: 0;
             transform: scale(0.95);
-            max-height: 0;
             overflow: hidden;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -544,31 +544,18 @@
         .hourly-chart.active {
             opacity: 1;
             transform: scale(1);
-            max-height: 600px;
+            height: 400px;
+            padding: 2rem;
         }
 
-        .hourly-placeholder {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: var(--text-secondary);
+        .hourly-chart-container {
+            height: 100%;
+            position: relative;
         }
 
-        .hourly-placeholder h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .hourly-placeholder p {
-            font-size: 0.9rem;
-        }
-
-        /* Demo Notice - стиль как у ошибки */
         .demo-notice {
             text-align: center;
-            padding: 2rem;
+            padding: 1rem;
             color: #FF4444;
             background: rgba(255, 68, 68, 0.1);
             border-radius: 8px;
@@ -582,6 +569,26 @@
         .hourly-chart.active .demo-notice {
             transform: translateY(0);
             opacity: 1;
+        }
+
+        .hourly-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--text-secondary);
+            width: 100%;
+        }
+
+        .hourly-chart-canvas {
+            transition: opacity 0.3s ease;
+            height: 100% !important;
+            width: 100% !important;
+        }
+
+        .hourly-chart-canvas.updating {
+            opacity: 0.5;
         }
 
         /* Overall Stats */
@@ -703,14 +710,12 @@
                 height: 30px;
             }
 
-            /* Основной контент - вертикальный стек */
             .main-content {
                 grid-template-columns: 1fr;
                 gap: 1rem;
                 margin-top: 1rem;
             }
 
-            /* Панель предметов - ограничение высоты */
             .items-panel {
                 order: 1;
             }
@@ -719,7 +724,6 @@
                 max-height: 50vh;
             }
 
-            /* Детальная панель - улучшенная адаптация */
             .details-panel {
                 padding: 1rem;
                 order: 2;
@@ -751,17 +755,15 @@
                 font-size: 1.1rem;
             }
 
-            /* Графики - адаптация под мобильные */
             .chart-container {
                 padding: 1rem;
                 height: 300px;
                 margin-top: 1rem;
             }
 
-            .hourly-chart {
+            .hourly-chart.active {
+                height: 300px;
                 padding: 1rem;
-                height: 280px;
-                margin-top: 1rem;
             }
 
             .hourly-placeholder h3 {
@@ -773,7 +775,6 @@
                 padding: 0 1rem;
             }
 
-            /* Общая статистика - улучшенная сетка */
             .overall-stats {
                 padding: 1rem;
                 margin-top: 2rem;
@@ -800,7 +801,6 @@
                 height: 250px;
             }
 
-            /* Top Menu - полная ширина экрана */
             .top-menu {
                 width: 100vw;
                 height: 100vh;
@@ -817,7 +817,6 @@
             }
         }
 
-        /* Дополнительные исправления для очень маленьких экранов */
         @media (max-width: 480px) {
             .container {
                 padding: 0 10px;
@@ -866,14 +865,13 @@
                 font-size: 0.8rem;
             }
 
-            /* Графики для очень маленьких экранов */
             .chart-container {
                 height: 250px;
                 padding: 0.8rem;
             }
 
-            .hourly-chart {
-                height: 230px;
+            .hourly-chart.active {
+                height: 250px;
                 padding: 0.8rem;
             }
 
@@ -881,16 +879,8 @@
                 font-size: 0.8rem;
                 padding: 0.8rem;
             }
-
-            /* Улучшение отображения текста в графиках */
-            .chart-container canvas,
-            .hourly-chart canvas,
-            .overall-chart canvas {
-                max-width: 100% !important;
-            }
         }
 
-        /* Исправление для горизонтальной ориентации на мобильных */
         @media (max-width: 768px) and (orientation: landscape) {
             .items-list {
                 max-height: 40vh;
@@ -900,8 +890,8 @@
                 height: 250px;
             }
 
-            .hourly-chart {
-                height: 230px;
+            .hourly-chart.active {
+                height: 200px;
             }
         }
     </style>
@@ -1011,16 +1001,18 @@
                     <canvas id="price-chart"></canvas>
                 </div>
 
-                <!-- Вернул оригинальную структуру почасового графика -->
+                <!-- Исправленная почасовая таблица -->
                 <div class="hourly-chart" id="hourly-chart">
                     <div class="demo-notice">
                         ⚠️ Это демонстрационные данные. Реальная почасовая статистика будет доступна после подключения к API
                     </div>
-                    <div class="hourly-placeholder">
-                        <h3>Статистика по часам</h3>
-                        <p>Нажмите на точку в основном графике для просмотра детальной статистики</p>
+                    <div class="hourly-chart-container">
+                        <div class="hourly-placeholder">
+                            <h3>Статистика по часам</h3>
+                            <p>Нажмите на точку в основном графике для просмотра детальной статистики</p>
+                        </div>
+                        <canvas id="hourly-chart-canvas" class="hourly-chart-canvas"></canvas>
                     </div>
-                    <canvas id="hourly-chart-canvas"></canvas>
                 </div>
             </div>
         </div>
@@ -1067,7 +1059,6 @@
         let filteredItems = [];
         let currentTheme = 'dark';
 
-        // Используем относительный путь к JSON файлу в той же директории
         const DATA_URL = 'prices.json';
 
         // Top Menu Management
@@ -1077,7 +1068,6 @@
             const overlay = document.getElementById('top-menu-overlay');
             const closeBtn = document.getElementById('close-top-menu');
 
-            // Initially closed
             topMenu.classList.remove('active');
             overlay.classList.remove('active');
 
@@ -1101,12 +1091,10 @@
             document.body.className = theme === 'light' ? 'light-theme' : '';
             localStorage.setItem('theme', theme);
             
-            // Update theme options
             document.querySelectorAll('.theme-option').forEach(option => {
                 option.classList.toggle('active', option.dataset.theme === theme);
             });
             
-            // Re-render charts if they exist
             if (selectedItem) {
                 renderPriceChart();
             }
@@ -1118,15 +1106,12 @@
             }
         }
 
-        // Initialize theme from localStorage
         const savedTheme = localStorage.getItem('theme') || 'dark';
         setTheme(savedTheme);
 
-        // Theme switcher
         document.querySelectorAll('.theme-option').forEach(option => {
             option.addEventListener('click', () => {
                 setTheme(option.dataset.theme);
-                // Close menu after theme change
                 closeTopMenu();
             });
         });
@@ -1268,27 +1253,36 @@
             const lastUpdateElement = document.getElementById('last-update');
             const hourlyChartElement = document.getElementById('hourly-chart');
             const chartContainer = document.getElementById('main-chart-container');
+            const hourlyPlaceholder = hourlyChartElement.querySelector('.hourly-placeholder');
             
             if (!selectedItem) {
                 itemNameElement.textContent = 'Выберите предмет для просмотра деталей';
                 priceInfoElement.style.display = 'none';
                 hourlyChartElement.classList.remove('active');
+                hourlyPlaceholder.style.display = 'flex';
                 chartContainer.classList.remove('animate-in');
                 if (priceChart) priceChart.destroy();
+                if (hourlyChart) {
+                    hourlyChart.destroy();
+                    hourlyChart = null;
+                }
                 return;
             }
             
             itemNameElement.textContent = selectedItem.name;
             priceInfoElement.style.display = 'grid';
-            hourlyChartElement.classList.remove('active');
-            chartContainer.classList.remove('animate-in');
             
-            // Reset animations
+            hourlyChartElement.classList.remove('active');
+            hourlyPlaceholder.style.display = 'flex';
+            if (hourlyChart) {
+                hourlyChart.destroy();
+                hourlyChart = null;
+            }
+            
             document.querySelectorAll('.price-card').forEach(card => {
                 card.classList.remove('animate-in');
             });
             
-            // Animate price cards
             setTimeout(() => {
                 document.querySelectorAll('.price-card').forEach((card, index) => {
                     setTimeout(() => {
@@ -1316,7 +1310,6 @@
             
             lastUpdateElement.textContent = lastUpdate !== 'Нет данных' ? formatDate(lastUpdate) : lastUpdate;
             
-            // Animate chart container
             setTimeout(() => {
                 chartContainer.classList.add('animate-in');
                 renderPriceChart();
@@ -1421,10 +1414,10 @@
             const hourlyChartElement = document.getElementById('hourly-chart');
             const placeholder = hourlyChartElement.querySelector('.hourly-placeholder');
             
-            placeholder.style.display = 'none';
             hourlyChartElement.classList.add('active');
             
             setTimeout(() => {
+                placeholder.style.display = 'none';
                 renderHourlyChart(date);
             }, 300);
         }
@@ -1432,19 +1425,25 @@
         function renderHourlyChart(date) {
             const canvas = document.getElementById('hourly-chart-canvas');
             
-            if (hourlyChart) {
-                hourlyChart.destroy();
-            }
+            canvas.classList.add('updating');
             
-            // Детальные данные по часам (демонстрационные)
+            if (hourlyChart) {
+                setTimeout(() => {
+                    hourlyChart.destroy();
+                    createNewHourlyChart(date, canvas);
+                }, 150);
+            } else {
+                createNewHourlyChart(date, canvas);
+            }
+        }
+
+        function createNewHourlyChart(date, canvas) {
             const hours = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', 
                           '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
             
-            // Генерация реалистичных демонстрационных данных
             const basePrice = selectedItem.currentPrice;
             const prices = hours.map((_, index) => {
                 const hour = index;
-                // Симуляция суточных колебаний цены
                 const fluctuation = Math.sin(hour * Math.PI / 12) * 0.1;
                 const random = (Math.random() - 0.5) * 0.05;
                 return basePrice * (1 + fluctuation + random);
@@ -1475,6 +1474,10 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 500,
+                        easing: 'easeOutQuart'
+                    },
                     plugins: {
                         tooltip: {
                             mode: 'index',
@@ -1515,7 +1518,6 @@
                                 color: textColor,
                                 maxTicksLimit: 12,
                                 callback: function(value, index) {
-                                    // Показываем каждые 2 часа для лучшей читаемости
                                     return index % 2 === 0 ? this.getLabelForValue(value) : '';
                                 }
                             }
@@ -1523,6 +1525,10 @@
                     }
                 }
             });
+
+            setTimeout(() => {
+                canvas.classList.remove('updating');
+            }, 500);
         }
 
         function updateOverallStats() {
@@ -1656,16 +1662,13 @@
             }
         }
 
-        // Улучшение touch-событий для мобильных устройств
         function initMobileImprovements() {
-            // Улучшение кликабельных областей для touch devices
             if ('ontouchstart' in window) {
                 document.querySelectorAll('.item, .theme-option, #search-btn').forEach(element => {
                     element.style.cursor = 'pointer';
                 });
             }
             
-            // Предотвращение масштабирования при фокусе на инпуте (iOS)
             document.getElementById('search-input').addEventListener('focus', function() {
                 setTimeout(function() {
                     window.scrollTo(0, 0);
@@ -1692,7 +1695,6 @@
                 }
             });
             
-            // Обновление данных каждые 5 минут
             setInterval(loadData, 5 * 60 * 1000);
         });
     </script>
