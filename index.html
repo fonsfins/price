@@ -47,18 +47,6 @@
             transition: all 0.3s ease;
             position: relative;
             overflow-x: hidden;
-            opacity: 0;
-            animation: fadeInBody 0.8s ease-out forwards;
-            overflow: hidden; /* Скрываем прокрутку во время анимации */
-        }
-
-        body.animation-complete {
-            overflow: auto; /* Возвращаем прокрутку после анимации */
-        }
-
-        @keyframes fadeInBody {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
 
         .gradient-overlay {
@@ -70,17 +58,10 @@
             background: linear-gradient(180deg, #8B0000 0%, rgba(139, 0, 0, 0.8) 20%, rgba(139, 0, 0, 0.4) 40%, rgba(139, 0, 0, 0.1) 60%, transparent 100%);
             z-index: -1;
             pointer-events: none;
-            opacity: 0;
-            animation: fadeInGradient 1s ease-out 0.3s forwards;
         }
 
         .light-theme .gradient-overlay {
-            background: linear-gradient(180deg, #FF4444 0%, rgba(255, 68, 68, 0.7) 20%, rgba(255, 68, 68, 0.3) 40%, rgba(255, 68, 68, 0.1) 60%, transparent 100%);
-        }
-
-        @keyframes fadeInGradient {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            background: linear-gradient(180deg, #8B0000 0%, rgba(139, 0, 0, 0.6) 20%, rgba(139, 0, 0, 0.3) 40%, rgba(139, 0, 0, 0.1) 60%, transparent 100%);
         }
 
         .container {
@@ -99,20 +80,6 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            opacity: 0;
-            transform: translateY(-20px);
-            animation: slideDownHeader 0.8s ease-out 0.5s forwards;
-        }
-
-        @keyframes slideDownHeader {
-            from { 
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .header-content {
@@ -214,12 +181,6 @@
             font-size: 0.9rem;
             outline: none;
             max-width: 100%;
-            transition: all 0.3s ease;
-        }
-
-        #search-input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.2);
         }
 
         #search-input::placeholder {
@@ -417,13 +378,6 @@
             width: 100%;
             max-width: 100%;
             overflow-x: hidden;
-            opacity: 0;
-            animation: fadeInContent 0.8s ease-out 0.7s forwards;
-        }
-
-        @keyframes fadeInContent {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
 
         .items-panel {
@@ -435,20 +389,6 @@
             width: 100%;
             max-width: 100%;
             max-height: 65vh;
-            transform: translateX(-20px);
-            opacity: 0;
-            animation: slideInLeft 0.6s ease-out 0.9s forwards;
-        }
-
-        @keyframes slideInLeft {
-            from {
-                transform: translateX(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
         }
 
         .panel-header {
@@ -486,41 +426,13 @@
             width: 100%;
         }
 
-        .item.animate-in {
-            animation: itemSlideIn 0.4s ease forwards;
-        }
-
-        @keyframes itemSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .item:hover {
+            background-color: var(--hover-color);
         }
 
         .item.active {
             background-color: var(--hover-color);
             border-left: 4px solid var(--accent-color);
-            animation: itemActive 0.3s ease;
-        }
-
-        @keyframes itemActive {
-            0% {
-                background-color: var(--bg-secondary);
-            }
-            50% {
-                background-color: var(--hover-color);
-            }
-            100% {
-                background-color: var(--hover-color);
-            }
-        }
-
-        .item:hover {
-            background-color: var(--hover-color);
         }
 
         .item-name {
@@ -558,20 +470,6 @@
             width: 100%;
             max-width: 100%;
             overflow-x: hidden;
-            transform: translateX(20px);
-            opacity: 0;
-            animation: slideInRight 0.6s ease-out 0.9s forwards;
-        }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
         }
 
         .details-header {
@@ -586,43 +484,6 @@
             word-wrap: break-word;
             overflow-wrap: break-word;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Period Selector */
-        .period-selector {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.4s ease;
-        }
-
-        .period-selector.animate-in {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .period-btn {
-            padding: 8px 16px;
-            background-color: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .period-btn:hover {
-            background-color: var(--hover-color);
-        }
-
-        .period-btn.active {
-            background-color: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
         }
 
         .price-info-grid {
@@ -703,31 +564,6 @@
         .chart-container.fade-out {
             opacity: 0;
             transform: translateY(-20px);
-        }
-
-        /* Period Notice */
-        .period-notice {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            padding: 1.5rem;
-            color: #FF4444;
-            background: rgba(255, 68, 68, 0.1);
-            border-radius: 8px;
-            border: 1px solid rgba(255, 68, 68, 0.3);
-            width: 80%;
-            max-width: 400px;
-            z-index: 10;
-            backdrop-filter: none;
-            box-shadow: none;
-            transition: all 0.4s ease;
-        }
-
-        .period-notice.fade-out {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.9);
         }
 
         /* Hourly Chart */
@@ -829,20 +665,6 @@
             width: 100%;
             max-width: 100%;
             overflow-x: hidden;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: slideUpStats 0.8s ease-out 1.1s forwards;
-        }
-
-        @keyframes slideUpStats {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .overall-stats h2 {
@@ -1054,7 +876,7 @@
                 height: 300px;
             }
 
-            .demo-notice, .period-notice {
+            .demo-notice {
                 padding: 1rem;
                 width: 90%;
             }
@@ -1107,15 +929,6 @@
 
             .theme-option {
                 padding: 0.8rem;
-            }
-
-            .period-selector {
-                gap: 0.3rem;
-            }
-
-            .period-btn {
-                padding: 6px 12px;
-                font-size: 0.8rem;
             }
         }
 
@@ -1177,13 +990,9 @@
                 padding: 0.8rem;
             }
 
-            .demo-notice, .period-notice {
+            .demo-notice {
                 font-size: 0.8rem;
                 padding: 0.8rem;
-            }
-
-            .period-selector {
-                justify-content: center;
             }
         }
 
@@ -1302,14 +1111,6 @@
                     <h2 id="selected-item-name">Выберите предмет для просмотра деталей</h2>
                 </div>
                 
-                <!-- Period Selector -->
-                <div class="period-selector" id="period-selector" style="display: none;">
-                    <button class="period-btn active" data-period="all">Все время</button>
-                    <button class="period-btn" data-period="year">Год</button>
-                    <button class="period-btn" data-period="month">Месяц</button>
-                    <button class="period-btn" data-period="week">Неделя</button>
-                </div>
-                
                 <div class="price-info-grid" id="price-info" style="display: none;">
                     <div class="price-card">
                         <h3>Текущая цена</h3>
@@ -1330,10 +1131,6 @@
                 </div>
 
                 <div class="chart-container" id="main-chart-container">
-                    <!-- Period Notice -->
-                    <div class="period-notice" id="period-notice" style="display: none;">
-                        ⚠️ Период "Неделя", "Месяц" и "Год" пока не поддерживаются. Доступен только период "Все время"
-                    </div>
                     <canvas id="price-chart"></canvas>
                 </div>
 
@@ -1395,7 +1192,6 @@
         let hourlyChart = null;
         let filteredItems = [];
         let currentTheme = 'dark';
-        let currentPeriod = 'all';
 
         const DATA_URL = 'prices.json';
 
@@ -1498,6 +1294,8 @@
                 updateOverallStats();
                 updateLastUpdateTime();
                 
+                showNotification('Данные успешно загружены!');
+                
             } catch (error) {
                 console.error('Ошибка загрузки данных:', error);
                 showErrorState(`Ошибка загрузки данных: ${error.message}`);
@@ -1561,7 +1359,7 @@
             return ((lastPrice - firstPrice) / firstPrice) * 100;
         }
 
-        function renderItemsList(animateItems = false) {
+        function renderItemsList() {
             const container = document.getElementById('items-container');
             container.innerHTML = '';
             
@@ -1591,30 +1389,14 @@
                 
                 itemElement.addEventListener('click', () => selectItem(item));
                 container.appendChild(itemElement);
-                
-                // Анимация появления элемента только при поиске или начальной загрузке
-                if (animateItems) {
-                    setTimeout(() => {
-                        itemElement.classList.add('animate-in');
-                    }, index * 50);
-                }
             });
         }
 
         function selectItem(item) {
-            // Обновляем активный класс без полной перерисовки списка
-            document.querySelectorAll('.item').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            const selectedElement = document.querySelector(`.item[data-name="${item.name}"]`);
-            if (selectedElement) {
-                selectedElement.classList.add('active');
-            }
-            
             // Анимация смены предмета
             animateItemChange(() => {
                 selectedItem = item;
+                renderItemsList();
                 updateItemDetails();
             });
         }
@@ -1628,16 +1410,11 @@
             const demoNotice = document.querySelector('.demo-notice');
             const hourlyPlaceholder = document.querySelector('.hourly-placeholder');
             const hourlyCanvas = document.getElementById('hourly-chart-canvas');
-            const periodSelector = document.getElementById('period-selector');
-            const periodNotice = document.getElementById('period-notice');
 
             // Если уже есть выбранный предмет - анимируем исчезновение
             if (selectedItem) {
                 // Анимация заголовка
                 itemNameElement.classList.add('text-fade-out');
-                
-                // Анимация селектора периода
-                periodSelector.classList.remove('animate-in');
                 
                 // Анимация карточек цен
                 priceCards.forEach(card => {
@@ -1646,9 +1423,6 @@
 
                 // Анимация основного графика
                 chartContainer.classList.add('fade-out');
-
-                // Скрываем уведомление о периодах
-                periodNotice.style.display = 'none';
 
                 // Анимация почасового графика если он активен
                 if (hourlyChartElement.classList.contains('active')) {
@@ -1679,13 +1453,10 @@
             const hourlyPlaceholder = hourlyChartElement.querySelector('.hourly-placeholder');
             const demoNotice = hourlyChartElement.querySelector('.demo-notice');
             const hourlyCanvas = document.getElementById('hourly-chart-canvas');
-            const periodSelector = document.getElementById('period-selector');
-            const periodNotice = document.getElementById('period-notice');
             
             if (!selectedItem) {
                 itemNameElement.textContent = 'Выберите предмет для просмотра деталей';
                 priceInfoElement.style.display = 'none';
-                periodSelector.style.display = 'none';
                 hourlyChartElement.classList.remove('active');
                 hourlyPlaceholder.style.display = 'flex';
                 demoNotice.style.display = 'none';
@@ -1698,19 +1469,11 @@
                 return;
             }
             
-            // Показываем селектор периода
-            periodSelector.style.display = 'flex';
-            
             // Анимация появления нового контента
             setTimeout(() => {
                 itemNameElement.textContent = selectedItem.name;
                 itemNameElement.classList.remove('text-fade-out');
                 itemNameElement.classList.add('text-fade-in');
-                
-                // Анимация появления селектора периода
-                setTimeout(() => {
-                    periodSelector.classList.add('animate-in');
-                }, 200);
                 
                 setTimeout(() => {
                     itemNameElement.classList.remove('text-fade-in');
@@ -1778,20 +1541,8 @@
             }, 600);
         }
 
-        function filterPriceHistoryByPeriod(history, period) {
-            if (!history || history.length === 0) return [];
-            
-            // Для периодов кроме "all" показываем уведомление
-            if (period !== 'all') {
-                return [];
-            }
-            
-            return history;
-        }
-
         function renderPriceChart() {
             const ctx = document.getElementById('price-chart').getContext('2d');
-            const periodNotice = document.getElementById('period-notice');
             
             if (priceChart) {
                 priceChart.destroy();
@@ -1801,19 +1552,8 @@
                 return;
             }
             
-            // Фильтруем историю по выбранному периоду
-            const filteredHistory = filterPriceHistoryByPeriod(selectedItem.priceHistory, currentPeriod);
-            
-            // Показываем уведомление для периодов кроме "all"
-            if (currentPeriod !== 'all') {
-                periodNotice.style.display = 'block';
-                return;
-            } else {
-                periodNotice.style.display = 'none';
-            }
-            
-            const labels = filteredHistory.map(entry => formatDate(entry.date));
-            const data = filteredHistory.map(entry => entry.price);
+            const labels = selectedItem.priceHistory.map(entry => formatDate(entry.date));
+            const data = selectedItem.priceHistory.map(entry => entry.price);
             
             const gridColor = currentTheme === 'light' ? '#E8E8E8' : '#333333';
             const textColor = currentTheme === 'light' ? '#404040' : '#E0E0E0';
@@ -1843,7 +1583,7 @@
                     onClick: (e, elements) => {
                         if (elements.length > 0) {
                             const index = elements[0].index;
-                            const date = filteredHistory[index].date;
+                            const date = selectedItem.priceHistory[index].date;
                             showHourlyStats(date);
                         }
                     },
@@ -1901,37 +1641,19 @@
             const demoNotice = hourlyChartElement.querySelector('.demo-notice');
             const hourlyCanvas = document.getElementById('hourly-chart-canvas');
             
-            // Если график уже активен, анимируем переход
-            if (hourlyChartElement.classList.contains('active')) {
-                // Анимация исчезновения текущего графика
-                hourlyCanvas.classList.add('fade-out');
-                demoNotice.classList.add('fade-out');
+            // Анимация скрытия плейсхолдера
+            placeholder.classList.add('fade-out');
+            
+            setTimeout(() => {
+                placeholder.style.display = 'none';
+                demoNotice.style.display = 'block';
                 
+                // Анимация появления демо-заметки и графика
                 setTimeout(() => {
-                    // Обновляем данные
+                    hourlyChartElement.classList.add('active');
                     renderHourlyChart(date);
-                    
-                    // Анимация появления обновленного графика
-                    setTimeout(() => {
-                        hourlyCanvas.classList.remove('fade-out');
-                        demoNotice.classList.remove('fade-out');
-                    }, 100);
-                }, 300);
-            } else {
-                // Анимация скрытия плейсхолдера
-                placeholder.classList.add('fade-out');
-                
-                setTimeout(() => {
-                    placeholder.style.display = 'none';
-                    demoNotice.style.display = 'block';
-                    
-                    // Анимация появления демо-заметки и графика
-                    setTimeout(() => {
-                        hourlyChartElement.classList.add('active');
-                        renderHourlyChart(date);
-                    }, 200);
-                }, 300);
-            }
+                }, 200);
+            }, 300);
         }
 
         function renderHourlyChart(date) {
@@ -2144,39 +1866,25 @@
         }
 
         function searchItems(query) {
-            const container = document.getElementById('items-container');
-            const items = container.querySelectorAll('.item');
+            if (!query.trim()) {
+                processData();
+            } else {
+                const lowerQuery = query.toLowerCase();
+                filteredItems = Object.entries(itemsData)
+                    .filter(([name, data]) => name.toLowerCase().includes(lowerQuery))
+                    .map(([name, data]) => ({
+                        name: name,
+                        currentPrice: data.price,
+                        priceHistory: data.history || []
+                    }));
+            }
+            renderItemsList();
+            updateOverallStats();
             
-            // Анимация исчезновения текущих элементов
-            items.forEach((item, index) => {
-                setTimeout(() => {
-                    item.style.opacity = '0';
-                    item.style.transform = 'translateY(10px)';
-                }, index * 30);
-            });
-            
-            // Фильтрация и отображение новых результатов
-            setTimeout(() => {
-                if (!query.trim()) {
-                    processData();
-                } else {
-                    const lowerQuery = query.toLowerCase();
-                    filteredItems = Object.entries(itemsData)
-                        .filter(([name, data]) => name.toLowerCase().includes(lowerQuery))
-                        .map(([name, data]) => ({
-                            name: name,
-                            currentPrice: data.price,
-                            priceHistory: data.history || []
-                        }));
-                }
-                renderItemsList(true); // Включаем анимацию для результатов поиска
-                updateOverallStats();
-                
-                if (selectedItem && !filteredItems.some(item => item.name === selectedItem.name)) {
-                    selectedItem = null;
-                    updateItemDetails();
-                }
-            }, items.length * 30 + 100);
+            if (selectedItem && !filteredItems.some(item => item.name === selectedItem.name)) {
+                selectedItem = null;
+                updateItemDetails();
+            }
         }
 
         function initMobileImprovements() {
@@ -2194,39 +1902,11 @@
             });
         }
 
-        function initPeriodSelector() {
-            const periodBtns = document.querySelectorAll('.period-btn');
-            
-            periodBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    // Убираем активный класс у всех кнопок
-                    periodBtns.forEach(b => b.classList.remove('active'));
-                    
-                    // Добавляем активный класс к текущей кнопке
-                    this.classList.add('active');
-                    
-                    // Обновляем текущий период
-                    currentPeriod = this.dataset.period;
-                    
-                    // Перерисовываем график с новым периодом
-                    if (selectedItem) {
-                        renderPriceChart();
-                    }
-                });
-            });
-        }
-
         // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
             initTopMenu();
             initMobileImprovements();
-            initPeriodSelector();
             loadData();
-            
-            // Включаем прокрутку после завершения анимаций
-            setTimeout(() => {
-                document.body.classList.add('animation-complete');
-            }, 1500);
             
             document.getElementById('search-btn').addEventListener('click', function() {
                 const query = document.getElementById('search-input').value;
