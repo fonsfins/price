@@ -450,7 +450,6 @@
             padding: 2rem;
             min-height: 600px;
             order: 2;
-            transition: padding-bottom 0.3s ease;
         }
 
         .details-header {
@@ -526,31 +525,31 @@
             opacity: 1;
         }
 
-        /* Hourly Chart - исправленная версия */
+        /* Hourly Chart - полностью переработанная версия */
         .hourly-chart {
             background-color: var(--bg-tertiary);
             border-radius: 12px;
             border: 1px solid var(--border-color);
-            padding: 0;
             margin-top: 2rem;
             position: relative;
-            height: 0;
-            opacity: 0;
-            transform: scale(0.95);
             overflow: hidden;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .hourly-chart.active {
+            max-height: 450px;
             opacity: 1;
-            transform: scale(1);
-            height: 400px;
+            transform: translateY(0);
             padding: 2rem;
         }
 
         .hourly-chart-container {
-            height: 100%;
+            height: 350px;
             position: relative;
+            width: 100%;
         }
 
         .demo-notice {
@@ -559,16 +558,8 @@
             color: #FF4444;
             background: rgba(255, 68, 68, 0.1);
             border-radius: 8px;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             border: 1px solid rgba(255, 68, 68, 0.3);
-            transform: translateY(-10px);
-            opacity: 0;
-            transition: all 0.4s ease 0.3s;
-        }
-
-        .hourly-chart.active .demo-notice {
-            transform: translateY(0);
-            opacity: 1;
         }
 
         .hourly-placeholder {
@@ -579,16 +570,21 @@
             text-align: center;
             color: var(--text-secondary);
             width: 100%;
+            z-index: 2;
         }
 
         .hourly-chart-canvas {
-            transition: opacity 0.3s ease;
-            height: 100% !important;
+            transition: all 0.5s ease;
             width: 100% !important;
+            height: 100% !important;
         }
 
-        .hourly-chart-canvas.updating {
-            opacity: 0.5;
+        .hourly-chart-canvas.fade-out {
+            opacity: 0;
+        }
+
+        .hourly-chart-canvas.fade-in {
+            opacity: 1;
         }
 
         /* Overall Stats */
@@ -762,8 +758,12 @@
             }
 
             .hourly-chart.active {
-                height: 300px;
                 padding: 1rem;
+                max-height: 350px;
+            }
+
+            .hourly-chart-container {
+                height: 250px;
             }
 
             .hourly-placeholder h3 {
@@ -871,8 +871,12 @@
             }
 
             .hourly-chart.active {
-                height: 250px;
+                max-height: 300px;
                 padding: 0.8rem;
+            }
+
+            .hourly-chart-container {
+                height: 200px;
             }
 
             .demo-notice {
@@ -891,6 +895,10 @@
             }
 
             .hourly-chart.active {
+                max-height: 280px;
+            }
+
+            .hourly-chart-container {
                 height: 200px;
             }
         }
@@ -1001,7 +1009,7 @@
                     <canvas id="price-chart"></canvas>
                 </div>
 
-                <!-- Исправленная почасовая таблица -->
+                <!-- Полностью переработанная почасовая таблица -->
                 <div class="hourly-chart" id="hourly-chart">
                     <div class="demo-notice">
                         ⚠️ Это демонстрационные данные. Реальная почасовая статистика будет доступна после подключения к API
@@ -1068,21 +1076,40 @@
             const overlay = document.getElementById('top-menu-overlay');
             const closeBtn = document.getElementById('close-top-menu');
 
-            topMenu.classList.remove('active');
-            overlay.classList.remove('active');
-
-            hamburger.addEventListener('click', () => {
+            // Улучшенное управление состоянием меню
+            function openTopMenu() {
                 topMenu.classList.add('active');
                 overlay.classList.add('active');
-            });
-
-            closeBtn.addEventListener('click', closeTopMenu);
-            overlay.addEventListener('click', closeTopMenu);
+                document.body.style.overflow = 'hidden'; // Блокируем скролл
+            }
 
             function closeTopMenu() {
                 topMenu.classList.remove('active');
                 overlay.classList.remove('active');
+                document.body.style.overflow = ''; // Разблокируем скролл
+                
+                // Гарантированно скрываем меню через небольшой таймаут
+                setTimeout(() => {
+                    topMenu.style.display = 'none';
+                    overlay.style.display = 'none';
+                }, 400);
             }
+
+            function showTopMenu() {
+                topMenu.style.display = 'block';
+                overlay.style.display = 'block';
+                setTimeout(() => {
+                    topMenu.classList.add('active');
+                    overlay.classList.add('active');
+                }, 10);
+            }
+
+            hamburger.addEventListener('click', showTopMenu);
+            closeBtn.addEventListener('click', closeTopMenu);
+            overlay.addEventListener('click', closeTopMenu);
+
+            // Изначально скрываем меню
+            closeTopMenu();
         }
 
         // Theme Management
@@ -1117,8 +1144,17 @@
         });
 
         function closeTopMenu() {
-            document.getElementById('top-menu').classList.remove('active');
-            document.getElementById('top-menu-overlay').classList.remove('active');
+            const topMenu = document.getElementById('top-menu');
+            const overlay = document.getElementById('top-menu-overlay');
+            
+            topMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            setTimeout(() => {
+                topMenu.style.display = 'none';
+                overlay.style.display = 'none';
+            }, 400);
         }
 
         // Data loading functions
@@ -1168,8 +1204,7 @@
         }
 
         function updateLastUpdateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('ru-RU');
+            // Функция оставлена для будущего использования
         }
 
         function processData() {
@@ -1272,6 +1307,7 @@
             itemNameElement.textContent = selectedItem.name;
             priceInfoElement.style.display = 'grid';
             
+            // Сбрасываем почасовой график при смене предмета
             hourlyChartElement.classList.remove('active');
             hourlyPlaceholder.style.display = 'flex';
             if (hourlyChart) {
@@ -1413,9 +1449,12 @@
         function showHourlyStats(date) {
             const hourlyChartElement = document.getElementById('hourly-chart');
             const placeholder = hourlyChartElement.querySelector('.hourly-placeholder');
+            const canvas = document.getElementById('hourly-chart-canvas');
             
+            // Показываем контейнер
             hourlyChartElement.classList.add('active');
             
+            // Скрываем плейсхолдер и рендерим график
             setTimeout(() => {
                 placeholder.style.display = 'none';
                 renderHourlyChart(date);
@@ -1425,16 +1464,16 @@
         function renderHourlyChart(date) {
             const canvas = document.getElementById('hourly-chart-canvas');
             
-            canvas.classList.add('updating');
+            // Плавное исчезновение текущего графика
+            canvas.classList.add('fade-out');
             
-            if (hourlyChart) {
-                setTimeout(() => {
+            setTimeout(() => {
+                if (hourlyChart) {
                     hourlyChart.destroy();
-                    createNewHourlyChart(date, canvas);
-                }, 150);
-            } else {
+                }
+                
                 createNewHourlyChart(date, canvas);
-            }
+            }, 300);
         }
 
         function createNewHourlyChart(date, canvas) {
@@ -1451,6 +1490,10 @@
             
             const gridColor = currentTheme === 'light' ? '#E8E8E8' : '#333333';
             const textColor = currentTheme === 'light' ? '#404040' : '#E0E0E0';
+            
+            // Начинаем с полностью прозрачного графика
+            canvas.classList.remove('fade-out');
+            canvas.classList.add('fade-in');
             
             hourlyChart = new Chart(canvas, {
                 type: 'line',
@@ -1475,7 +1518,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     animation: {
-                        duration: 500,
+                        duration: 600,
                         easing: 'easeOutQuart'
                     },
                     plugins: {
@@ -1525,10 +1568,6 @@
                     }
                 }
             });
-
-            setTimeout(() => {
-                canvas.classList.remove('updating');
-            }, 500);
         }
 
         function updateOverallStats() {
