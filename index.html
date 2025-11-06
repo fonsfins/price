@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Standoff2 - Трекер цен</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -25,17 +25,23 @@
             --text-secondary: #404040;
             --accent-color: #FF4444;
             --border-color: #DDDDDD;
-            --hover-color: rgba(255, 68, 68, 0.05);
+            --hover-color: rgba(255, 68, 68, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Roboto', 'Noto Sans', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Roboto', 'Noto Sans', sans-serif;
+        }
 
         body {
             background-color: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
-            transition: all 0.25s ease;
-            overflow-x: hidden; /* важно чтобы не было горизонтальной прокрутки */
+            transition: all 0.3s ease;
+            position: relative;
+            overflow-x: hidden;
         }
 
         .gradient-overlay {
@@ -49,29 +55,141 @@
             pointer-events: none;
         }
 
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+        .light-theme .gradient-overlay {
+            background: linear-gradient(180deg, #8B0000 0%, rgba(139, 0, 0, 0.6) 20%, rgba(139, 0, 0, 0.3) 40%, rgba(139, 0, 0, 0.1) 60%, transparent 100%);
+        }
 
-        /* Header */
-        .header { background: transparent; border-bottom: 1px solid transparent; padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
-        .header-content { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
-        .header-top-row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
-        .header-bottom-row { width: 100%; }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-        .menu-section { display: flex; align-items: center; justify-content: space-between; width: 100%; }
-        .logo-section { display: flex; align-items: center; gap: 1.5rem; }
-        .hamburger-menu { cursor: pointer; padding: 8px; border-radius: 6px; transition: background-color 0.2s; flex-shrink: 0; order: 2; }
-        .hamburger-menu:hover { background-color: var(--hover-color); }
-        .hamburger-icon { width: 24px; height: 2px; background-color: var(--text-primary); position: relative; display: inline-block; }
-        .hamburger-icon::before, .hamburger-icon::after { content: ''; position: absolute; width: 24px; height: 2px; background-color: var(--text-primary); transition: all 0.2s; }
-        .hamburger-icon::before { top: -7px; }
-        .hamburger-icon::after { top: 7px; }
-        .logo { height: 35px; width: auto; flex-shrink: 0; }
+        /* Header Styles */
+        .header {
+            background: transparent;
+            border-bottom: 1px solid transparent;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-        .search-container { display: flex; flex: 2; max-width: 600px; margin: 0 auto; min-width: 200px; }
-        #search-input { flex: 1; padding: 12px 20px; background-color: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 25px 0 0 25px; color: var(--text-primary); font-size: 0.9rem; outline: none; }
-        #search-input::placeholder { color: var(--text-secondary); }
-        #search-btn { background-color: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-left: none; padding: 12px 24px; border-radius: 0 25px 25px 0; cursor: pointer; font-weight: 600; transition: all 0.2s; }
-        #search-btn:hover { background-color: var(--hover-color); }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .header-bottom-row {
+            width: 100%;
+        }
+
+        .menu-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .hamburger-menu {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            flex-shrink: 0;
+            order: 2;
+        }
+
+        .hamburger-menu:hover {
+            background-color: var(--hover-color);
+        }
+
+        .hamburger-icon {
+            width: 24px;
+            height: 2px;
+            background-color: var(--text-primary);
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .hamburger-icon::before,
+        .hamburger-icon::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 2px;
+            background-color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .hamburger-icon::before {
+            top: -6px;
+        }
+
+        .hamburger-icon::after {
+            top: 6px;
+        }
+
+        .logo {
+            height: 35px;
+            width: auto;
+            flex-shrink: 0;
+        }
+
+        .search-container {
+            display: flex;
+            flex: 2;
+            max-width: 600px;
+            margin: 0 auto;
+            min-width: 200px;
+        }
+
+        #search-input {
+            flex: 1;
+            padding: 12px 20px;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 25px 0 0 25px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        #search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        #search-btn {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-left: none;
+            padding: 12px 24px;
+            border-radius: 0 25px 25px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        #search-btn:hover {
+            background-color: var(--hover-color);
+        }
 
         /* Top Menu */
         .top-menu {
@@ -81,148 +199,576 @@
             width: 100%;
             background-color: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
-            transition: top 0.35s cubic-bezier(0.4,0,0.2,1);
+            transition: top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1000;
             padding: 2rem;
-            box-shadow: 0 6px 30px rgba(0,0,0,0.35);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             transform: translateZ(0);
         }
-        .top-menu.active { top: 0; }
-        .top-menu-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.5); display: none; z-index: 999; opacity: 0; transition: opacity 0.25s ease;
+
+        .top-menu.active {
+            top: 0;
         }
-        .top-menu-overlay.active { display: block; opacity: 1; }
 
-        .top-menu-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem; }
-        .top-menu-title { font-size:1.2rem; font-weight:600; }
-        .close-top-menu { background:none; border:none; color:var(--text-primary); font-size:1.5rem; cursor:pointer; padding:5px; border-radius:6px; }
-        .close-top-menu:hover { background-color: var(--hover-color); }
+        .top-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-        .theme-switcher { margin-bottom: 1.2rem; }
-        .theme-section-title { font-size:1rem; color:var(--text-secondary); margin-bottom:0.8rem; font-weight:500; }
-        .theme-options { display:flex; gap:0.6rem; flex-wrap:wrap; }
-        .theme-option { display:flex; align-items:center; gap:0.8rem; padding:0.8rem 1rem; border-radius:8px; cursor:pointer; transition: all 0.18s ease; border: 1px solid transparent; }
-        .theme-option:hover { background-color: var(--hover-color); }
-        .theme-option.active { border-color: var(--accent-color); background-color: rgba(255,68,68,0.06); }
-        .theme-preview { width:20px; height:20px; border-radius:50%; border:2px solid var(--border-color); }
-        .dark-preview { background: linear-gradient(135deg,#121212 50%, #202020 50%); }
-        .light-preview { background: linear-gradient(135deg,#FFFFFF 50%, #F5F5F5 50%); }
+        .top-menu-overlay.active {
+            display: block;
+            opacity: 1;
+        }
 
-        .language-selector { margin-top: 0.6rem; }
-        .language-select { width: 100%; padding: 12px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); font-size: 0.9rem; }
+        .top-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .top-menu-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .close-top-menu {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .close-top-menu:hover {
+            background-color: var(--hover-color);
+        }
+
+        .theme-switcher {
+            margin-bottom: 2rem;
+        }
+
+        .theme-section-title {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .theme-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform: translateX(-20px);
+            opacity: 0;
+        }
+
+        .top-menu.active .theme-option {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .top-menu.active .theme-option:nth-child(1) {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+        }
+
+        .top-menu.active .theme-option:nth-child(2) {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        }
+
+        .theme-option:hover {
+            background-color: var(--hover-color);
+        }
+
+        .theme-option.active {
+            background-color: var(--hover-color);
+            border: 1px solid var(--accent-color);
+        }
+
+        .theme-preview {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+        }
+
+        .dark-preview {
+            background: linear-gradient(135deg, #121212 50%, #202020 50%);
+        }
+
+        .light-preview {
+            background: linear-gradient(135deg, #FFFFFF 50%, #F5F5F5 50%);
+        }
+
+        .language-selector {
+            margin-bottom: 1rem;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+        }
+
+        .top-menu.active .language-selector {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .language-section-title {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .language-select {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+	/* Улучшенная адаптация под телефоны */
+	@media (max-width: 768px) {
+	    .main-content {
+	        grid-template-columns: 1fr;
+	        gap: 1.5rem;
+	    }
+
+	    .details-panel {
+	        padding: 1.2rem;
+	        min-height: auto;
+	    }
+
+	    .price-info-grid {
+	        grid-template-columns: 1fr 1fr;
+	        gap: 1rem;
+	    }
+
+	    .chart-container,
+	    .hourly-chart {
+	        padding: 1rem;
+	        height: auto;
+	        min-height: 300px;
+	    }
+
+	    .overall-stats {
+	        padding: 1.5rem 1rem;
+	        margin-top: 2rem;
+	    }
+
+	    .stats-grid {
+	        grid-template-columns: 1fr 1fr;
+	        gap: 1rem;
+	    }
+	}
+
+	@media (max-width: 480px) {
+	    .price-info-grid {
+	        grid-template-columns: 1fr;
+	    }
+	
+	    .stats-grid {
+	        grid-template-columns: 1fr;
+	    }
+
+	    .price-card p {
+	        font-size: 1.1rem;
+	    }
+
+	    .stat-card p {
+	        font-size: 1.2rem;
+	    }
+
+	    .details-header h2 {
+	        font-size: 1.2rem;
+	    }
+
+	    .overall-stats h2 {
+	        font-size: 1.1rem;
+	    }
+
+	    .items-list {
+	        max-height: none;
+	    }
+
+	    .chart-container,
+	    .hourly-chart {
+	        padding: 0.8rem;
+	        height: auto;
+	        min-height: 250px;
+	    }
+	}
+
 
         /* Main Content */
-        .main-content { display: grid; grid-template-columns: 350px 1fr; gap: 2rem; margin-top: 2rem; align-items: start; }
-        @media (max-width: 1024px) { .main-content { grid-template-columns: 1fr; } }
+        .main-content {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
 
-        .items-panel, .details-panel, .overall-stats { background-color: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-color); overflow-x: hidden; width: 100%; }
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
 
-        .panel-header { padding: 1.2rem; border-bottom: 1px solid var(--border-color); }
-        .panel-header h2 { font-size:1.3rem; font-weight:600; }
+        .items-panel {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
 
-        .items-list { max-height: 70vh; overflow-y: auto; scrollbar-width: thin; padding-bottom: 0.5rem; }
-        .items-list::-webkit-scrollbar { width:6px; }
-        .items-list::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 6px; }
+        .panel-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-        @media (max-width: 1024px) { .items-list { max-height: 420px; } }
-        @media (max-width: 480px) { .items-list { max-height: 320px; } }
+        .panel-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
 
-        .item { padding: 1rem 1.2rem; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background-color 0.15s; display:flex; justify-content:space-between; align-items:center; gap:1rem; }
-        .item:hover { background-color: var(--hover-color); }
-        .item.active { background-color: rgba(255,68,68,0.06); border-left: 4px solid var(--accent-color); }
+        .items-list {
+            max-height: 70vh;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
 
-        .item-name { font-weight:600; margin-bottom: 0; font-size:1rem; }
-        .item-price { color: var(--accent-color); font-weight:700; font-size:1.05rem; display:flex; align-items:center; gap:0.6rem; white-space:nowrap; }
+        .items-list::-webkit-scrollbar {
+            display: none;
+        }
 
-        .change-percent { font-size:0.85rem; color:var(--text-secondary); }
+        @media (max-width: 1024px) {
+            .items-list {
+                max-height: 400px;
+            }
+        }
+
+        .item {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .item:hover {
+            background-color: var(--hover-color);
+        }
+
+        .item.active {
+            background-color: var(--hover-color);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .item-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .item-price {
+            color: var(--accent-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .item-price.change-negative {
+            color: #FF4444;
+        }
+
+        .change-percent {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-left: 0.5rem;
+        }
 
         /* Details Panel */
-        .details-panel { padding: 1.6rem; min-height: 420px; }
-        .details-header h2 { font-size:1.4rem; font-weight:700; margin-bottom:0.4rem; }
+        .details-panel {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            min-height: 600px;
+        }
 
-        .price-info-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap:1rem; margin-bottom:1.2rem; }
-        .price-card { background: var(--bg-tertiary); padding:1rem; border-radius:8px; border:1px solid var(--border-color); }
-        .price-card h3 { font-size:0.9rem; color:var(--text-secondary); margin-bottom:0.6rem; font-weight:500; }
-        .price-card p { font-size:1.2rem; font-weight:700; color:var(--accent-color); }
+        .details-header {
+            margin-bottom: 2rem;
+        }
 
-        .chart-container { background-color: var(--bg-tertiary); border-radius: 12px; border: 1px solid var(--border-color); padding: 1.2rem; margin-top: 1rem; position: relative; height: 360px; transition: all 0.25s ease; }
-        .hourly-chart { background-color: var(--bg-tertiary); border-radius:12px; border:1px solid var(--border-color); padding: 1rem; margin-top: 1rem; position: relative; height: 0; overflow: hidden; transition: all 0.35s; }
-        .hourly-chart.active { height: 320px; padding: 1rem; }
+        .details-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
 
-        .hourly-placeholder { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:var(--text-secondary); text-align:center; pointer-events:none; }
-        .demo-notice { background: rgba(255,68,68,0.06); border: 1px solid var(--accent-color); border-radius:8px; padding: 0.8rem; margin-bottom:0.8rem; color:var(--accent-color); text-align:center; }
+        .price-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .price-card {
+            background-color: var(--bg-tertiary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .price-card.animate-in {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .price-card:nth-child(1) { transition-delay: 0.1s; }
+        .price-card:nth-child(2) { transition-delay: 0.2s; }
+        .price-card:nth-child(3) { transition-delay: 0.3s; }
+        .price-card:nth-child(4) { transition-delay: 0.4s; }
+
+        .price-card h3 {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+
+        .price-card p {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .price-card .change-negative {
+            color: #FF4444;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background-color: var(--bg-tertiary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            margin-top: 2rem;
+            position: relative;
+            height: 400px;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .chart-container.animate-in {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .hourly-chart {
+            background-color: var(--bg-tertiary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            margin-top: 2rem;
+            position: relative;
+            height: 350px;
+            opacity: 0;
+            transform: scale(0.95);
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hourly-chart.active {
+            opacity: 1;
+            transform: scale(1);
+            max-height: 600px;
+        }
+
+        .hourly-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .hourly-placeholder h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hourly-placeholder p {
+            font-size: 0.9rem;
+        }
+
+        .demo-notice {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: all 0.4s ease 0.3s;
+        }
+
+        .hourly-chart.active .demo-notice {
+            transform: translateY(0);
+            opacity: 1;
+        }
 
         /* Overall Stats */
-        .overall-stats { margin-top: 1.6rem; padding:1.2rem; }
-        .overall-stats h2 { font-size:1.2rem; font-weight:600; margin-bottom:1rem; }
-        .stats-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap:1rem; margin-bottom:1rem; }
-        .stat-card { background:var(--bg-tertiary); padding:0.9rem; border-radius:8px; border:1px solid var(--border-color); text-align:center; }
-        .stat-card h3 { font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.4rem; font-weight:500; }
-        .stat-card p { font-size:1.1rem; font-weight:700; color:var(--accent-color); }
-
-        .overall-chart { height: 260px; }
-
-        footer { margin-top: 1.6rem; text-align:center; padding:1.2rem 0; color:var(--text-secondary); border-top: 1px solid var(--border-color); }
-
-        .update-notification { position: fixed; top: 20px; right: 20px; background: var(--accent-color); color: var(--bg-primary); padding: 10px 18px; border-radius:8px; box-shadow: 0 6px 20px rgba(0,0,0,0.3); display:none; z-index:1001; font-weight:700; transform: translateX(60px); opacity:0; transition: all 0.3s ease; }
-        .update-notification.show { display:block; transform: translateX(0); opacity:1; }
-
-        .loading { text-align:center; padding:2.4rem; color:var(--text-secondary); }
-        .error { text-align:center; padding:1rem; color:#FF4444; background: rgba(255,68,68,0.06); border-radius:8px; margin:0.6rem; border:1px solid rgba(255,68,68,0.18); }
-
-        /* Mobile tweaks */
-        @media (max-width: 768px) {
-            .header-content { flex-direction: column; gap:0.6rem; }
-            .search-container { margin: 0; max-width: none; width: 100%; }
-            .logo { height: 30px; }
-            .top-menu { padding: 1.2rem; }
-            .main-content { gap: 1rem; }
-            .details-panel { padding: 1rem; min-height: auto; }
-            .chart-container { height: 300px; }
-            .overall-chart { height: 220px; }
-            .hamburger-menu { order: 1; align-self:flex-start; }
+        .overall-stats {
+            margin-top: 3rem;
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
         }
-        @media (max-width: 600px) {
-            .top-menu { height: 100vh; overflow-y: auto; padding-bottom: 3rem; }
-            .chart-container, .hourly-chart.active { height: 240px; }
-            .overall-chart { height: 180px; }
+
+        .overall-stats h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
         }
-        @media (max-width: 480px) {
-            .container { padding: 0 12px; }
-            #search-input { padding: 10px 14px; font-size:0.86rem; }
-            #search-btn { padding: 10px 16px; font-size:0.86rem; }
-            .panel-header h2, .details-header h2, .overall-stats h2 { font-size:1.1rem; }
-            .item-name { font-size:0.92rem; }
-            .item-price { font-size:1rem; }
-            .chart-container, .hourly-chart.active { height: 200px; }
-            .overall-chart { height: 150px; }
-            .items-list { max-height: 260px; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--bg-tertiary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+
+        .stat-card p {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .overall-chart {
+            height: 300px;
+            position: relative;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .update-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--accent-color);
+            color: var(--bg-primary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+            font-weight: 600;
+            transform: translateX(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .update-notification.show {
+            display: block;
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .error {
+            text-align: center;
+            padding: 2rem;
+            color: #FF4444;
+            background: rgba(255, 68, 68, 0.1);
+            border-radius: 8px;
+            margin: 1rem;
+            border: 1px solid rgba(255, 68, 68, 0.3);
         }
     </style>
 </head>
 <body>
+    <!-- Gradient Overlay -->
     <div class="gradient-overlay"></div>
+
+    <!-- Update Notification -->
     <div class="update-notification" id="update-notification">Данные обновлены!</div>
 
+    <!-- Header -->
     <header class="header">
         <div class="container">
             <div class="header-content">
                 <div class="header-top-row">
                     <div class="menu-section">
                         <div class="logo-section">
-                            <img src="https://downloads.intercomcdn.com/i/o/427509/b0cce76cc72dc84563f5e8c7/c507c374faf2bc0216c805612a002e47.png" alt="Standoff2" class="logo" />
+                            <img src="https://downloads.intercomcdn.com/i/o/427509/b0cce76cc72dc84563f5e8c7/c507c374faf2bc0216c805612a002e47.png" alt="Standoff2" class="logo">
                         </div>
-
-                        <div class="hamburger-menu" id="hamburger-menu" aria-label="Открыть меню">
-                            <div class="hamburger-icon" aria-hidden="true"></div>
+                        <div class="hamburger-menu" id="hamburger-menu">
+                            <div class="hamburger-icon"></div>
                         </div>
                     </div>
                 </div>
-
                 <div class="header-bottom-row">
                     <div class="search-container">
-                        <input type="text" id="search-input" placeholder="Поиск предметов..." aria-label="Поиск предметов" />
+                        <input type="text" id="search-input" placeholder="Поиск предметов...">
                         <button id="search-btn">Найти</button>
                     </div>
                 </div>
@@ -232,29 +778,29 @@
 
     <!-- Top Menu -->
     <div class="top-menu-overlay" id="top-menu-overlay"></div>
-    <div class="top-menu" id="top-menu" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="top-menu" id="top-menu">
         <div class="top-menu-header">
             <div class="top-menu-title">Настройки</div>
-            <button class="close-top-menu" id="close-top-menu" aria-label="Закрыть меню">×</button>
+            <button class="close-top-menu" id="close-top-menu">×</button>
         </div>
-
+        
         <div class="theme-switcher">
             <div class="theme-section-title">Тема</div>
             <div class="theme-options">
-                <div class="theme-option active" data-theme="dark" tabindex="0">
+                <div class="theme-option active" data-theme="dark">
                     <div class="theme-preview dark-preview"></div>
                     <span>Темная тема</span>
                 </div>
-                <div class="theme-option" data-theme="light" tabindex="0">
+                <div class="theme-option" data-theme="light">
                     <div class="theme-preview light-preview"></div>
                     <span>Светлая тема</span>
                 </div>
             </div>
         </div>
-
+        
         <div class="language-selector">
             <div class="language-section-title">Язык</div>
-            <select class="language-select" aria-label="Выбор языка">
+            <select class="language-select">
                 <option>Русский</option>
                 <option>English</option>
                 <option>Español</option>
@@ -262,21 +808,26 @@
         </div>
     </div>
 
+    <!-- Main Content -->
     <div class="container">
         <div class="main-content">
+            <!-- Items Panel -->
             <div class="items-panel">
-                <div class="panel-header"><h2>Предметы</h2></div>
+                <div class="panel-header">
+                    <h2>Предметы</h2>
+                </div>
                 <div class="items-list" id="items-container">
                     <div class="loading">Загрузка данных...</div>
                 </div>
             </div>
 
+            <!-- Details Panel -->
             <div class="details-panel">
                 <div class="details-header">
                     <h2 id="selected-item-name">Выберите предмет для просмотра деталей</h2>
                 </div>
-
-                <div class="price-info-grid" id="price-info" style="display:none;">
+                
+                <div class="price-info-grid" id="price-info" style="display: none;">
                     <div class="price-card">
                         <h3>Текущая цена</h3>
                         <p id="current-price">-</p>
@@ -296,20 +847,23 @@
                 </div>
 
                 <div class="chart-container" id="main-chart-container">
-                    <canvas id="price-chart" aria-label="График цены" role="img"></canvas>
+                    <canvas id="price-chart"></canvas>
                 </div>
 
                 <div class="hourly-chart" id="hourly-chart">
-                    <div class="demo-notice">⚠️ Это демонстрационные данные. Реальная почасовая статистика будет доступна после подключения к API</div>
+                    <div class="demo-notice">
+                        ⚠️ Это демонстрационные данные. Реальная почасовая статистика будет доступна после подключения к API
+                    </div>
                     <div class="hourly-placeholder">
                         <h3>Статистика по часам</h3>
                         <p>Нажмите на точку в основном графике для просмотра детальной статистики</p>
                     </div>
-                    <canvas id="hourly-chart-canvas" aria-label="Почасовой график" role="img"></canvas>
+                    <canvas id="hourly-chart-canvas"></canvas>
                 </div>
             </div>
         </div>
 
+        <!-- Overall Stats -->
         <div class="overall-stats">
             <h2>Общая статистика цен</h2>
             <div class="stats-grid">
@@ -331,17 +885,18 @@
                 </div>
             </div>
             <div class="overall-chart">
-                <canvas id="overall-chart" aria-label="Общий график" role="img"></canvas>
+                <canvas id="overall-chart"></canvas>
             </div>
         </div>
     </div>
 
     <footer>
-        <div class="container"><p>Standoff2 Price Tracker &copy; 2023</p></div>
+        <div class="container">
+            <p>Standoff2 Price Tracker &copy; 2023</p>
+        </div>
     </footer>
 
     <script>
-        // --- Переменные ---
         let itemsData = {};
         let selectedItem = null;
         let priceChart = null;
@@ -350,169 +905,188 @@
         let filteredItems = [];
         let currentTheme = 'dark';
 
-        const DATA_URL = './prices.json'; // поменяй путь, если нужно
+        const DATA_URL = './prices.json';
 
-        // --- Управление меню (глобально) ---
-        function closeTopMenu() {
-            const topMenu = document.getElementById('top-menu');
-            const overlay = document.getElementById('top-menu-overlay');
-            topMenu.classList.remove('active');
-            topMenu.setAttribute('aria-hidden','true');
-            overlay.classList.remove('active');
-        }
-
-        function openTopMenu() {
-            const topMenu = document.getElementById('top-menu');
-            const overlay = document.getElementById('top-menu-overlay');
-            topMenu.classList.add('active');
-            topMenu.setAttribute('aria-hidden','false');
-            overlay.classList.add('active');
-            // focus first focusable inside menu for accessibility
-            const first = topMenu.querySelector('.theme-option, .language-select, .close-top-menu');
-            if (first) first.focus();
-        }
-
+        // Top Menu Management
         function initTopMenu() {
             const hamburger = document.getElementById('hamburger-menu');
+            const topMenu = document.getElementById('top-menu');
             const overlay = document.getElementById('top-menu-overlay');
             const closeBtn = document.getElementById('close-top-menu');
 
-            hamburger.addEventListener('click', openTopMenu);
+            // Initially closed
+            topMenu.classList.remove('active');
+            overlay.classList.remove('active');
+
+            hamburger.addEventListener('click', () => {
+                topMenu.classList.add('active');
+                overlay.classList.add('active');
+            });
+
             closeBtn.addEventListener('click', closeTopMenu);
             overlay.addEventListener('click', closeTopMenu);
 
-            // close with Escape
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeTopMenu();
-            });
+            function closeTopMenu() {
+                topMenu.classList.remove('active');
+                overlay.classList.remove('active');
+            }
         }
 
-        // --- Тема ---
+        // Theme Management
         function setTheme(theme) {
             currentTheme = theme;
             document.body.className = theme === 'light' ? 'light-theme' : '';
             localStorage.setItem('theme', theme);
-
+            
+            // Update theme options
             document.querySelectorAll('.theme-option').forEach(option => {
                 option.classList.toggle('active', option.dataset.theme === theme);
             });
-
-            // перерисовать графики под новую тему
-            if (priceChart) priceChart.update();
-            if (overallChart) overallChart.update();
-            if (hourlyChart) hourlyChart.update();
+            
+            // Re-render charts if they exist
+            if (selectedItem) {
+                renderPriceChart();
+            }
+            if (overallChart) {
+                renderOverallChart();
+            }
+            if (hourlyChart) {
+                renderHourlyChart();
+            }
         }
 
-        // инициализация темы
-        document.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('theme') || 'dark';
-            setTheme(saved);
+        // Initialize theme from localStorage
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        setTheme(savedTheme);
 
-            // повесим обработчики на переключатели темы
-            document.querySelectorAll('.theme-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    setTheme(option.dataset.theme);
-                    closeTopMenu();
-                });
-                option.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setTheme(option.dataset.theme);
-                        closeTopMenu();
-                    }
-                });
+        // Theme switcher
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', () => {
+                setTheme(option.dataset.theme);
+                // Close menu after theme change
+                closeTopMenu();
             });
         });
 
-        // --- Загрузка и обработка данных ---
+        function closeTopMenu() {
+            document.getElementById('top-menu').classList.remove('active');
+            document.getElementById('top-menu-overlay').classList.remove('active');
+        }
+
+        // Data loading functions
         async function loadData() {
             try {
                 showLoadingState();
+                
                 const url = `${DATA_URL}?t=${Date.now()}`;
                 const response = await fetch(url);
-                if (!response.ok) throw new Error(`Ошибка загрузки: ${response.status} ${response.statusText}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Ошибка загрузки: ${response.status} ${response.statusText}`);
+                }
+                
                 itemsData = await response.json();
                 processData();
                 renderItemsList();
                 updateOverallStats();
+                updateLastUpdateTime();
+                
                 showNotification('Данные успешно загружены!');
-            } catch (err) {
-                console.error(err);
-                showErrorState('Ошибка загрузки данных: ' + err.message);
+                
+            } catch (error) {
+                console.error('Ошибка загрузки данных:', error);
+                showErrorState(`Ошибка загрузки данных: ${error.message}`);
             }
         }
 
         function showLoadingState() {
-            document.getElementById('items-container').innerHTML = '<div class="loading">Загрузка данных...</div>';
+            document.getElementById('items-container').innerHTML = 
+                '<div class="loading">Загрузка данных...</div>';
         }
+
         function showErrorState(message) {
-            document.getElementById('items-container').innerHTML = `<div class="error">${message}</div>`;
+            document.getElementById('items-container').innerHTML = 
+                `<div class="error">${message}</div>`;
         }
+
         function showNotification(message) {
-            const n = document.getElementById('update-notification');
-            n.textContent = message;
-            n.classList.add('show');
-            setTimeout(() => n.classList.remove('show'), 2800);
+            const notification = document.getElementById('update-notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function updateLastUpdateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ru-RU');
         }
 
         function processData() {
-            filteredItems = Object.entries(itemsData).map(([name, data]) => ({
-                name,
-                currentPrice: data.price || 0,
-                priceHistory: data.history || []
-            }));
+            filteredItems = [];
+            
+            for (const [name, data] of Object.entries(itemsData)) {
+                filteredItems.push({
+                    name: name,
+                    currentPrice: data.price,
+                    priceHistory: data.history || []
+                });
+            }
         }
 
-        // форматирование
         function formatPrice(price) {
-            return new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price);
+            return new Intl.NumberFormat('ru-RU', { 
+                minimumFractionDigits: 2, 
+                maximumFractionDigits: 2 
+            }).format(price);
         }
+
         function formatDate(dateString) {
-            if (!dateString) return '-';
-            const d = new Date(dateString);
-            if (isNaN(d)) return dateString;
-            return d.toLocaleDateString('ru-RU');
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU');
         }
 
         function calculatePriceChange(item) {
             if (!item.priceHistory || item.priceHistory.length < 2) return 0;
-            const first = item.priceHistory[0].price;
-            const last = item.priceHistory[item.priceHistory.length - 1].price;
-            if (!first) return 0;
-            return ((last - first) / first) * 100;
+            
+            const firstPrice = item.priceHistory[0].price;
+            const lastPrice = item.priceHistory[item.priceHistory.length - 1].price;
+            
+            return ((lastPrice - firstPrice) / firstPrice) * 100;
         }
 
-        // --- Рендер списка предметов ---
         function renderItemsList() {
             const container = document.getElementById('items-container');
             container.innerHTML = '';
-            if (!filteredItems || filteredItems.length === 0) {
+            
+            if (filteredItems.length === 0) {
                 container.innerHTML = '<div class="item">Предметы не найдены</div>';
                 return;
             }
-
-            filteredItems.forEach(item => {
-                const change = calculatePriceChange(item);
-                const changeClass = change < 0 ? 'change-negative' : '';
-                const sign = change >= 0 ? '+' : '';
-                const el = document.createElement('div');
-                el.className = `item ${selectedItem && selectedItem.name === item.name ? 'active' : ''}`;
-                el.setAttribute('data-name', item.name);
-                el.innerHTML = `
-                    <div style="display:flex;flex-direction:column;">
-                        <div class="item-name">${item.name}</div>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:0.6rem;">
-                        <div class="item-price ${changeClass}">
-                            ${formatPrice(item.currentPrice)}
-                        </div>
-                        <div class="change-percent">
-                            ${item.priceHistory && item.priceHistory.length > 1 ? `(${sign}${change.toFixed(2)}%)` : '(нет истории)'}
-                        </div>
+            
+            filteredItems.forEach((item, index) => {
+                const priceChange = calculatePriceChange(item);
+                const priceChangeClass = priceChange >= 0 ? '' : 'change-negative';
+                const priceChangeSymbol = priceChange >= 0 ? '+' : '';
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = `item ${selectedItem && selectedItem.name === item.name ? 'active' : ''}`;
+                itemElement.dataset.name = item.name;
+                
+                itemElement.innerHTML = `
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-price ${priceChangeClass}">
+                        ${formatPrice(item.currentPrice)}
+                        <span class="change-percent">${item.priceHistory && item.priceHistory.length > 1 ? 
+                            `(${priceChangeSymbol}${priceChange.toFixed(2)}%)` : 
+                            '(нет истории)'}</span>
                     </div>
                 `;
-                el.addEventListener('click', () => selectItem(item));
-                container.appendChild(el);
+                
+                itemElement.addEventListener('click', () => selectItem(item));
+                container.appendChild(itemElement);
             });
         }
 
@@ -520,111 +1094,115 @@
             selectedItem = item;
             renderItemsList();
             updateItemDetails();
-            // скролл к деталям на мобильных
-            if (window.innerWidth <= 1024) {
-                setTimeout(() => {
-                    document.querySelector('.details-panel').scrollIntoView({ behavior: 'smooth' });
-                }, 220);
-            }
         }
 
         function updateItemDetails() {
-            const itemName = document.getElementById('selected-item-name');
-            const priceInfo = document.getElementById('price-info');
-            const currentPriceEl = document.getElementById('current-price');
-            const startPriceEl = document.getElementById('start-price');
-            const priceChangeEl = document.getElementById('price-change');
-            const lastUpdateEl = document.getElementById('last-update');
-            const hourlyChartEl = document.getElementById('hourly-chart');
+            const itemNameElement = document.getElementById('selected-item-name');
+            const priceInfoElement = document.getElementById('price-info');
+            const currentPriceElement = document.getElementById('current-price');
+            const startPriceElement = document.getElementById('start-price');
+            const priceChangeElement = document.getElementById('price-change');
+            const lastUpdateElement = document.getElementById('last-update');
+            const hourlyChartElement = document.getElementById('hourly-chart');
             const chartContainer = document.getElementById('main-chart-container');
-
+            
             if (!selectedItem) {
-                itemName.textContent = 'Выберите предмет для просмотра деталей';
-                priceInfo.style.display = 'none';
-                hourlyChartEl.classList.remove('active');
+                itemNameElement.textContent = 'Выберите предмет для просмотра деталей';
+                priceInfoElement.style.display = 'none';
+                hourlyChartElement.classList.remove('active');
                 chartContainer.classList.remove('animate-in');
                 if (priceChart) priceChart.destroy();
                 return;
             }
-
-            itemName.textContent = selectedItem.name;
-            priceInfo.style.display = 'grid';
-            hourlyChartEl.classList.remove('active');
+            
+            itemNameElement.textContent = selectedItem.name;
+            priceInfoElement.style.display = 'grid';
+            hourlyChartElement.classList.remove('active');
             chartContainer.classList.remove('animate-in');
-
-            // анимация карточек
-            document.querySelectorAll('.price-card').forEach((card, i) => {
+            
+            // Reset animations
+            document.querySelectorAll('.price-card').forEach(card => {
                 card.classList.remove('animate-in');
-                setTimeout(() => card.classList.add('animate-in'), 80 + i * 80);
             });
-
-            currentPriceEl.textContent = formatPrice(selectedItem.currentPrice);
-
+            
+            // Animate price cards
+            setTimeout(() => {
+                document.querySelectorAll('.price-card').forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animate-in');
+                    }, index * 100);
+                });
+            }, 50);
+            
+            currentPriceElement.textContent = formatPrice(selectedItem.currentPrice);
+            
             let startPrice = selectedItem.currentPrice;
             let lastUpdate = 'Нет данных';
+            
             if (selectedItem.priceHistory && selectedItem.priceHistory.length > 0) {
                 startPrice = selectedItem.priceHistory[0].price;
                 lastUpdate = selectedItem.priceHistory[selectedItem.priceHistory.length - 1].date;
             }
-            startPriceEl.textContent = formatPrice(startPrice);
-
-            const change = calculatePriceChange(selectedItem);
-            const sign = change >= 0 ? '+' : '';
-            priceChangeEl.textContent = `${sign}${change.toFixed(2)}%`;
-            priceChangeEl.className = change < 0 ? 'change-negative' : '';
-
-            lastUpdateEl.textContent = lastUpdate !== 'Нет данных' ? formatDate(lastUpdate) : lastUpdate;
-
-            // показ и рендер графика
+            
+            startPriceElement.textContent = formatPrice(startPrice);
+            
+            const priceChange = calculatePriceChange(selectedItem);
+            const priceChangeSymbol = priceChange >= 0 ? '+' : '';
+            priceChangeElement.textContent = `${priceChangeSymbol}${priceChange.toFixed(2)}%`;
+            priceChangeElement.className = priceChange >= 0 ? '' : 'change-negative';
+            
+            lastUpdateElement.textContent = lastUpdate !== 'Нет данных' ? formatDate(lastUpdate) : lastUpdate;
+            
+            // Animate chart container
             setTimeout(() => {
                 chartContainer.classList.add('animate-in');
                 renderPriceChart();
-            }, 350);
+            }, 500);
         }
 
-        // --- Chart.js рендеры ---
         function renderPriceChart() {
             const ctx = document.getElementById('price-chart').getContext('2d');
-            if (priceChart) priceChart.destroy();
-
-            if (!selectedItem || !selectedItem.priceHistory || selectedItem.priceHistory.length === 0) {
-                // очистка canvas
-                ctx.canvas.width = ctx.canvas.width;
+            
+            if (priceChart) {
+                priceChart.destroy();
+            }
+            
+            if (!selectedItem.priceHistory || selectedItem.priceHistory.length === 0) {
                 return;
             }
-
-            const labels = selectedItem.priceHistory.map(e => formatDate(e.date));
-            const data = selectedItem.priceHistory.map(e => e.price);
-
+            
+            const labels = selectedItem.priceHistory.map(entry => formatDate(entry.date));
+            const data = selectedItem.priceHistory.map(entry => entry.price);
+            
             const gridColor = currentTheme === 'light' ? '#E8E8E8' : '#333333';
             const textColor = currentTheme === 'light' ? '#404040' : '#E0E0E0';
-
+            
             priceChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels,
+                    labels: labels,
                     datasets: [{
                         label: `Цена ${selectedItem.name}`,
-                        data,
+                        data: data,
                         borderColor: '#FF4444',
-                        backgroundColor: 'rgba(255,68,68,0.12)',
+                        backgroundColor: 'rgba(255, 68, 68, 0.1)',
                         borderWidth: 3,
                         fill: true,
-                        tension: 0.35,
+                        tension: 0.4,
                         pointBackgroundColor: '#FF4444',
                         pointBorderColor: currentTheme === 'light' ? '#FFFFFF' : '#121212',
                         pointBorderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7
+                        pointRadius: 6,
+                        pointHoverRadius: 8
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    onClick: (evt, elements) => {
-                        if (elements && elements.length > 0) {
-                            const idx = elements[0].index;
-                            const date = selectedItem.priceHistory[idx].date;
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const date = selectedItem.priceHistory[index].date;
                             showHourlyStats(date);
                         }
                     },
@@ -632,25 +1210,45 @@
                         tooltip: {
                             mode: 'index',
                             intersect: false,
-                            backgroundColor: 'rgba(0,0,0,0.75)',
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
                             titleColor: '#FFFFFF',
                             bodyColor: '#FFFFFF',
                             callbacks: {
                                 label: function(context) {
                                     return `Цена: ${formatPrice(context.raw)}`;
                                 },
-                                afterLabel: function() { return 'Нажмите для почасовой статистики'; }
+                                afterLabel: function(context) {
+                                    return 'Нажмите для детальной статистики по часам';
+                                }
                             }
                         },
-                        legend: { labels: { color: textColor } }
+                        legend: {
+                            labels: {
+                                color: textColor
+                            }
+                        }
                     },
                     scales: {
                         y: {
                             beginAtZero: false,
-                            grid: { color: gridColor },
-                            ticks: { color: textColor, callback: (v) => formatPrice(v) }
+                            grid: {
+                                color: gridColor
+                            },
+                            ticks: {
+                                color: textColor,
+                                callback: function(value) {
+                                    return formatPrice(value);
+                                }
+                            }
                         },
-                        x: { grid: { color: gridColor }, ticks: { color: textColor } }
+                        x: {
+                            grid: {
+                                color: gridColor
+                            },
+                            ticks: {
+                                color: textColor
+                            }
+                        }
                     }
                 }
             });
@@ -659,31 +1257,39 @@
         function showHourlyStats(date) {
             const hourlyChartElement = document.getElementById('hourly-chart');
             const placeholder = hourlyChartElement.querySelector('.hourly-placeholder');
+            
             placeholder.style.display = 'none';
             hourlyChartElement.classList.add('active');
-            setTimeout(() => renderHourlyChart(date), 250);
-            // на мобильном скроллим к блоку
-            if (window.innerWidth <= 600) {
-                setTimeout(() => hourlyChartElement.scrollIntoView({ behavior: 'smooth', block: 'center' }), 450);
-            }
+            
+            setTimeout(() => {
+                renderHourlyChart(date);
+            }, 300);
         }
 
         function renderHourlyChart(date) {
-            const canvas = document.getElementById('hourly-chart-canvas').getContext('2d');
-            if (hourlyChart) hourlyChart.destroy();
-
-            // демонстрационные почасовые данные
-            const hours = Array.from({length:24}, (_,i) => (i<10? '0'+i : i) + ':00');
-            const base = selectedItem ? selectedItem.currentPrice || 100 : 100;
-            const prices = hours.map((_, i) => {
-                const fluct = Math.sin(i * Math.PI / 12) * 0.07;
-                const rnd = (Math.random()-0.5) * 0.04;
-                return base * (1 + fluct + rnd);
+            const canvas = document.getElementById('hourly-chart-canvas');
+            
+            if (hourlyChart) {
+                hourlyChart.destroy();
+            }
+            
+            // Детальные данные по часам (демонстрационные)
+            const hours = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', 
+                          '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+            
+            // Генерация реалистичных демонстрационных данных
+            const basePrice = selectedItem.currentPrice;
+            const prices = hours.map((_, index) => {
+                const hour = index;
+                // Симуляция суточных колебаний цены
+                const fluctuation = Math.sin(hour * Math.PI / 12) * 0.1;
+                const random = (Math.random() - 0.5) * 0.05;
+                return basePrice * (1 + fluctuation + random);
             });
-
+            
             const gridColor = currentTheme === 'light' ? '#E8E8E8' : '#333333';
             const textColor = currentTheme === 'light' ? '#404040' : '#E0E0E0';
-
+            
             hourlyChart = new Chart(canvas, {
                 type: 'line',
                 data: {
@@ -692,11 +1298,15 @@
                         label: `Цена за ${formatDate(date)}`,
                         data: prices,
                         borderColor: '#FF4444',
-                        backgroundColor: 'rgba(255,68,68,0.08)',
+                        backgroundColor: 'rgba(255, 68, 68, 0.1)',
                         borderWidth: 2,
                         fill: true,
-                        tension: 0.3,
-                        pointRadius: 3
+                        tension: 0.4,
+                        pointBackgroundColor: '#FF4444',
+                        pointBorderColor: currentTheme === 'light' ? '#FFFFFF' : '#121212',
+                        pointBorderWidth: 1,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
                     }]
                 },
                 options: {
@@ -706,18 +1316,47 @@
                         tooltip: {
                             mode: 'index',
                             intersect: false,
-                            callbacks: {
-                                label: (ctx) => `Цена: ${formatPrice(ctx.raw)}`
-                            },
-                            backgroundColor: 'rgba(0,0,0,0.75)',
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
                             titleColor: '#FFFFFF',
-                            bodyColor: '#FFFFFF'
+                            bodyColor: '#FFFFFF',
+                            callbacks: {
+                                label: function(context) {
+                                    return `Цена: ${formatPrice(context.raw)}`;
+                                }
+                            }
                         },
-                        legend: { labels: { color: textColor } }
+                        legend: {
+                            labels: {
+                                color: textColor
+                            }
+                        }
                     },
                     scales: {
-                        y: { grid: { color: gridColor }, ticks: { color: textColor, callback: v => formatPrice(v) } },
-                        x: { grid: { color: gridColor }, ticks: { color: textColor, maxTicksLimit: 12 } }
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: gridColor
+                            },
+                            ticks: {
+                                color: textColor,
+                                callback: function(value) {
+                                    return formatPrice(value);
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: gridColor
+                            },
+                            ticks: {
+                                color: textColor,
+                                maxTicksLimit: 12,
+                                callback: function(value, index) {
+                                    // Показываем каждые 2 часа для лучшей читаемости
+                                    return index % 2 === 0 ? this.getLabelForValue(value) : '';
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -725,50 +1364,63 @@
 
         function updateOverallStats() {
             document.getElementById('total-items').textContent = filteredItems.length;
-            const avg = filteredItems.length ? filteredItems.reduce((s,i)=>s+i.currentPrice,0) / filteredItems.length : 0;
-            document.getElementById('avg-price').textContent = formatPrice(avg || 0);
-            const max = filteredItems.length ? Math.max(...filteredItems.map(i=>i.currentPrice)) : 0;
-            const min = filteredItems.length ? Math.min(...filteredItems.map(i=>i.currentPrice)) : 0;
-            document.getElementById('max-price').textContent = formatPrice(max);
-            document.getElementById('min-price').textContent = formatPrice(min);
+            
+            const avgPrice = filteredItems.reduce((sum, item) => sum + item.currentPrice, 0) / filteredItems.length;
+            document.getElementById('avg-price').textContent = formatPrice(avgPrice || 0);
+            
+            const maxPrice = filteredItems.length > 0 ? Math.max(...filteredItems.map(item => item.currentPrice)) : 0;
+            document.getElementById('max-price').textContent = formatPrice(maxPrice);
+            
+            const minPrice = filteredItems.length > 0 ? Math.min(...filteredItems.map(item => item.currentPrice)) : 0;
+            document.getElementById('min-price').textContent = formatPrice(minPrice);
+            
             renderOverallChart();
         }
 
         function renderOverallChart() {
             const ctx = document.getElementById('overall-chart').getContext('2d');
-            if (overallChart) overallChart.destroy();
-
-            const allDates = [...new Set(filteredItems.flatMap(item => (item.priceHistory||[]).map(e=>e.date)))].sort();
+            
+            if (overallChart) {
+                overallChart.destroy();
+            }
+            
+            const allDates = [...new Set(filteredItems.flatMap(item => 
+                (item.priceHistory || []).map(entry => entry.date)
+            ))].sort();
+            
             if (allDates.length === 0) {
-                // очистить
-                ctx.canvas.width = ctx.canvas.width;
                 return;
             }
-
-            const avgByDate = allDates.map(date => {
-                const prices = filteredItems.map(item => {
-                    const e = (item.priceHistory||[]).find(p => p.date === date);
-                    return e ? e.price : null;
-                }).filter(Boolean);
-                return prices.length ? prices.reduce((s,a)=>s+a,0)/prices.length : 0;
+            
+            const avgPricesByDate = allDates.map(date => {
+                const pricesOnDate = filteredItems.map(item => {
+                    if (!item.priceHistory) return null;
+                    const priceEntry = item.priceHistory.find(entry => entry.date === date);
+                    return priceEntry ? priceEntry.price : null;
+                }).filter(price => price !== null);
+                
+                return pricesOnDate.length > 0 
+                    ? pricesOnDate.reduce((sum, price) => sum + price, 0) / pricesOnDate.length
+                    : 0;
             });
-
-            const labels = allDates.map(d => formatDate(d));
+            
+            const labels = allDates.map(date => formatDate(date));
+            
             const gridColor = currentTheme === 'light' ? '#E8E8E8' : '#333333';
             const textColor = currentTheme === 'light' ? '#404040' : '#E0E0E0';
-
+            
             overallChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels,
+                    labels: labels,
                     datasets: [{
                         label: 'Средняя цена всех предметов',
-                        data: avgByDate,
+                        data: avgPricesByDate,
                         borderColor: '#FF4444',
-                        backgroundColor: 'rgba(255,68,68,0.10)',
-                        borderWidth: 2,
+                        backgroundColor: 'rgba(255, 68, 68, 0.1)',
+                        borderWidth: 3,
                         fill: true,
-                        tension: 0.3
+                        tension: 0.4
                     }]
                 },
                 options: {
@@ -776,59 +1428,89 @@
                     maintainAspectRatio: false,
                     plugins: {
                         tooltip: {
-                            callbacks: {
-                                label: (ctx) => `Средняя цена: ${formatPrice(ctx.raw)}`
-                            },
-                            backgroundColor: 'rgba(0,0,0,0.75)',
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
                             titleColor: '#FFFFFF',
-                            bodyColor: '#FFFFFF'
+                            bodyColor: '#FFFFFF',
+                            callbacks: {
+                                label: function(context) {
+                                    return `Средняя цена: ${formatPrice(context.raw)}`;
+                                }
+                            }
                         },
-                        legend: { labels: { color: textColor } }
+                        legend: {
+                            labels: {
+                                color: textColor
+                            }
+                        }
                     },
                     scales: {
-                        y: { grid: { color: gridColor }, ticks: { color: textColor, callback: v => formatPrice(v) } },
-                        x: { grid: { color: gridColor }, ticks: { color: textColor } }
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: gridColor
+                            },
+                            ticks: {
+                                color: textColor,
+                                callback: function(value) {
+                                    return formatPrice(value);
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: gridColor
+                            },
+                            ticks: {
+                                color: textColor
+                            }
+                        }
                     }
                 }
             });
         }
 
-        // --- Поиск ---
         function searchItems(query) {
-            if (!query || !query.trim()) {
+            if (!query.trim()) {
                 processData();
             } else {
-                const q = query.toLowerCase();
+                const lowerQuery = query.toLowerCase();
                 filteredItems = Object.entries(itemsData)
-                    .filter(([name]) => name.toLowerCase().includes(q))
-                    .map(([name, data]) => ({ name, currentPrice: data.price || 0, priceHistory: data.history || [] }));
+                    .filter(([name, data]) => name.toLowerCase().includes(lowerQuery))
+                    .map(([name, data]) => ({
+                        name: name,
+                        currentPrice: data.price,
+                        priceHistory: data.history || []
+                    }));
             }
             renderItemsList();
             updateOverallStats();
-            if (selectedItem && !filteredItems.some(x => x.name === selectedItem.name)) {
+            
+            if (selectedItem && !filteredItems.some(item => item.name === selectedItem.name)) {
                 selectedItem = null;
                 updateItemDetails();
             }
         }
 
-        // --- Инициализация DOMContentLoaded ---
-        document.addEventListener('DOMContentLoaded', () => {
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
             initTopMenu();
             loadData();
-
-            document.getElementById('search-btn').addEventListener('click', () => {
-                const q = document.getElementById('search-input').value || '';
-                searchItems(q);
+            
+            document.getElementById('search-btn').addEventListener('click', function() {
+                const query = document.getElementById('search-input').value;
+                searchItems(query);
             });
-            document.getElementById('search-input').addEventListener('keyup', (e) => {
-                if (e.key === 'Enter') searchItems(e.target.value || '');
+            
+            document.getElementById('search-input').addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    const query = document.getElementById('search-input').value;
+                    searchItems(query);
+                }
             });
-
-            // периодическое обновление (5 минут)
-            setInterval(() => {
-                // если файл не доступен в проде — можешь увеличить интервал
-                loadData();
-            }, 5 * 60 * 1000);
+            
+            setInterval(loadData, 5 * 60 * 1000);
         });
     </script>
 </body>
