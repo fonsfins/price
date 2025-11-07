@@ -204,6 +204,100 @@
             background-color: var(--hover-color);
         }
 
+        /* Filters Section */
+        .filters-section {
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .filter-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-select:hover {
+            background-color: var(--hover-color);
+        }
+
+        .filter-select.active {
+            background-color: var(--accent-color);
+            color: var(--bg-primary);
+        }
+
+        .filter-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .filter-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--bg-secondary);
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            z-index: 100;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            top: 100%;
+            left: 0;
+            margin-top: 5px;
+        }
+
+        .filter-dropdown-content.show {
+            display: block;
+        }
+
+        .filter-dropdown-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .filter-dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .filter-dropdown-item:hover {
+            background-color: var(--hover-color);
+        }
+
+        .filter-dropdown-item.active {
+            background-color: var(--hover-color);
+            color: var(--accent-color);
+        }
+
+        .filter-dropdown-arrow {
+            margin-left: 5px;
+            transition: transform 0.3s;
+        }
+
+        .filter-dropdown.active .filter-dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
         /* Top Menu */
         .top-menu {
             position: fixed;
@@ -839,6 +933,11 @@
             .items-panel {
                 max-height: 50vh;
             }
+
+            .filters-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
 
         @media (max-width: 768px) {
@@ -985,6 +1084,15 @@
                 width: 40px;
                 height: 40px;
             }
+
+            .filters-section {
+                gap: 0.5rem;
+            }
+
+            .filter-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1114,6 +1222,63 @@
                     <div class="search-container">
                         <input type="text" id="search-input" placeholder="Поиск предметов...">
                         <button id="search-btn">Найти</button>
+                    </div>
+                </div>
+                <!-- Filters Section -->
+                <div class="filters-section">
+                    <div class="filter-group">
+                        <span class="filter-label">Сортировка:</span>
+                        <select class="filter-select" id="sort-by">
+                            <option value="name">По названию</option>
+                            <option value="price-low">Цена: от меньшей</option>
+                            <option value="price-high">Цена: от большей</option>
+                            <option value="change-up">Изменение: рост ↑</option>
+                            <option value="change-down">Изменение: падение ↓</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <span class="filter-label">Тип:</span>
+                        <div class="filter-dropdown" id="quality-filter">
+                            <select class="filter-select">
+                                <option value="all">Все предметы</option>
+                                <option value="st">StatTrack</option>
+                                <option value="pt">Pattern</option>
+                                <option value="regular">Regular</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <span class="filter-label">Категория:</span>
+                        <div class="filter-dropdown" id="category-filter">
+                            <button class="filter-select" id="category-main-btn">
+                                Все категории
+                                <span class="filter-dropdown-arrow">▼</span>
+                            </button>
+                            <div class="filter-dropdown-content" id="category-dropdown">
+                                <div class="filter-dropdown-item" data-category="all">Все категории</div>
+                                <div class="filter-dropdown-item" data-category="fragments">Фрагменты</div>
+                                <div class="filter-dropdown-item" data-category="gloves">Перчатки</div>
+                                <div class="filter-dropdown-item" data-category="charms">Брелоки</div>
+                                <div class="filter-dropdown-item" data-category="stickers">Наклейки</div>
+                                <div class="filter-dropdown-item" data-category="graffiti">Граффити</div>
+                                <div class="filter-dropdown-item" data-category="containers">Контейнеры</div>
+                                <div class="filter-dropdown-item" data-category="grenades">Гранаты</div>
+                                <div class="filter-dropdown-item" data-category="knives">Ножи</div>
+                                <div class="filter-dropdown-item" data-category="guns">Пушки</div>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-dropdown" id="subcategory-filter" style="display: none;">
+                            <button class="filter-select" id="subcategory-main-btn">
+                                Все типы
+                                <span class="filter-dropdown-arrow">▼</span>
+                            </button>
+                            <div class="filter-dropdown-content" id="subcategory-dropdown">
+                                <!-- Subcategories will be populated dynamically -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1256,7 +1421,160 @@
         let filteredItems = [];
         let currentTheme = 'dark';
 
+        // Filter states
+        let currentSort = 'name';
+        let currentQuality = 'all';
+        let currentCategory = 'all';
+        let currentSubcategory = 'all';
+
         const DATA_URL = 'prices.json';
+
+        // Category definitions
+        const categories = {
+            'all': { name: 'Все категории', subcategories: [] },
+            'fragments': { 
+                name: 'Фрагменты', 
+                subcategories: [],
+                match: (name) => name.toLowerCase().endsWith('fragment')
+            },
+            'gloves': { 
+                name: 'Перчатки', 
+                subcategories: [],
+                match: (name) => name.toLowerCase().includes('gloves')
+            },
+            'charms': { 
+                name: 'Брелоки', 
+                subcategories: [
+                    { id: 'all', name: 'Все брелоки' },
+                    { id: 'charm', name: 'Charm', match: (name) => name.toLowerCase().includes('charm') },
+                    { id: 'chibi', name: 'Chibi', match: (name) => name.toLowerCase().includes('chibi') }
+                ],
+                match: (name) => name.toLowerCase().includes('charm') || name.toLowerCase().includes('chibi')
+            },
+            'stickers': { 
+                name: 'Наклейки', 
+                subcategories: [],
+                match: (name) => name.toLowerCase().startsWith('sticker')
+            },
+            'graffiti': { 
+                name: 'Граффити', 
+                subcategories: [],
+                match: (name) => name.toLowerCase().startsWith('graffiti')
+            },
+            'containers': { 
+                name: 'Контейнеры', 
+                subcategories: [
+                    { id: 'all', name: 'Все контейнеры' },
+                    { id: 'pack', name: 'Pack', match: (name) => name.toLowerCase().endsWith('pack') },
+                    { id: 'box', name: 'Box', match: (name) => name.toLowerCase().endsWith('box') },
+                    { id: 'case', name: 'Case', match: (name) => name.toLowerCase().endsWith('case') },
+                    { id: 'crate', name: 'Crate', match: (name) => name.toLowerCase().endsWith('crate') },
+                    { id: 'weapon', name: 'Weapon', match: (name) => name.toLowerCase().endsWith('weapon') },
+                    { id: 'sticker', name: 'Sticker', match: (name) => name.toLowerCase().endsWith('sticker') },
+                    { id: 'major', name: 'Major', match: (name) => name.toLowerCase().endsWith('major') },
+                    { id: '2024', name: '2024', match: (name) => name.toLowerCase().endsWith('2024') },
+                    { id: 'charm', name: 'Charm', match: (name) => name.toLowerCase().endsWith('charm') }
+                ],
+                match: (name) => {
+                    const lowerName = name.toLowerCase();
+                    return lowerName.endsWith('pack') || lowerName.endsWith('box') || 
+                           lowerName.endsWith('case') || lowerName.endsWith('crate') ||
+                           lowerName.endsWith('weapon') || lowerName.endsWith('sticker') ||
+                           lowerName.endsWith('major') || lowerName.endsWith('2024') ||
+                           lowerName.endsWith('charm');
+                }
+            },
+            'grenades': { 
+                name: 'Гранаты', 
+                subcategories: [
+                    { id: 'all', name: 'Все гранаты' },
+                    { id: 'flash', name: 'Flash', match: (name) => name.toLowerCase().startsWith('flash') },
+                    { id: 'he', name: 'HE', match: (name) => name.toLowerCase().startsWith('he') },
+                    { id: 'smoke', name: 'Smoke', match: (name) => name.toLowerCase().startsWith('smoke') },
+                    { id: 'molotov', name: 'Molotov', match: (name) => name.toLowerCase().startsWith('molotov') },
+                    { id: 'hermite', name: 'Hermite', match: (name) => name.toLowerCase().startsWith('hermite') }
+                ],
+                match: (name) => {
+                    const lowerName = name.toLowerCase();
+                    return lowerName.startsWith('flash') || lowerName.startsWith('he') || 
+                           lowerName.startsWith('smoke') || lowerName.startsWith('molotov') ||
+                           lowerName.startsWith('hermite');
+                }
+            },
+            'knives': { 
+                name: 'Ножи', 
+                subcategories: [
+                    { id: 'all', name: 'Все ножи' },
+                    { id: 'm9bayonet', name: 'M9 Bayonet', match: (name) => name.toLowerCase().startsWith('m9bayonet') },
+                    { id: 'karambit', name: 'Karambit', match: (name) => name.toLowerCase().startsWith('karambit') },
+                    { id: 'jkommando', name: 'J-Kommando', match: (name) => name.toLowerCase().startsWith('jkommando') },
+                    { id: 'butterfly', name: 'Butterfly', match: (name) => name.toLowerCase().startsWith('butterfly') },
+                    { id: 'flip', name: 'Flip', match: (name) => name.toLowerCase().startsWith('flip') },
+                    { id: 'kunai', name: 'Kunai', match: (name) => name.toLowerCase().startsWith('kunai') },
+                    { id: 'scorpion', name: 'Scorpion', match: (name) => name.toLowerCase().startsWith('scorpion') },
+                    { id: 'tanto', name: 'Tanto', match: (name) => name.toLowerCase().startsWith('tanto') },
+                    { id: 'dualdaggers', name: 'Dual Daggers', match: (name) => name.toLowerCase().startsWith('dualdaggers') },
+                    { id: 'kukri', name: 'Kukri', match: (name) => name.toLowerCase().startsWith('kukri') },
+                    { id: 'stiletto', name: 'Stiletto', match: (name) => name.toLowerCase().startsWith('stiletto') },
+                    { id: 'mantis', name: 'Mantis', match: (name) => name.toLowerCase().startsWith('mantis') },
+                    { id: 'fang', name: 'Fang', match: (name) => name.toLowerCase().startsWith('fang') },
+                    { id: 'sting', name: 'Sting', match: (name) => name.toLowerCase().startsWith('sting') }
+                ],
+                match: (name) => {
+                    const lowerName = name.toLowerCase();
+                    return lowerName.startsWith('m9bayonet') || lowerName.startsWith('karambit') || 
+                           lowerName.startsWith('jkommando') || lowerName.startsWith('butterfly') ||
+                           lowerName.startsWith('flip') || lowerName.startsWith('kunai') ||
+                           lowerName.startsWith('scorpion') || lowerName.startsWith('tanto') ||
+                           lowerName.startsWith('dualdaggers') || lowerName.startsWith('kukri') ||
+                           lowerName.startsWith('stiletto') || lowerName.startsWith('mantis') ||
+                           lowerName.startsWith('fang') || lowerName.startsWith('sting');
+                }
+            },
+            'guns': { 
+                name: 'Пушки', 
+                subcategories: [
+                    { id: 'all', name: 'Все пушки' },
+                    { id: 'g22', name: 'G22', match: (name) => name.toLowerCase().startsWith('g22') },
+                    { id: 'usp', name: 'USP', match: (name) => name.toLowerCase().startsWith('usp') },
+                    { id: 'p350', name: 'P350', match: (name) => name.toLowerCase().startsWith('p350') },
+                    { id: 'berettas', name: 'Berettas', match: (name) => name.toLowerCase().startsWith('berettas') },
+                    { id: 'tec9', name: 'Tec-9', match: (name) => name.toLowerCase().startsWith('tec9') },
+                    { id: 'fs', name: 'FS', match: (name) => name.toLowerCase().startsWith('fs') },
+                    { id: 'deserteagle', name: 'Desert Eagle', match: (name) => name.toLowerCase().startsWith('deserteagle') },
+                    { id: 'fabm', name: 'FAB M', match: (name) => name.toLowerCase().startsWith('fabm') },
+                    { id: 'sm1014', name: 'SM1014', match: (name) => name.toLowerCase().startsWith('sm1014') },
+                    { id: 'spas', name: 'SPAS', match: (name) => name.toLowerCase().startsWith('spas') },
+                    { id: 'm60', name: 'M60', match: (name) => name.toLowerCase().startsWith('m60') },
+                    { id: 'mac10', name: 'MAC-10', match: (name) => name.toLowerCase().startsWith('mac10') },
+                    { id: 'ump45', name: 'UMP45', match: (name) => name.toLowerCase().startsWith('ump45') },
+                    { id: 'mp5', name: 'MP5', match: (name) => name.toLowerCase().startsWith('mp5') },
+                    { id: 'mp7', name: 'MP7', match: (name) => name.toLowerCase().startsWith('mp7') },
+                    { id: 'akimbouzi', name: 'Akimbouzi', match: (name) => name.toLowerCase().startsWith('akimbouzi') },
+                    { id: 'p90', name: 'P90', match: (name) => name.toLowerCase().startsWith('p90') },
+                    { id: 'fnfal', name: 'FN FAL', match: (name) => name.toLowerCase().startsWith('fnfal') },
+                    { id: 'famas', name: 'FAMAS', match: (name) => name.toLowerCase().startsWith('famas') },
+                    { id: 'val', name: 'VAL', match: (name) => name.toLowerCase().startsWith('val') },
+                    { id: 'm4', name: 'M4', match: (name) => name.toLowerCase().startsWith('m4') },
+                    { id: 'm4a1', name: 'M4A1', match: (name) => name.toLowerCase().startsWith('m4a1') },
+                    { id: 'akr', name: 'AKR', match: (name) => name.toLowerCase().startsWith('akr') },
+                    { id: 'akr12', name: 'AKR-12', match: (name) => name.toLowerCase().startsWith('akr12') },
+                    { id: 'm16', name: 'M16', match: (name) => name.toLowerCase().startsWith('m16') },
+                    { id: 'm40', name: 'M40', match: (name) => name.toLowerCase().startsWith('m40') },
+                    { id: 'mallard', name: 'Mallard', match: (name) => name.toLowerCase().startsWith('mallard') },
+                    { id: 'm110', name: 'M110', match: (name) => name.toLowerCase().startsWith('m110') },
+                    { id: 'awm', name: 'AWM', match: (name) => name.toLowerCase().startsWith('awm') }
+                ],
+                match: (name) => {
+                    const lowerName = name.toLowerCase();
+                    const gunPrefixes = ['g22', 'usp', 'p350', 'berettas', 'tec9', 'fs', 'deserteagle', 
+                                       'fabm', 'sm1014', 'spas', 'm60', 'mac10', 'ump45', 'mp5', 'mp7', 
+                                       'akimbouzi', 'p90', 'fnfal', 'famas', 'val', 'm4', 'm4a1', 'akr', 
+                                       'akr12', 'm16', 'm40', 'mallard', 'm110', 'awm'];
+                    return gunPrefixes.some(prefix => lowerName.startsWith(prefix));
+                }
+            }
+        };
 
         // Top Menu Management
         function initTopMenu() {
@@ -1337,6 +1655,183 @@
                 topMenu.style.display = 'none';
                 overlay.style.display = 'none';
             }, 400);
+        }
+
+        // Filter initialization
+        function initFilters() {
+            // Sort filter
+            document.getElementById('sort-by').addEventListener('change', function() {
+                currentSort = this.value;
+                applyFilters();
+            });
+
+            // Quality filter
+            document.querySelector('#quality-filter select').addEventListener('change', function() {
+                currentQuality = this.value;
+                applyFilters();
+            });
+
+            // Category filter
+            const categoryDropdown = document.getElementById('category-dropdown');
+            const categoryMainBtn = document.getElementById('category-main-btn');
+            const subcategoryFilter = document.getElementById('subcategory-filter');
+            const subcategoryDropdown = document.getElementById('subcategory-dropdown');
+            const subcategoryMainBtn = document.getElementById('subcategory-main-btn');
+
+            // Category dropdown items
+            categoryDropdown.querySelectorAll('.filter-dropdown-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const category = this.dataset.category;
+                    currentCategory = category;
+                    categoryMainBtn.textContent = categories[category].name + ' ▼';
+                    
+                    // Show/hide subcategory filter
+                    if (categories[category].subcategories.length > 0) {
+                        subcategoryFilter.style.display = 'inline-block';
+                        updateSubcategories(category);
+                    } else {
+                        subcategoryFilter.style.display = 'none';
+                        currentSubcategory = 'all';
+                    }
+                    
+                    categoryDropdown.classList.remove('show');
+                    applyFilters();
+                });
+            });
+
+            // Subcategory dropdown items
+            subcategoryMainBtn.addEventListener('click', function() {
+                subcategoryDropdown.classList.toggle('show');
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!categoryMainBtn.contains(e.target)) {
+                    categoryDropdown.classList.remove('show');
+                }
+                if (!subcategoryMainBtn.contains(e.target)) {
+                    subcategoryDropdown.classList.remove('show');
+                }
+            });
+
+            categoryMainBtn.addEventListener('click', function() {
+                categoryDropdown.classList.toggle('show');
+            });
+        }
+
+        function updateSubcategories(category) {
+            const subcategoryDropdown = document.getElementById('subcategory-dropdown');
+            subcategoryDropdown.innerHTML = '';
+            
+            categories[category].subcategories.forEach(subcat => {
+                const item = document.createElement('div');
+                item.className = 'filter-dropdown-item';
+                item.dataset.subcategory = subcat.id;
+                item.textContent = subcat.name;
+                item.addEventListener('click', function() {
+                    currentSubcategory = subcat.id;
+                    document.getElementById('subcategory-main-btn').textContent = subcat.name + ' ▼';
+                    subcategoryDropdown.classList.remove('show');
+                    applyFilters();
+                });
+                subcategoryDropdown.appendChild(item);
+            });
+            
+            // Reset to "all" when changing category
+            currentSubcategory = 'all';
+            document.getElementById('subcategory-main-btn').textContent = 'Все типы ▼';
+        }
+
+        function applyFilters() {
+            let filtered = [...filteredItems];
+
+            // Quality filter
+            if (currentQuality !== 'all') {
+                filtered = filtered.filter(item => {
+                    const name = item.name.toLowerCase();
+                    if (currentQuality === 'st') {
+                        return name.endsWith(' st');
+                    } else if (currentQuality === 'pt') {
+                        return name.endsWith(' pt');
+                    } else if (currentQuality === 'regular') {
+                        return !name.endsWith(' st') && !name.endsWith(' pt');
+                    }
+                    return true;
+                });
+            }
+
+            // Category filter
+            if (currentCategory !== 'all') {
+                const category = categories[currentCategory];
+                filtered = filtered.filter(item => category.match(item.name));
+                
+                // Subcategory filter
+                if (currentSubcategory !== 'all' && category.subcategories.length > 0) {
+                    const subcategory = category.subcategories.find(sub => sub.id === currentSubcategory);
+                    if (subcategory && subcategory.match) {
+                        filtered = filtered.filter(item => subcategory.match(item.name));
+                    }
+                }
+            }
+
+            // Sort filter
+            filtered.sort((a, b) => {
+                switch (currentSort) {
+                    case 'name':
+                        return a.name.localeCompare(b.name);
+                    case 'price-low':
+                        return a.currentPrice - b.currentPrice;
+                    case 'price-high':
+                        return b.currentPrice - a.currentPrice;
+                    case 'change-up':
+                        return calculatePriceChange(b) - calculatePriceChange(a);
+                    case 'change-down':
+                        return calculatePriceChange(a) - calculatePriceChange(b);
+                    default:
+                        return 0;
+                }
+            });
+
+            renderFilteredItemsList(filtered);
+        }
+
+        function renderFilteredItemsList(items) {
+            const container = document.getElementById('items-container');
+            container.innerHTML = '';
+            
+            if (items.length === 0) {
+                container.innerHTML = '<div class="item">Предметы не найдены</div>';
+                return;
+            }
+            
+            items.forEach((item, index) => {
+                const priceChange = calculatePriceChange(item);
+                const priceChangeClass = priceChange >= 0 ? '' : 'change-negative';
+                const priceChangeSymbol = priceChange >= 0 ? '+' : '';
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = `item ${selectedItem && selectedItem.name === item.name ? 'active' : ''}`;
+                itemElement.dataset.name = item.name;
+                
+                // Используем заглушку если изображение отсутствует
+                const imageUrl = item.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjMjgyODI4Ii8+CjxwYXRoIGQ9Ik0yNSAzMEMyOC44NjYgMzAgMzIgMjYuODY2IDMyIDIzQzMyIDE5LjEzNCAyOC44NjYgMTYgMjUgMTZDMjEuMTM0IDE2IDE4IDE5LjEzNCAxOCAyM0MxOCAyNi44NjYgMjEuMTM0IDMwIDI1IDMwWiIgZmlsbD0iIzY2NjY2NiIvPgo8cGF0aCBkPSJNMTUgNDBMMzUgNDBMMzAgMzVMMjUgNDBMMjAgMzVMMTUgNDBaIiBmaWxsPSIjNjY2NjY2Ii8+Cjwvc3ZnPgo=';
+                
+                itemElement.innerHTML = `
+                    <img src="${imageUrl}" alt="${item.name}" class="item-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjMjgyODI4Ii8+CjxwYXRoIGQ9Ik0yNSAzMEMyOC44NjYgMzAgMzIgMjYuODY2IDMyIDIzQzMyIDE5LjEzNCAyOC44NjYgMTYgMjUgMTZDMjEuMTM0IDE2IDE4IDE5LjEzNCAxOCAyM0MxOCAyNi44NjYgMjEuMTM0IDMwIDI1IDMwWiIgZmlsbD0iIzY2NjY2NiIvPgo8cGF0aCBkPSJNMTUgNDBMMzUgNDBMMzAgMzVMMjUgNDBMMjAgMzVMMTUgNDBaIiBmaWxsPSIjNjY2NjY2Ii8+Cjwvc3ZnPgo='">
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-price ${priceChangeClass}">
+                            ${formatPrice(item.currentPrice)}
+                            <span class="change-percent">${item.priceHistory && item.priceHistory.length > 1 ? 
+                                `(${priceChangeSymbol}${priceChange.toFixed(2)}%)` : 
+                                '(нет истории)'}</span>
+                        </div>
+                    </div>
+                `;
+                
+                itemElement.addEventListener('click', () => selectItem(item));
+                container.appendChild(itemElement);
+            });
         }
 
         // Data loading functions
@@ -1424,42 +1919,7 @@
         }
 
         function renderItemsList() {
-            const container = document.getElementById('items-container');
-            container.innerHTML = '';
-            
-            if (filteredItems.length === 0) {
-                container.innerHTML = '<div class="item">Предметы не найдены</div>';
-                return;
-            }
-            
-            filteredItems.forEach((item, index) => {
-                const priceChange = calculatePriceChange(item);
-                const priceChangeClass = priceChange >= 0 ? '' : 'change-negative';
-                const priceChangeSymbol = priceChange >= 0 ? '+' : '';
-                
-                const itemElement = document.createElement('div');
-                itemElement.className = `item ${selectedItem && selectedItem.name === item.name ? 'active' : ''}`;
-                itemElement.dataset.name = item.name;
-                
-                // Используем заглушку если изображение отсутствует
-                const imageUrl = item.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjMjgyODI4Ii8+CjxwYXRoIGQ9Ik0yNSAzMEMyOC44NjYgMzAgMzIgMjYuODY2IDMyIDIzQzMyIDE5LjEzNCAyOC44NjYgMTYgMjUgMTZDMjEuMTM0IDE2IDE4IDE5LjEzNCAxOCAyM0MxOCAyNi44NjYgMjEuMTM0IDMwIDI1IDMwWiIgZmlsbD0iIzY2NjY2NiIvPgo8cGF0aCBkPSJNMTUgNDBMMzUgNDBMMzAgMzVMMjUgNDBMMjAgMzVMMTUgNDBaIiBmaWxsPSIjNjY2NjY2Ii8+Cjwvc3ZnPgo=';
-                
-                itemElement.innerHTML = `
-                    <img src="${imageUrl}" alt="${item.name}" class="item-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjMjgyODI4Ii8+CjxwYXRoIGQ9Ik0yNSAzMEMyOC44NjYgMzAgMzIgMjYuODY2IDMyIDIzQzMyIDE5LjEzNCAyOC44NjYgMTYgMjUgMTZDMjEuMTM0IDE2IDE4IDE5LjEzNCAxOCAyM0MxOCAyNi44NjYgMjEuMTM0IDMwIDI1IDMwWiIgZmlsbD0iIzY2NjY2NiIvPgo8cGF0aCBkPSJNMTUgNDBMMzUgNDBMMzAgMzVMMjUgNDBMMjAgMzVMMTUgNDBaIiBmaWxsPSIjNjY2NjY2Ii8+Cjwvc3ZnPgo='">
-                    <div class="item-info">
-                        <div class="item-name">${item.name}</div>
-                        <div class="item-price ${priceChangeClass}">
-                            ${formatPrice(item.currentPrice)}
-                            <span class="change-percent">${item.priceHistory && item.priceHistory.length > 1 ? 
-                                `(${priceChangeSymbol}${priceChange.toFixed(2)}%)` : 
-                                '(нет истории)'}</span>
-                        </div>
-                    </div>
-                `;
-                
-                itemElement.addEventListener('click', () => selectItem(item));
-                container.appendChild(itemElement);
-            });
+            applyFilters(); // Use filtered rendering instead of direct rendering
         }
 
         function selectItem(item) {
@@ -1970,7 +2430,7 @@
                         image: data.image || ''
                     }));
             }
-            renderItemsList();
+            applyFilters();
             updateOverallStats();
             
             if (selectedItem && !filteredItems.some(item => item.name === selectedItem.name)) {
@@ -1997,6 +2457,7 @@
         // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
             initTopMenu();
+            initFilters();
             initMobileImprovements();
             loadData();
             
