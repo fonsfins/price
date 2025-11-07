@@ -421,8 +421,8 @@
             transition: all 0.3s ease;
             min-height: 60px;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            align-items: center;
+            gap: 1rem;
             width: 100%;
         }
 
@@ -435,12 +435,30 @@
             border-left: 4px solid var(--accent-color);
         }
 
+        .item-image {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            border-radius: 6px;
+            flex-shrink: 0;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+        }
+
+        .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
         .item-name {
             font-weight: 600;
             margin-bottom: 0.5rem;
             font-size: 1rem;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .item-price {
@@ -475,6 +493,23 @@
         .details-header {
             margin-bottom: 2rem;
             width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .details-header-image {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 8px;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .details-header-text {
+            flex: 1;
         }
 
         .details-header h2 {
@@ -840,6 +875,17 @@
                 min-height: auto;
             }
 
+            .details-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .details-header-image {
+                width: 60px;
+                height: 60px;
+            }
+
             .details-header h2 {
                 font-size: 1.3rem;
             }
@@ -930,6 +976,15 @@
             .theme-option {
                 padding: 0.8rem;
             }
+
+            .item {
+                padding: 1rem;
+            }
+
+            .item-image {
+                width: 40px;
+                height: 40px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -965,7 +1020,12 @@
             }
 
             .item {
-                padding: 1rem;
+                padding: 0.8rem;
+            }
+
+            .item-image {
+                width: 35px;
+                height: 35px;
             }
 
             .item-name {
@@ -1108,7 +1168,10 @@
             <!-- Details Panel -->
             <div class="details-panel">
                 <div class="details-header">
-                    <h2 id="selected-item-name">Выберите предмет для просмотра деталей</h2>
+                    <img id="selected-item-image" class="details-header-image" src="" alt="" style="display: none;">
+                    <div class="details-header-text">
+                        <h2 id="selected-item-name">Выберите предмет для просмотра деталей</h2>
+                    </div>
                 </div>
                 
                 <div class="price-info-grid" id="price-info" style="display: none;">
@@ -1333,7 +1396,8 @@
                 filteredItems.push({
                     name: name,
                     currentPrice: data.price,
-                    priceHistory: data.history || []
+                    priceHistory: data.history || [],
+                    image: data.image || '' // Добавляем изображение
                 });
             }
         }
@@ -1377,13 +1441,19 @@
                 itemElement.className = `item ${selectedItem && selectedItem.name === item.name ? 'active' : ''}`;
                 itemElement.dataset.name = item.name;
                 
+                // Используем заглушку если изображение отсутствует
+                const imageUrl = item.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjMjgyODI4Ii8+CjxwYXRoIGQ9Ik0yNSAzMEMyOC44NjYgMzAgMzIgMjYuODY2IDMyIDIzQzMyIDE5LjEzNCAyOC44NjYgMTYgMjUgMTZDMjEuMTM0IDE2IDE4IDE5LjEzNCAxOCAyM0MxOCAyNi44NjYgMjEuMTM0IDMwIDI1IDMwWiIgZmlsbD0iIzY2NjY2NiIvPgo8cGF0aCBkPSJNMTUgNDBMMzUgNDBMMzAgMzVMMjUgNDBMMjAgMzVMMTUgNDBaIiBmaWxsPSIjNjY2NjY2Ii8+Cjwvc3ZnPgo=';
+                
                 itemElement.innerHTML = `
-                    <div class="item-name">${item.name}</div>
-                    <div class="item-price ${priceChangeClass}">
-                        ${formatPrice(item.currentPrice)}
-                        <span class="change-percent">${item.priceHistory && item.priceHistory.length > 1 ? 
-                            `(${priceChangeSymbol}${priceChange.toFixed(2)}%)` : 
-                            '(нет истории)'}</span>
+                    <img src="${imageUrl}" alt="${item.name}" class="item-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjMjgyODI4Ii8+CjxwYXRoIGQ9Ik0yNSAzMEMyOC44NjYgMzAgMzIgMjYuODY2IDMyIDIzQzMyIDE5LjEzNCAyOC44NjYgMTYgMjUgMTZDMjEuMTM0IDE2IDE4IDE5LjEzNCAxOCAyM0MxOCAyNi44NjYgMjEuMTM0IDMwIDI1IDMwWiIgZmlsbD0iIzY2NjY2NiIvPgo8cGF0aCBkPSJNMTUgNDBMMzUgNDBMMzAgMzVMMjUgNDBMMjAgMzVMMTUgNDBaIiBmaWxsPSIjNjY2NjY2Ii8+Cjwvc3ZnPgo='">
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-price ${priceChangeClass}">
+                            ${formatPrice(item.currentPrice)}
+                            <span class="change-percent">${item.priceHistory && item.priceHistory.length > 1 ? 
+                                `(${priceChangeSymbol}${priceChange.toFixed(2)}%)` : 
+                                '(нет истории)'}</span>
+                        </div>
                     </div>
                 `;
                 
@@ -1403,6 +1473,7 @@
 
         function animateItemChange(callback) {
             const itemNameElement = document.getElementById('selected-item-name');
+            const itemImageElement = document.getElementById('selected-item-image');
             const priceInfoElement = document.getElementById('price-info');
             const chartContainer = document.getElementById('main-chart-container');
             const hourlyChartElement = document.getElementById('hourly-chart');
@@ -1416,6 +1487,10 @@
                 // Анимация заголовка
                 itemNameElement.classList.add('text-fade-out');
                 
+                // Анимация изображения
+                itemImageElement.style.opacity = '0';
+                itemImageElement.style.transform = 'scale(0.8)';
+
                 // Анимация карточек цен
                 priceCards.forEach(card => {
                     card.classList.add('fade-out');
@@ -1443,6 +1518,7 @@
 
         function updateItemDetails() {
             const itemNameElement = document.getElementById('selected-item-name');
+            const itemImageElement = document.getElementById('selected-item-image');
             const priceInfoElement = document.getElementById('price-info');
             const currentPriceElement = document.getElementById('current-price');
             const startPriceElement = document.getElementById('start-price');
@@ -1456,6 +1532,7 @@
             
             if (!selectedItem) {
                 itemNameElement.textContent = 'Выберите предмет для просмотра деталей';
+                itemImageElement.style.display = 'none';
                 priceInfoElement.style.display = 'none';
                 hourlyChartElement.classList.remove('active');
                 hourlyPlaceholder.style.display = 'flex';
@@ -1474,6 +1551,20 @@
                 itemNameElement.textContent = selectedItem.name;
                 itemNameElement.classList.remove('text-fade-out');
                 itemNameElement.classList.add('text-fade-in');
+                
+                // Обновляем изображение
+                if (selectedItem.image) {
+                    itemImageElement.src = selectedItem.image;
+                    itemImageElement.alt = selectedItem.name;
+                    itemImageElement.style.display = 'block';
+                    setTimeout(() => {
+                        itemImageElement.style.opacity = '1';
+                        itemImageElement.style.transform = 'scale(1)';
+                        itemImageElement.style.transition = 'all 0.4s ease';
+                    }, 100);
+                } else {
+                    itemImageElement.style.display = 'none';
+                }
                 
                 setTimeout(() => {
                     itemNameElement.classList.remove('text-fade-in');
@@ -1875,7 +1966,8 @@
                     .map(([name, data]) => ({
                         name: name,
                         currentPrice: data.price,
-                        priceHistory: data.history || []
+                        priceHistory: data.history || [],
+                        image: data.image || ''
                     }));
             }
             renderItemsList();
