@@ -1,5 +1,5 @@
 {
-  "m9 bayonet \"dragon glass\"": {
+  "m9bayonet \"dragon glass\"": {
     "image": "",
     "collection": "origin",
     "rarity": "arcane",
@@ -11,7 +11,7 @@
       }
     ]
   },
-  "m9 bayonet \"scratch\"": {
+  "m9bayonet \"scratch\"": {
     "image": "",
     "collection": "origin",
     "rarity": "arcane",
@@ -419,7 +419,7 @@
       }
     ]
   },
-  "desert eagle \"predator\" ST": {
+  "deserteagle \"predator\" ST": {
     "image": "",
     "collection": "origin",
     "rarity": "rare",
@@ -635,4 +635,5 @@
       }
     ]
   }
+
 }
