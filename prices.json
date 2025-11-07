@@ -1,5 +1,5 @@
 {
-  "m9 bayonet \"dragon glass\"": {
+  "m9bayonet \"dragon glass\"": {
     "image": "https://static.wikia.nocookie.net/standoff-2/images/9/9d/%D0%9F%D1%80%D0%B5%D0%B2%D1%8C%D1%8E_%E2%80%94_G22_%22Pixel_Camouflage%22.png/revision/latest?cb=20240807174546&path-prefix=ru",
     "price": 40800.0,
     "history": [
@@ -13,7 +13,7 @@
       }
     ]
   },
-  "m9 bayonet \"scratch\"": {
+  "m9bayonet \"scratch\"": {
     "price": 23499.0,
     "history": [
       {
@@ -26,7 +26,7 @@
       }
     ]
   },
-  "m9 bayonet \"universe\"": {
+  "m9bayonet \"universe\"": {
     "price": 22522.21,
     "history": [
       {
@@ -52,7 +52,7 @@
       }
     ]
   },
-  "m9 bayonet \"ancient\"": {
+  "m9bayonet \"ancient\"": {
     "price": 8199.0,
     "history": [
       {
@@ -481,7 +481,7 @@
       }
     ]
   },
-  "m9 bayonet \"blue blood\"": {
+  "m9bayonet \"blue blood\"": {
     "price": 12773.0,
     "history": [
       {
@@ -689,5 +689,4 @@
       }
     ]
   }
-
 }
